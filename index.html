@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar y Guardar Productos en XLSX</title>
+    <link rel="stylesheet" href="estilo.css">
+
+
+
+
+
+</html>
+
+</head>
+
+<body>
+
+
+  <div class="contenido">
+
+
+    <div id="compra_actual">
+      <!-- Botón para cargar archivo XLSX -->
+      <input type="file" id="archivo-xlsx" accept=".xlsx">
+      <button type="button" id="cargar-archivo">Cargar Archivo XLSX</button>
+      <!-- Botón para abrir el modal -->
+      <button id="btnMostrarModal">Mostrar Datos XLSX</button>
+    </div>
+
+
+    <div id="ingresar_producto">
+
+      <form id="formulario-producto">
+
+
+        <h1>Comprar</h1>
+
+
+        <label for="nombre">Nombre del Producto:</label>
+        <input type="text" id="nombre" list="opciones-productos" required>
+        <datalist id="opciones-productos"></datalist>
+
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" required><br>
+
+        <label for="stock">Stock:</label>
+        <input type="text" id="stock" readonly>
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" required><br>
+
+        <button type="button" id="guardar">Comprar producto</button>
+      </form>
+
+
+    </div>
+
+    <!-- Contenedor del modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Datos desde XLSX</h2>
+        <table id="tabla-datos">
+          <!-- Aquí se mostrarán los datos -->
+        </table>
+        
+      </div>
+    </div>
+    <br>
+    <br>
+    <div id="compra_actual">
+      <div id="vendido-actual">Compra actual: $0.00</div>
+      <br>
+      <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
+      <button id="borrar-compra">Cancelar Compra</button>
+
+    </div>
+    <hr>
+
+
+ 
+
+
+    <div id="historial">
+      <h2>Compra Actual</h2>
+      
+      
+
+      
+
+  
+      <br>
+      <br>
+      <table id="tabla-productos">
+        <tr>
+          <th>ID</th>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Total</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Acciones</th>
+        </tr>
+      </table>
+      
+ <!-- Tabla para mostrar el historial de productos -->
+
+      <h2>Historial de Compras</h2>
+      
+      <div class="busqueda">
+        <input type="text" id="search-input" placeholder="Buscar por Nombre, Fecha, Hora o Precio">
+        <button id="search-button">Buscar</button>
+        <button id="show-all-button">Mostrar Todos</button>
+        <button id="exportar-xlsx">Exportar a Excel</button>
+
+      </div>
+<br>  
+<button onclick="limpiarHistorial()">Vaciar Historial</button>
+<div id="total-precio">Total: $0.00</div>
+<table id="historial-table">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+        </tr>
+    </thead>
+</table>
+    </div>
+
+ 
+
+
+  </div>
+  <div class="copyright">
+    © 2023 Desarrollado por DEA. Derechos reservados.
+  </div>
+
+
+
+
+
+  <!-- Incluye la biblioteca xlsx-style -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+  <script src="CONTROL.js"></script>
+
+</body>

@@ -1,0 +1,407 @@
+@charset "UTF-8";
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0% 0em 0em 0em;
+  background-color: #073260;
+  color: rgb(66, 66, 66);
+}
+.menu {
+  background-color: #073260;
+  color: #fff;
+}
+
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.menu li {
+  float: left;
+}
+
+.menu li a {
+  display: block;
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.menu li a:hover {
+  background-color: #091725;
+}
+
+h1 {
+  text-align: center;
+}
+
+.contenido {
+  display: flex;
+  margin: 0em 4% 0em 4%;
+  padding: 1em 1em 1em 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: #091725;
+}
+
+#ingresar_producto {
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 0em 2em 1em 2em;
+  border-radius: 8px;
+}
+
+#compra_actual {
+  width: 100%;
+  margin: 0em 0em 0em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 20px 20px 20px 20px;
+  border-radius: 8px;
+}
+
+#vendido-actual {
+  font-size: 2em;
+}
+
+#historial {
+  width: 100%;
+  margin: 0em 0em 0em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 2em 2em 2em 2em;
+  border-radius: 8px;
+}
+
+#formulario-producto {
+  margin: 0em 0em 0em 0em;
+  padding: 0em 2em 1em 1em;
+  border-radius: 8px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input[type=text],
+input[type=number] {
+  padding: 10px;
+  width: 97%;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+button {
+  background-color: rgb(0, 0, 0);
+  color: rgb(226, 226, 226);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+table {
+  margin: 2em 2em 2em 2em;
+  padding: 2em 2em 2em 2em;
+  border-collapse: collapse;
+  display: flex;
+  justify-content: space-around;
+  border-radius: 5px;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+button#exportar-xlsx,
+button#borrar-compra,
+button#sort-button {
+  float: right;
+  margin: 1em 1em 1em 1em;
+}
+
+/* Estilo para el botón "Exportar a Excel" */
+#exportar-xlsx {
+  background-color: #02861f;
+}
+
+/* Estilo para el botón "Vaciar productos" */
+#borrar-compra {
+  background-color: rgb(66, 66, 66);
+}
+
+/* Estilo para el botón "Alternar Orden" */
+#sort-button {
+  background-color: #0fc1e0;
+}
+
+/* Estilo para el botón "Buscar" */
+#search-button {
+  background-color: #0fc1e0;
+}
+
+/* Estilo para el botón "Mostrar Todos" */
+#show-all-button {
+  background-color: #0fc1e0;
+}
+
+#guardar {
+  background-color: #0fc1e0;
+}
+
+
+.btn-eliminar {
+  background-color: red; /* Cambiar el color de fondo a rojo */
+  color: white; /* Cambiar el color del texto a blanco */
+  /* Otros estilos si los necesitas */
+}
+
+h2 {
+  float: left;
+}
+
+/* Estilo para el elemento que muestra el total de precios */
+#total-precio {
+  margin: 20px;
+  font-weight: bold;
+}
+
+hr {
+  height: 2px;
+  background-color: #ccc;
+  border: none;
+}
+
+.copyright {
+  text-align: right;
+  color: #ccc;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+@media screen and (max-width: 576px) {
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0% 0em 0em 0em;
+    background-color: rgb(226, 226, 226);
+    color: rgb(66, 66, 66);
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .contenido {
+    display: flex;
+    margin: 0em 0em 0em 0em;
+    padding: 0em 0em 0em 0em;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: rgb(226, 226, 226);
+  }
+
+  #ingresar_producto {
+    margin: 0em 0em 0em 0em;
+    background-color: rgb(226, 226, 226);
+    padding: 0em 0em 0em 0em;
+    border-radius: 8px;
+  }
+
+  #compra_actual {
+    width: 100%;
+    margin: 0em 0em 0em 0em;
+    background-color: rgb(226, 226, 226);
+    padding: 1em 0em 1em 1em;
+    border-radius: 8px;
+  }
+
+  .busqueda {
+    margin: 0em 0em 0em 0em;
+    padding: 1em 0em 1em 1em;
+  }
+
+  #vendido-actual {
+    font-size: 2em;
+  }
+
+  #historial {
+    background-color: rgb(226, 226, 226);
+    display: flex;
+    margin: 0em 0em 0em 0em;
+    padding: 0em 0em 0em 0em;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+
+  #formulario-producto {
+    margin: 0em 0em 0em 0em;
+    padding: 0em 0em 0em 0em;
+    border-radius: 8px;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+  }
+
+  input[type=text],
+  input[type=number] {
+    padding: 10px;
+    width: 92%;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+
+  button {
+    background-color: rgb(0, 0, 0);
+    color: rgb(226, 226, 226);
+    padding: 14px 26px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  table {
+    display: none;
+    margin: 0em 0em 0em 0em;
+    padding: 0em 0em 0em 0em;
+    border-collapse: collapse;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 5px;
+  }
+
+  th,
+  td {
+    font-size: 0.4em;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+
+  button#exportar-xlsx,
+  button#borrar-compra,
+  button#sort-button {
+    float: right;
+    margin: 1em 1em 1em 1em;
+  }
+
+  /* Estilo para el botón "Exportar a Excel" */
+  #exportar-xlsx {
+    background-color: #02861f;
+  }
+
+  /* Estilo para el botón "Vaciar productos" */
+  #borrar-compra {
+    background-color: rgb(66, 66, 66);
+  }
+
+  /* Estilo para el botón "Alternar Orden" */
+  #sort-button {
+    background-color: #0fc1e0;
+  }
+
+  /* Estilo para el botón "Buscar" */
+  #search-button {
+    background-color: #0fc1e0;
+  }
+
+  /* Estilo para el botón "Mostrar Todos" */
+  #show-all-button {
+    background-color: #0fc1e0;
+  }
+
+  #guardar {
+    background-color: #0fc1e0;
+  }
+
+  h2 {
+    float: left;
+  }
+
+  /* Estilo para el elemento que muestra el total de precios */
+  #total-precio {
+    margin: 20px;
+    font-weight: bold;
+  }
+
+  hr {
+    height: 2px;
+    background-color: #ccc;
+    border: none;
+  }
+
+  .copyright {
+    text-align: right;
+    color: rgb(66, 66, 66);
+    margin: 1rem;
+    padding: 1rem;
+    font-size: 1em;
+  }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Estilos para el modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
