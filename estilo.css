@@ -7,6 +7,7 @@ body {
   background-color: #073260;
   color: rgb(66, 66, 66);
 }
+
 .menu {
   background-color: #073260;
   color: #fff;
@@ -56,15 +57,19 @@ h1 {
 }
 
 #compra_actual {
+  display: flex;
   width: 100%;
   margin: 0em 0em 0em 0em;
   background-color: rgb(226, 226, 226);
-  padding: 20px 20px 20px 20px;
+  padding: 1em 0em 1em 1em;
   border-radius: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 #vendido-actual {
   font-size: 2em;
+  margin: 1em 1em 1em 1em;
 }
 
 #historial {
@@ -74,11 +79,13 @@ h1 {
   padding: 2em 2em 2em 2em;
   border-radius: 8px;
 }
-
 #formulario-producto {
   margin: 0em 0em 0em 0em;
-  padding: 0em 2em 1em 1em;
+  padding: 0em 0em 0em 0em;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 label {
@@ -86,12 +93,11 @@ label {
   font-weight: bold;
 }
 
-input[type=text],
-input[type=number] {
+input[type=text], input[type=number] {
   padding: 10px;
-  width: 97%;
+  /* width: 97%; */
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 0px solid #ccc;
   border-radius: 5px;
   font-size: 1em;
 }
@@ -122,10 +128,23 @@ td {
   border: 1px solid #ccc;
 }
 
-button#exportar-xlsx,
-button#borrar-compra,
+button#finalizar-compra {
+  
+  margin: 1em 1em 1em 1em;
+}
+
 button#sort-button {
-  float: right;
+  
+  margin: 1em 1em 1em 1em;
+}
+
+button#exportar-xlsx {
+  
+  margin: 1em 1em 1em 1em;
+}
+
+button#borrar-compra {
+
   margin: 1em 1em 1em 1em;
 }
 
@@ -160,8 +179,10 @@ button#sort-button {
 
 
 .btn-eliminar {
-  background-color: red; /* Cambiar el color de fondo a rojo */
-  color: white; /* Cambiar el color del texto a blanco */
+  background-color: red;
+  /* Cambiar el color de fondo a rojo */
+  color: white;
+  /* Cambiar el color del texto a blanco */
   /* Otros estilos si los necesitas */
 }
 
@@ -218,20 +239,25 @@ hr {
   }
 
   #compra_actual {
+    display: flex;
     width: 100%;
     margin: 0em 0em 0em 0em;
     background-color: rgb(226, 226, 226);
     padding: 1em 0em 1em 1em;
     border-radius: 8px;
-  }
-
+    flex-wrap: wrap;
+    justify-content: center;
+}
   .busqueda {
     margin: 0em 0em 0em 0em;
     padding: 1em 0em 1em 1em;
   }
 
+
   #vendido-actual {
     font-size: 2em;
+    margin: 1em 1em 1em 1em;
+
   }
 
   #historial {
@@ -248,7 +274,10 @@ hr {
     margin: 0em 0em 0em 0em;
     padding: 0em 0em 0em 0em;
     border-radius: 8px;
-  }
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
 
   label {
     display: block;
@@ -291,10 +320,24 @@ hr {
     border: 1px solid #ccc;
   }
 
-  button#exportar-xlsx,
-  button#borrar-compra,
+
+  button#finalizar-compra {
+    
+    margin: 1em 1em 1em 1em;
+  }
+
   button#sort-button {
-    float: right;
+
+    margin: 1em 1em 1em 1em;
+  }
+
+  button#exportar-xlsx {
+  
+    margin: 1em 1em 1em 1em;
+  }
+
+  button#borrar-compra {
+    
     margin: 1em 1em 1em 1em;
   }
 
