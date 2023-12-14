@@ -192,7 +192,9 @@ button#borrar-compra {
 #guardar {
   background-color: #0fc1e0;
 }
-
+#exportar-stock-xlsx {
+  background-color: #02861f;
+}
 
 .btn-eliminar {
   background-color: red;
@@ -375,6 +377,10 @@ hr {
 
   /* Estilo para el botón "Exportar a Excel" */
   #exportar-xlsx {
+    background-color: #02861f;
+  }
+
+  #exportar-stock-xlsx {
     background-color: #02861f;
   }
 

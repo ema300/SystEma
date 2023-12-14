@@ -492,9 +492,22 @@ document.getElementById('exportar-xlsx').addEventListener('click', function () {
   XLSX.writeFile(wb, fileName);
 });
 
+document.getElementById('exportar-stock-xlsx').addEventListener('click', function () {
+  var datos = JSON.parse(localStorage.getItem('datosExcel'));
+  var wb = XLSX.utils.book_new();
+  var ws = XLSX.utils.json_to_sheet(datos);
+  XLSX.utils.book_append_sheet(wb, ws, 'Productos-stock');
+
+  var now = new Date();
+  var datePart = now.toISOString().slice(0, 10).replace(/-/g, '-');
+  var timePart = now.toTimeString().slice(0, 8).replace(/:/g, '-');
+  var fileName = 'productos-stock-editar_' + datePart + '_' + timePart + '.xlsx';
+
+  XLSX.writeFile(wb, fileName);
+});
 
 
-
+        
 
 
 
