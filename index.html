@@ -35,7 +35,7 @@
       <form id="formulario-producto">
 
 
-        <h1>Comprar</h1>
+        <h1>Productos</h1>
 
 
         <label for="nombre">Nombre del Producto:</label>
@@ -50,7 +50,7 @@
         <label for="cantidad">Cantidad:</label>
         <input type="number" id="cantidad" required><br>
 
-        <button type="button" id="guardar">Comprar producto</button>
+        <button type="button" id="guardar">Añadir</button>
       </form>
 
 
@@ -71,28 +71,17 @@
     <br>
     <br>
     <div id="compra_actual">
-      <div id="vendido-actual">Compra actual: $0.00</div>
+      <div id="vendido-actual">Total: $0.00</div>
       <br>
       <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
       <button id="borrar-compra">Cancelar Compra</button>
 
     </div>
-    <hr>
+    
 
 
- 
-
-
-    <div id="historial">
-      <h2>Compra Actual</h2>
-      
-      
-
-      
-
-  
-      <br>
-      <br>
+    <div id="compra_actual">
+    
       <table id="tabla-productos">
         <tr>
           <th>ID</th>
@@ -105,6 +94,11 @@
           <th>Acciones</th>
         </tr>
       </table>
+    </div>
+
+<hr>
+    <div id="historial">
+
       
  <!-- Tabla para mostrar el historial de productos -->
 
