@@ -107,17 +107,21 @@
       
  <!-- Tabla para mostrar el historial de productos -->
 
-      <h2>Historial de Compras</h2>
+      <h2>Historial de Compras</h2> 
+      <div id="opciones-historial"> 
+        <button onclick="limpiarHistorial()">Vaciar Historial</button>
+        <button id="exportar-xlsx">Exportar a Excel</button>
+      </div>
       
+
       <div class="busqueda">
         <input type="text" id="search-input" placeholder="Buscar por Nombre, Fecha, Hora o Precio">
         <button id="search-button">Buscar</button>
         <button id="show-all-button">Mostrar Todos</button>
-        <button id="exportar-xlsx">Exportar a Excel</button>
 
       </div>
 <br>  
-<button onclick="limpiarHistorial()">Vaciar Historial</button>
+
 <div id="total-precio">Total: $0.00</div>
 <table id="historial-table">
 
