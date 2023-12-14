@@ -12,6 +12,7 @@ compra_actual = localStorage.getItem('finalizo_compra');
 var historial = [];
 
 
+localStorage.setItem('c', '1234');
 
 
 
@@ -22,7 +23,7 @@ var historial = [];
 
 document.getElementById('cargar-archivo').addEventListener('click', function () {
   var input = document.getElementById('archivo-xlsx');
- 
+
   input.click(); // Simula el clic en el input para seleccionar un archivo
   refrescarPagina();
 
@@ -45,7 +46,7 @@ document.getElementById('archivo-xlsx').addEventListener('change', function (e) 
       // Mostrar los datos en una tabla
       mostrarDatosEnTabla(jsonData);
       // Crear lista de productos para autocompletado
-    
+
       crearListaAutocompletado(jsonData);
     };
 
@@ -54,7 +55,7 @@ document.getElementById('archivo-xlsx').addEventListener('change', function (e) 
 });
 
 function mostrarDatosEnTabla(data) {
-  
+
   var tabla = document.getElementById('tabla-datos');
   tabla.innerHTML = ''; // Limpiar contenido existente de la tabla
 
@@ -430,19 +431,30 @@ const historialTable = document.getElementById('historial-table');
 
 // Función para limpiar el historial y el localStorage
 function limpiarHistorial() {
-  var historialTable = document.getElementById('historial-table');
+  var contrasenaAlmacenada = localStorage.getItem('c'); // Reemplaza 'contrasena' con la clave real
 
-  // Eliminar todas las filas excepto la primera (encabezado)
-  while (historialTable.rows.length > 1) {
-    historialTable.deleteRow(1);
+  var contrasenaIngresada = prompt('Ingresa la contraseña para vaciar el historial');
+
+  if (contrasenaIngresada === contrasenaAlmacenada) {
+    var historialTable = document.getElementById('historial-table');
+    // Eliminar todas las filas excepto la primera (encabezado)
+    while (historialTable.rows.length > 1) {
+      historialTable.deleteRow(1);
+    }
+
+
+    localStorage.removeItem('Ident');
+
+    // Limpiar localStorage
+    localStorage.removeItem('historial');
+    reiniciarTotal();
+  }
+  else {
+    // La contraseña es incorrecta, mostrar un mensaje de error
+    alert('Contraseña incorrecta. No tienes permiso para vaciar el historial.');
   }
 
 
-  localStorage.removeItem('Ident');
-
-  // Limpiar localStorage
-  localStorage.removeItem('historial');
-  reiniciarTotal();
 }
 
 
@@ -788,58 +800,58 @@ function editarDatoEnTabla(cell, newData) {
   cell.innerText = newData;
 }
 
-localStorage.setItem('contraseña','1234');
 document.getElementById('tabla-datos').addEventListener('click', function (e) {
-  var contrasenaAlmacenada = localStorage.getItem('contrasena'); // Reemplaza 'contrasena' con la clave real
+  var contrasenaAlmacenada = localStorage.getItem('c'); // Reemplaza 'contrasena' con la clave real
 
   var contrasenaIngresada = prompt('Ingresa la contraseña para editar los datos desde XLSX:');
 
   var target = e.target;
   if (contrasenaIngresada === contrasenaAlmacenada) {
-  if (target.tagName === 'TD') {
-    
-    var cell = target;
-    
-    var newData = prompt('Editar dato:', cell.innerText);
+    if (target.tagName === 'TD') {
 
-    if (newData !== null) {
-      if (confirm(`¿Estás seguro de editar "?`)) {
+      var cell = target;
 
-      editarDatoEnTabla(cell, newData);
+      var newData = prompt('Editar dato:', cell.innerText);
 
-      // Obtener la fila y actualizar el localStorage con el dato editado
-      var row = cell.parentElement;
-      var storedData = JSON.parse(localStorage.getItem('datosExcel'));
-      var rowIndex = row.rowIndex;
-      var columnIndex = cell.cellIndex;
-      if (columnIndex === 1 || columnIndex === 2) { // Si la celda es de Precio o Stock
-        if (!esNumero(newData)) {
-          alert('Por favor, ingresa un valor numérico para Precio o Stock.');
-          return;
+      if (newData !== null) {
+        if (confirm(`¿Estás seguro de editar "?`)) {
+
+          editarDatoEnTabla(cell, newData);
+
+          // Obtener la fila y actualizar el localStorage con el dato editado
+          var row = cell.parentElement;
+          var storedData = JSON.parse(localStorage.getItem('datosExcel'));
+          var rowIndex = row.rowIndex;
+          var columnIndex = cell.cellIndex;
+          if (columnIndex === 1 || columnIndex === 2) { // Si la celda es de Precio o Stock
+            if (!esNumero(newData)) {
+              alert('Por favor, ingresa un valor numérico para Precio o Stock.');
+              return;
+            }
+          }
+          cell.textContent = newData;
+
+          // Obtener la fila y actualizar el localStorage con el dato editado
+          var storedData = JSON.parse(localStorage.getItem('datosExcel'));
+          storedData[rowIndex][columnIndex] = newData;
+
+          localStorage.setItem('datosExcel', JSON.stringify(storedData));
         }
       }
-      cell.textContent = newData;
 
-      // Obtener la fila y actualizar el localStorage con el dato editado
-      var storedData = JSON.parse(localStorage.getItem('datosExcel'));
-      storedData[rowIndex][columnIndex] = newData;
-  
-      localStorage.setItem('datosExcel', JSON.stringify(storedData));
-    } }
- 
-  } else if (target.tagName === 'BUTTON') {
-    var confirmacion = confirm('¿Estás seguro de que deseas eliminar esta fila?');
-    if (confirmacion) {
-      var rowIndex = target.parentElement.rowIndex;
-      eliminarFilaDatosXLSX(rowIndex);
-      refrescarPagina();
+    } else if (target.tagName === 'BUTTON') {
+      var confirmacion = confirm('¿Estás seguro de que deseas eliminar esta fila?');
+      if (confirmacion) {
+        var rowIndex = target.parentElement.rowIndex;
+        eliminarFilaDatosXLSX(rowIndex);
+        refrescarPagina();
+      }
     }
-  }
 
- } else {
-  // La contraseña es incorrecta, mostrar un mensaje de error
-  alert('Contraseña incorrecta. No tienes permiso para editar los datos.');
-}
+  } else {
+    // La contraseña es incorrecta, mostrar un mensaje de error
+    alert('Contraseña incorrecta. No tienes permiso para editar los datos.');
+  }
 });
 
 
