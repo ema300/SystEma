@@ -493,14 +493,24 @@ document.getElementById('exportar-xlsx').addEventListener('click', function () {
 });
 
 
+
+
 document.getElementById('exportar-stock-xlsx').addEventListener('click', function () {
   var datos = JSON.parse(localStorage.getItem('datosExcel'));
-
   // Eliminar la primera fila del conjunto de datos
   datos.shift();
+  var datosConvertidos = datos.map(function(fila) {
+    return {
+      producto: fila[0], // Asigna cada valor a una clave específica
+      precio: fila[1],
+      stock: fila[2]
+      // ... repite esto para más columnas si es necesario
+    };
+  });
+  
 
   var wb = XLSX.utils.book_new();
-  var ws = XLSX.utils.json_to_sheet(datos);
+  var ws = XLSX.utils.json_to_sheet(datosConvertidos);
   XLSX.utils.book_append_sheet(wb, ws, 'Productos-stock');
 
   var now = new Date();
