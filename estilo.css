@@ -148,33 +148,28 @@ button#finalizar-compra {
 
 button#sort-button {
   
+  background-color: #0fc1e0;
+
   margin: 1em 1em 1em 1em;
 }
 
 button#exportar-xlsx {
-  
+  background-color: #02861f;
+
   margin: 1em 1em 1em 1em;
 }
 
 button#borrar-compra {
+  background-color: rgb(66, 66, 66);
 
   margin: 1em 1em 1em 1em;
 }
 
-/* Estilo para el botón "Exportar a Excel" */
-#exportar-xlsx {
-  background-color: #02861f;
-}
 
-/* Estilo para el botón "Vaciar productos" */
-#borrar-compra {
-  background-color: rgb(66, 66, 66);
-}
 
-/* Estilo para el botón "Alternar Orden" */
-#sort-button {
-  background-color: #0fc1e0;
-}
+
+
+
 
 /* Estilo para el botón "Buscar" */
 #search-button {
@@ -194,14 +189,13 @@ button#borrar-compra {
 }
 #exportar-stock-xlsx {
   background-color: #02861f;
+  margin: 1em 1em 1em 1em;
+  float: right;
 }
 
 .btn-eliminar {
   background-color: red;
-  /* Cambiar el color de fondo a rojo */
   color: white;
-  /* Cambiar el color del texto a blanco */
-  /* Otros estilos si los necesitas */
 }
 
 h2 {
@@ -280,7 +274,11 @@ hr {
   align-content: center;
   justify-content: space-around;
 }
-
+#exportar-stock-xlsx {
+  background-color: #02861f;
+  margin: 1em 1em 1em 1em;
+  float: none;
+}
 
   #vendido-actual {
     font-size: 2em;
@@ -355,58 +353,7 @@ hr {
     margin: 0em 0em 0em 0em;
     width: 88%;
 }
-  button#finalizar-compra {
-    
-    margin: 1em 1em 1em 1em;
-  }
-
-  button#sort-button {
-
-    margin: 1em 1em 1em 1em;
-  }
-
-  button#exportar-xlsx {
-  
-    margin: 1em 1em 1em 1em;
-  }
-
-  button#borrar-compra {
-    
-    margin: 1em 1em 1em 1em;
-  }
-
-  /* Estilo para el botón "Exportar a Excel" */
-  #exportar-xlsx {
-    background-color: #02861f;
-  }
-
-  #exportar-stock-xlsx {
-    background-color: #02861f;
-  }
-
-  /* Estilo para el botón "Vaciar productos" */
-  #borrar-compra {
-    background-color: rgb(66, 66, 66);
-  }
-
-  /* Estilo para el botón "Alternar Orden" */
-  #sort-button {
-    background-color: #0fc1e0;
-  }
-
-  /* Estilo para el botón "Buscar" */
-  #search-button {
-    background-color: #0fc1e0;
-  }
-
-  /* Estilo para el botón "Mostrar Todos" */
-  #show-all-button {
-    background-color: #0fc1e0;
-  }
-
-  #guardar {
-    background-color: #0fc1e0;
-  }
+ 
 
   h2 {
     float: left;
