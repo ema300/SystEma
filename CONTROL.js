@@ -379,13 +379,19 @@ document.getElementById('guardar').addEventListener('click', function () {
     }
   }
   var datosGuardados = JSON.parse(localStorage.getItem('datosExcel'));
-  for (var i = 1; i < datosGuardados.length; i++) {
-    if (datosGuardados[i][0].toLowerCase() === nombre.toLowerCase()) {
-      datosGuardados[i][2] = nuevoStock.toString(); // Actualizar el stock en los datos guardados
-      localStorage.setItem('datosExcel', JSON.stringify(datosGuardados)); // Guardar datos actualizados en localStorage
-      break;
-    }
+
+  if (datosGuardados!==null) {
+    console.log("BIEN");
+
+      for (var i = 1; i < datosGuardados.length; i++) {
+        if (datosGuardados[i][0].toLowerCase() === nombre.toLowerCase()) {
+          datosGuardados[i][2] = nuevoStock.toString(); // Actualizar el stock en los datos guardados
+          localStorage.setItem('datosExcel', JSON.stringify(datosGuardados)); // Guardar datos actualizados en localStorage
+          break;
+        }
+      }
   }
+ 
 
   var comprasAnteriores = JSON.parse(localStorage.getItem('comprasAnteriores')) || {};
   if (!comprasAnteriores[nombre]) {
@@ -394,7 +400,6 @@ document.getElementById('guardar').addEventListener('click', function () {
   comprasAnteriores[nombre] += cantidad;
   localStorage.setItem('comprasAnteriores', JSON.stringify(comprasAnteriores));
   actualizarCompraActual();
-
 
 
 
@@ -501,9 +506,11 @@ document.getElementById('exportar-stock-xlsx').addEventListener('click', functio
   datos.shift();
   var datosConvertidos = datos.map(function(fila) {
     return {
-      producto: fila[0], // Asigna cada valor a una clave específica
-      precio: fila[1],
-      stock: fila[2]
+      Producto: fila[0], // Asigna cada valor a una clave específica
+      Precio: fila[1],
+      Stock: fila[2],   
+      Categoria: fila[3]
+
       // ... repite esto para más columnas si es necesario
     };
   });

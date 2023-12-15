@@ -63,12 +63,12 @@ h1 {
   background-color: rgb(226, 226, 226);
   padding: 1em 0em 1em 1em;
   border-radius: 8px;
-  flex-wrap: nowrap;
-  align-items: center;
+  flex-wrap: wrap;
 }
 
 #vendido-actual {
   font-size: 2em;
+  width: 100%;
   margin: 1em 1em 1em 1em;
 }
 #historial {
@@ -223,7 +223,7 @@ hr {
   padding: 1rem;
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 700px) {
   body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -307,6 +307,9 @@ hr {
     flex-wrap: wrap;
 }
 
+#botones-compra-actual {
+  display: flex;
+}
   label {
     display: block;
     font-weight: bold;
@@ -350,8 +353,8 @@ hr {
   input#search-input {
     margin: 0em 0em 0em 0em;
     width: 88%;
+    font-size: 1em;
 }
- 
 
   h2 {
     float: left;
@@ -359,9 +362,10 @@ hr {
 
   /* Estilo para el elemento que muestra el total de precios */
   #total-precio {
-    margin: 20px;
+    margin: 1em 1em 1em 6%;
     font-weight: bold;
-  }
+    width: 100%;
+}
 
   hr {
     height: 2px;
@@ -431,4 +435,11 @@ hr {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+
+
+
+#botones-compra-actual{
+
 }
