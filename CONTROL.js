@@ -683,12 +683,12 @@ function actualizarCompraActual() {
     acum = parseFloat(acum) + parseFloat(vendido);
     localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
     var vendidoActualElement = document.getElementById('vendido-actual');
-    vendidoActualElement.textContent = 'Compra actual: $' + acum;
+    vendidoActualElement.textContent = 'Total: $' + acum;
   } else {
     console.log('Si finalizo');
     vendido = 0;
     var vendidoActualElement = document.getElementById('vendido-actual');
-    vendidoActualElement.textContent = 'Compra actual: $' + vendido.toFixed(2);
+    vendidoActualElement.textContent = 'Total: $' + vendido.toFixed(2);
     vendido = localStorage.setItem('valor_compra_actual', '0');
   }
 }
