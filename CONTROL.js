@@ -165,31 +165,30 @@ window.addEventListener('load', function () {
     historial = JSON.parse(localStorage.getItem('historial'));
   }
 });
-
 function displayProductsInTable(productsToDisplay = productos) {
   var tabla = document.getElementById('tabla-productos');
   tabla.innerHTML = ""; // Limpiar el contenido existente de la tabla
   var headerRow = tabla.insertRow();
   for (var key in productsToDisplay[0]) {
-    var headerCell = headerRow.insertCell();
-    headerCell.innerHTML = key;
+      var headerCell = headerRow.insertCell();
+      headerCell.innerHTML = key;
   }
 
   productsToDisplay.forEach(function (product, index) {
-    var row = tabla.insertRow();
-    for (var key in product) {
-      var cell = row.insertCell();
-      cell.innerHTML = product[key];
-    }
+      var row = tabla.insertRow();
+      for (var key in product) {
+          var cell = row.insertCell();
+          cell.innerHTML = product[key];
+      }
 
-    // Agregar un botón de eliminar a cada fila
-    var deleteCell = row.insertCell();
-    var deleteButton = document.createElement('button');
-    deleteButton.innerHTML = 'Eliminar';
-    deleteButton.addEventListener('click', function () {
-      eliminarProducto(index);
-    });
-    deleteCell.appendChild(deleteButton);
+      // Agregar un botón de eliminar a cada fila
+      var deleteCell = row.insertCell();
+      var deleteButton = document.createElement('button');
+      deleteButton.innerHTML = 'Eliminar';
+      deleteButton.addEventListener('click', function () {
+          eliminarProducto(index);
+      });
+      deleteCell.appendChild(deleteButton);
   });
 }
 
@@ -210,65 +209,58 @@ function obtenerFechaYHoraActuales() {
 }
 
 
-
 function eliminarProducto(index) {
   if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-    if (compra_actual === 'no' && carrito[index].Total === productos[index].Total) {
-      vendido = localStorage.getItem('valor_compra_actual');
-
-      acum = Math.max(parseFloat(vendido), carrito[index].Total) - Math.min(parseFloat(vendido), carrito[index].Total);
-      localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
-      var vendidoActualElement = document.getElementById('vendido-actual');
-      vendidoActualElement.textContent = 'Compra actual: $' + acum;
-
-
-      carrito.splice(index, 1);
-      localStorage.setItem('carrito', JSON.stringify(carrito));
-
-
-      productos.splice(index, 1);
-      localStorage.setItem('productos', JSON.stringify(productos));
-      displayProductsInTable()
-
-
-    }
-    console.log(productos.length)
-    if (productos.length === 0) {
-      localStorage.removeItem('productos');
-      localStorage.removeItem('carrito');
-      productos = [];
-      Carrito = [];
-      localStorage.removeItem('Ident');
-
-      localStorage.setItem('finalizo_compra', 'si');
-      compra_actual = localStorage.getItem('finalizo_compra');
-      vendido = localStorage.setItem('valor_compra_actual', '0.00');
-      localStorage.removeItem('valor_compra_actual');
-      vendido = 0;
-
-      acum = 0;
-
-      displayProductsInTable();
-      actualizarCompraActual();
-    }
-    else {
-      productos.splice(index, 1);
-      localStorage.setItem('productos', JSON.stringify(productos));
-
-      displayProductsInTable();
-
-    }
 
 
 
+
+
+
+      if (compra_actual === 'no' && carrito[index].Total=== productos[index].Total) {
+          vendido = localStorage.getItem('valor_compra_actual');
+
+          acum = Math.max(parseFloat(vendido), carrito[index].Total ) - Math.min(parseFloat(vendido), carrito[index].Total );
+          localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
+          var vendidoActualElement = document.getElementById('vendido-actual');
+          vendidoActualElement.textContent = 'Total: $' + acum;
+
+
+          carrito.splice(index, 1);
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+
+
+          productos.splice(index, 1);
+          localStorage.setItem('productos', JSON.stringify(productos));
+          displayProductsInTable();
+          actualizarTotalPrecio(); // Actualizar el total de precios después de eliminar
+          actualizarCompraActual();
+  
+      }
+      if (productos.length===0) {
+          localStorage.removeItem('productos');
+          localStorage.removeItem('carrito');
+          productos = [];
+          Carrito = [];
+          localStorage.removeItem('Ident');
+  
+          localStorage.setItem('finalizo_compra', 'si');
+          compra_actual = localStorage.getItem('finalizo_compra');
+          vendido = localStorage.setItem('valor_compra_actual', '0.00');
+          localStorage.removeItem('valor_compra_actual');
+          vendido = 0;
+  
+          acum = 0;
+  
+          displayProductsInTable();
+          actualizarTotalPrecio();
+          actualizarCompraActual();
+      }
+    
+     
+      
   }
 }
-
-
-
-
-
-
 
 
 
@@ -635,6 +627,7 @@ function finalizar_compra() {
 
     actualizarCompraActual();
     actualizarTotalPrecio();
+    refrescarPagina();
   }
 }
 
