@@ -22,12 +22,13 @@
 
 
     <div id="compra_actual">
-      <!-- Botón para cargar archivo XLSX -->
-      <input type="file" style="display: none;" id="archivo-xlsx" accept=".xlsx">
-      <button type="button" onclick="document.getElementById('archivo-xlsx').click()" >Cargar Archivo XLSX</button>
 
       <!-- Botón para abrir el modal -->
-      <button id="btnMostrarModal">Mostrar Datos XLSX</button>
+      <button id="btnMostrarModal">Mostrar Stock Disponible</button>
+      <!-- Botón para crear un archivo de Excel -->
+
+      <button  onclick="window.location.href = 'crear_lista_stock.html'">Crear Lista de Stock</button>
+
     </div>
 
 
@@ -61,12 +62,21 @@
     <div id="modal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Datos desde XLSX</h2>
-        <button id="exportar-stock-xlsx">Exportar a Excel</button>
+        <div id="botones-tabla-modal">
+       
+          <!-- Botón para cargar archivo XLSX -->
+          <input type="file" style="display: none;" id="archivo-xlsx" accept=".xlsx">
+          <button id="subir-stock" type="button" onclick="document.getElementById('archivo-xlsx').click()">Subir Stock</button>
+          <button id="exportar-stock-xlsx">Descargar tabla</button>
+          <h2>Control de Stock</h2>
+
+        </div>
+
+
         <table id="tabla-datos">
           <!-- Aquí se mostrarán los datos -->
         </table>
-        
+
       </div>
     </div>
     <br>
@@ -78,14 +88,14 @@
         <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
         <button id="borrar-compra">Cancelar Compra</button>
       </div>
-    
+
 
     </div>
-    
+
 
 
     <div id="compra_actual">
-    
+
       <table id="tabla-productos">
         <tr>
           <th>ID</th>
@@ -100,18 +110,18 @@
       </table>
     </div>
 
-<hr>
+    <hr>
     <div id="historial">
 
-      
- <!-- Tabla para mostrar el historial de productos -->
 
-      <h2>Historial de Compras</h2> 
-      <div id="opciones-historial"> 
+      <!-- Tabla para mostrar el historial de productos -->
+
+      <h2>Historial de Compras</h2>
+      <div id="opciones-historial">
         <button onclick="limpiarHistorial()">Vaciar Historial</button>
         <button id="exportar-xlsx">Exportar a Excel</button>
       </div>
-      
+
 
       <div class="busqueda">
         <input type="text" id="search-input" placeholder="Buscar por Nombre, Fecha, Hora o Precio">
@@ -119,13 +129,13 @@
         <button id="show-all-button">Mostrar Todos</button>
 
       </div>
-<br>  
+      <br>
 
-<div id="total-precio">Total: $0.00</div>
-<table id="historial-table">
+      <div id="total-precio">Total: $0.00</div>
+      <table id="historial-table">
 
-    <thead>
-        <tr>
+        <thead>
+          <tr>
             <th>ID</th>
             <th>Producto</th>
             <th>Precio</th>
@@ -133,12 +143,12 @@
             <th>Total</th>
             <th>Fecha</th>
             <th>Hora</th>
-        </tr>
-    </thead>
-</table>
+          </tr>
+        </thead>
+      </table>
     </div>
 
- 
+
 
 
   </div>
@@ -152,7 +162,7 @@
 
   <!-- Incluye la biblioteca xlsx-style -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
-  
+
   <script src="CONTROL.js"></script>
 
 </body>

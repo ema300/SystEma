@@ -188,6 +188,8 @@ function displayProductsInTable(productsToDisplay = productos) {
       var deleteCell = row.insertCell();
       var deleteButton = document.createElement('button');
       deleteButton.innerHTML = 'Eliminar';
+      deleteButton.id = 'eliminar'; // Asigna el ID 'btn-eliminar' al botón
+
       deleteButton.addEventListener('click', function () {
           eliminarProducto(index);
       });
