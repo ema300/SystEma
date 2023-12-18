@@ -51,7 +51,7 @@
             <button type="submit">Agregar Producto</button>
         </form>
 
-        <button id="boton-vaciar">Vaciar Todo</button>
+        <button id="boton-vaciar">Limpiar todo</button>
         <button id="boton-mostrar-todos">Mostrar Todos</button>
         <button id="boton-incrementar-precio">Aumentar Precio</button>
         <button id="boton-incrementar-porcentaje-precio">Aumentar Precio en Porcentaje</button>
@@ -137,6 +137,7 @@
                 if (confirmacion) {
                     vaciarTodosLosProductos();
                     limpiarFiltroCategoria();
+                    refrescarPagina();
                 }
             });
 
@@ -160,9 +161,8 @@
                 mostrarTodosLosProductos();
             });
 
-            function limpiarFiltroCategoria() {
-                filtroCategoria.selectedIndex = 0; // Restablece la opción predeterminada del filtro
-            }
+
+
             function agregarProductoATabla(producto) {
                 const fila = document.createElement("tr");
                 fila.innerHTML = `
@@ -339,6 +339,13 @@
                 if (dropdownCategoria) {
                     dropdownCategoria.selectedIndex = 0; // Establece la opción predeterminada
                 }
+            }
+
+
+            //Refrescar la pagina
+
+            function refrescarPagina() {
+                location.reload();
             }
         </script>
     </body>
