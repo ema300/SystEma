@@ -2,352 +2,86 @@
 <html>
 
     <head>
-        <title>Aplicación de Gestión de Productos</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lista de productos</title>
     </head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="estilo.css">
 
     <body>
-        <h1>Lista de Productos</h1>
-        <div>
+        <div class="contenido">
+            <div id="ingresar_producto">
+
+                <form id="formulario-producto">
+                    <h2>Agregar Producto</h2>
+                    <form id="formulario-producto">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" required>
+                        <br>
+                        <label for="precio">Precio:</label>
+                        <input type="number" id="precio" required>
+                        <br>
+                        <label for="stock">Stock:</label> 
+                        <input type="number" id="stock" required> 
+                        <label for="categoria">Categoría:</label>
+                        <input type="text" id="categoria" required>
+                        <br>
+                        <button type="submit">Agregar Producto</button>
+                    </form>
+            </div>
+        </div>
+
+<div id="lista_producto">
+    <h1>Lista de Productos</h1>
+    <button id="exportar-stock-xlsx">Exportar a Excel</button>
+
+
+      
+        
+        <div id="herramientas">
+            <button id="boton-vaciar">Limpiar todo</button>
+            <button id="boton-incrementar-precio">Aumentar Precio</button>
+            <button id="boton-incrementar-porcentaje-precio">Aumentar Precio en Porcentaje</button>
+            <button id="boton-redondear-precios">Redondear Precios</button>
+        </div>
+        <div id="busqueda">
             <label for="busqueda">Buscar por Nombre o Stock:</label>
             <input type="text" id="busqueda" placeholder="Nombre o Stock">
+
+            <div>
+                <label for="filtro-categoria">Filtrar por Categoría:</label>
+                <select id="filtro-categoria">
+                    <option value="">Todas las Categorías</option>
+                </select>
+            </div>
             <button id="boton-buscar">Buscar</button>
+            <button id="boton-mostrar-todos">Mostrar Todos</button>
+
         </div>
-        <button id="boton-exportar-excel">Exportar a Excel</button>
 
-        <div>
-            <label for="filtro-categoria">Filtrar por Categoría:</label>
-            <select id="filtro-categoria">
-                <option value="">Todas las Categorías</option>
-            </select>
+        <div id="compra_actual">
+
+            <table id="tabla-productos">
+                <thead>
+                    <tr>
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
-        <table id="tabla-productos">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Stock</th> <!-- Cambio de "Cantidad" a "Stock" -->
-                    <th>Categoría</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    </div>
 
-        <h2>Agregar Producto</h2>
-        <form id="formulario-producto">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" required>
-            <br>
-            <label for="precio">Precio:</label>
-            <input type="number" id="precio" required>
-            <br>
-            <label for="stock">Stock:</label> <!-- Cambio de "Cantidad" a "Stock" -->
-            <input type="number" id="stock" required> <!-- Cambio de "Cantidad" a "Stock" -->
-            <br>
-            <label for="categoria">Categoría:</label>
-            <input type="text" id="categoria" required>
-            <br>
-            <button type="submit">Agregar Producto</button>
-        </form>
+        </div>
+        <div class="copyright">
+            © 2023 Desarrollado por DEA. Derechos reservados.
+          </div>
+        
 
-        <button id="boton-vaciar">Limpiar todo</button>
-        <button id="boton-mostrar-todos">Mostrar Todos</button>
-        <button id="boton-incrementar-precio">Aumentar Precio</button>
-        <button id="boton-incrementar-porcentaje-precio">Aumentar Precio en Porcentaje</button>
-        <button id="boton-redondear-precios">Redondear Precios</button>
-
-        <script>
-            const formularioProducto = document.getElementById("formulario-producto");
-            const cuerpoTablaProductos = document.querySelector("#tabla-productos tbody");
-            const entradaBusqueda = document.getElementById("busqueda");
-            const botonBuscar = document.getElementById("boton-buscar");
-            const filtroCategoria = document.getElementById("filtro-categoria");
-            const botonVaciar = document.getElementById("boton-vaciar");
-            const botonMostrarTodos = document.getElementById("boton-mostrar-todos");
-            const botonIncrementarPrecio = document.getElementById("boton-incrementar-precio");
-            const botonIncrementarPorcentajePrecio = document.getElementById("boton-incrementar-porcentaje-precio");
-            const botonRedondearPrecios = document.getElementById("boton-redondear-precios");
-
-            botonBuscar.addEventListener("click", function () {
-                const textoBusqueda = entradaBusqueda.value.toLowerCase();
-                filtrarProductos(textoBusqueda);
-            });
-
-            filtroCategoria.addEventListener("change", function () {
-                const categoriaSeleccionada = filtroCategoria.value;
-                filtrarProductosPorCategoria(categoriaSeleccionada);
-            });
-
-            formularioProducto.addEventListener("submit", function (e) {
-                e.preventDefault();
-
-                const nombre = document.getElementById("nombre").value;
-                const precio = parseFloat(document.getElementById("precio").value);
-                const stock = parseInt(document.getElementById("stock").value); // Cambio de "cantidad" a "stock"
-                const categoria = document.getElementById("categoria").value;
-                const botonExportarExcel = document.getElementById("boton-exportar-excel");
-
-                botonExportarExcel.addEventListener("click", function () {
-                    exportarAExcel();
-                });
-
-                function exportarAExcel() {
-                    const filas = cuerpoTablaProductos.querySelectorAll("tr");
-                    const datos = [];
-
-                    filas.forEach((fila) => {
-                        const celdas = fila.querySelectorAll("td");
-                        const nombre = celdas[0].textContent;
-                        const precio = celdas[1].textContent;
-                        const stock = celdas[2].textContent;
-                        const categoria = celdas[3].textContent;
-                        datos.push([nombre, precio, stock, categoria]);
-                    });
-
-                    const wb = XLSX.utils.book_new();
-                    const ws = XLSX.utils.aoa_to_sheet([["Nombre", "Precio", "Stock", "Categoría"], ...datos]);
-                    XLSX.utils.book_append_sheet(wb, ws, "Productos");
-
-                    // Guardar el archivo
-                    XLSX.writeFile(wb, 'productos.xlsx');
-                }
-
-                const producto = {
-                    nombre,
-                    precio,
-                    stock, // Cambio de "cantidad" a "stock"
-                    categoria
-                };
-
-                const productosExistentes = JSON.parse(localStorage.getItem("productos")) || [];
-                productosExistentes.push(producto);
-                localStorage.setItem("productos", JSON.stringify(productosExistentes));
-
-                agregarProductoATabla(producto);
-
-                // Agregar la categoría al filtro
-                agregarCategoriaAlDropdown(categoria);
-
-                formularioProducto.reset();
-            });
-
-            botonVaciar.addEventListener("click", function () {
-                const confirmacion = confirm("¿Estás seguro de que deseas vaciar todos los productos?");
-                if (confirmacion) {
-                    vaciarTodosLosProductos();
-                    limpiarFiltroCategoria();
-                    refrescarPagina();
-                }
-            });
-
-            botonMostrarTodos.addEventListener("click", function () {
-                mostrarTodosLosProductos();
-            });
-
-            botonIncrementarPrecio.addEventListener("click", function () {
-                incrementarPrecioDeTodosLosProductos();
-            });
-
-            botonIncrementarPorcentajePrecio.addEventListener("click", function () {
-                incrementarPrecioPorcentajeDeTodosLosProductos();
-            });
-
-            botonRedondearPrecios.addEventListener("click", function () {
-                redondearPreciosDeTodosLosProductos();
-            });
-
-            window.addEventListener("load", function () {
-                mostrarTodosLosProductos();
-            });
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
 
-
-            function agregarProductoATabla(producto) {
-                const fila = document.createElement("tr");
-                fila.innerHTML = `
-        <td>${producto.nombre}</td>
-        <td>${producto.precio}</td>
-        <td>${producto.stock}</td>
-        <td>${producto.categoria}</td>
-        <td>
-            <button class="boton-editar">Editar</button>
-            <button class="boton-eliminar">Eliminar</button>
-        </td>
-    `;
-
-                const botonEditar = fila.querySelector(".boton-editar");
-                const botonEliminar = fila.querySelector(".boton-eliminar");
-
-                botonEditar.addEventListener("click", function () {
-                    editarProducto(producto, fila);
-                });
-
-                botonEliminar.addEventListener("click", function () {
-                    const confirmacion = confirm("¿Estás seguro de que deseas eliminar este producto?");
-                    if (confirmacion) {
-                        fila.remove();
-                        eliminarProducto(producto);
-                    }
-                });
-
-                // Inserta la nueva fila al principio de la tabla
-                if (cuerpoTablaProductos.firstChild) {
-                    cuerpoTablaProductos.insertBefore(fila, cuerpoTablaProductos.firstChild);
-                } else {
-                    cuerpoTablaProductos.appendChild(fila);
-                }
-            }
-            function filtrarProductos(textoBusqueda) {
-                const filas = cuerpoTablaProductos.querySelectorAll("tr");
-                filas.forEach((fila) => {
-                    const celdaNombre = fila.querySelector("td:first-child");
-                    const celdaStock = fila.querySelector("td:nth-child(3)"); // Cambio de "cantidad" a "stock"
-                    const nombre = celdaNombre.textContent.toLowerCase();
-                    const stock = celdaStock.textContent.toLowerCase(); // Cambio de "cantidad" a "stock"
-
-                    if (nombre.includes(textoBusqueda) || stock <= textoBusqueda) { // Cambio de "cantidad" a "stock"
-                        fila.style.display = "";
-                    } else {
-                        fila.style.display = "none";
-                    }
-                });
-            }
-
-            function filtrarProductosPorCategoria(categoria) {
-                const filas = cuerpoTablaProductos.querySelectorAll("tr");
-                filas.forEach((fila) => {
-                    const celdaCategoria = fila.querySelector("td:nth-child(4)");
-                    const categoriaProducto = celdaCategoria.textContent;
-
-                    if (categoria === "" || categoriaProducto === categoria) {
-                        fila.style.display = "";
-                    } else {
-                        fila.style.display = "none";
-                    }
-                });
-            }
-
-            function editarProducto(producto, fila) {
-                const nuevoNombre = prompt("Editar Nombre:", producto.nombre);
-                const nuevoPrecio = parseFloat(prompt("Editar Precio:", producto.precio));
-                const nuevoStock = parseInt(prompt("Editar Stock:", producto.stock)); // Cambio de "cantidad" a "stock"
-                const nuevaCategoria = prompt("Editar Categoría:", producto.categoria);
-
-                if (nuevoNombre !== null && !isNaN(nuevoPrecio) && !isNaN(nuevoStock) && nuevaCategoria !== null) {
-                    producto.nombre = nuevoNombre;
-                    producto.precio = nuevoPrecio;
-                    producto.stock = nuevoStock; // Cambio de "cantidad" a "stock"
-                    producto.categoria = nuevaCategoria;
-
-                    // Actualizar los campos de la fila con los nuevos valores
-                    fila.querySelector("td:nth-child(1)").textContent = nuevoNombre;
-                    fila.querySelector("td:nth-child(2)").textContent = nuevoPrecio;
-                    fila.querySelector("td:nth-child(3)").textContent = nuevoStock; // Cambio de "cantidad" a "stock"
-                    fila.querySelector("td:nth-child(4)").textContent = nuevaCategoria;
-
-                    actualizarProducto(producto);
-                }
-            }
-
-            function eliminarProducto(producto) {
-                const productosExistentes = JSON.parse(localStorage.getItem("productos")) || [];
-                const productosActualizados = productosExistentes.filter((p) => p.nombre !== producto.nombre);
-                localStorage.setItem("productos", JSON.stringify(productosActualizados));
-            }
-
-            function actualizarProducto(producto) {
-                const productosExistentes = JSON.parse(localStorage.getItem("productos")) || [];
-                const productosActualizados = productosExistentes.map((p) => {
-                    if (p.nombre === producto.nombre) {
-                        return producto;
-                    }
-                    return p;
-                });
-                localStorage.setItem("productos", JSON.stringify(productosActualizados));
-            }
-
-            function vaciarTodosLosProductos() {
-                localStorage.removeItem("productos");
-                cuerpoTablaProductos.innerHTML = "";
-            }
-
-            function mostrarTodosLosProductos() {
-                cuerpoTablaProductos.innerHTML = ""; // Limpia la tabla
-
-                const productosAlmacenados = JSON.parse(localStorage.getItem("productos")) || [];
-
-                for (const producto of productosAlmacenados) {
-                    agregarProductoATabla(producto);
-                    // Agregar la categoría al filtro
-                    agregarCategoriaAlDropdown(producto.categoria);
-                }
-            }
-
-            function incrementarPrecioDeTodosLosProductos() {
-                const cantidadAumento = parseFloat(prompt("Ingrese el aumento de precio (sin decimales):"));
-                if (!isNaN(cantidadAumento)) {
-                    const productosAlmacenados = JSON.parse(localStorage.getItem("productos")) || [];
-                    const productosActualizados = productosAlmacenados.map((producto) => {
-                        producto.precio += cantidadAumento;
-                        return producto;
-                    });
-                    localStorage.setItem("productos", JSON.stringify(productosActualizados));
-                    mostrarTodosLosProductos();
-                } else {
-                    alert("Ingrese un número válido para el aumento de precio.");
-                }
-            }
-
-            function incrementarPrecioPorcentajeDeTodosLosProductos() {
-                const porcentajeAumento = parseFloat(prompt("Ingrese el aumento de precio en porcentaje:"));
-                if (!isNaN(porcentajeAumento)) {
-                    const productosAlmacenados = JSON.parse(localStorage.getItem("productos")) || [];
-                    const productosActualizados = productosAlmacenados.map((producto) => {
-                        producto.precio += (producto.precio * porcentajeAumento) / 100;
-                        return producto;
-                    });
-                    localStorage.setItem("productos", JSON.stringify(productosActualizados));
-                    mostrarTodosLosProductos();
-                } else {
-                    alert("Ingrese un número válido para el aumento de precio en porcentaje.");
-                }
-            }
-
-            function redondearPreciosDeTodosLosProductos() {
-                const productosAlmacenados = JSON.parse(localStorage.getItem("productos")) || [];
-                const productosRedondeados = productosAlmacenados.map((producto) => {
-                    producto.precio = Math.round(producto.precio);
-                    return producto;
-                });
-                localStorage.setItem("productos", JSON.stringify(productosRedondeados));
-                mostrarTodosLosProductos();
-            }
-
-            function agregarCategoriaAlDropdown(categoria) {
-                const dropdownCategoria = document.getElementById("filtro-categoria");
-                if (dropdownCategoria) {
-                    const opcion = document.createElement("option");
-                    opcion.text = categoria;
-                    opcion.value = categoria;
-                    dropdownCategoria.appendChild(opcion);
-                }
-            }
-
-            function limpiarFiltroCategoria() {
-                const dropdownCategoria = document.getElementById("filtro-categoria");
-                if (dropdownCategoria) {
-                    dropdownCategoria.selectedIndex = 0; // Establece la opción predeterminada
-                }
-            }
-
-
-            //Refrescar la pagina
-
-            function refrescarPagina() {
-                location.reload();
-            }
-        </script>
+        <script src="control_stock.js"></script>
     </body>
 
 </html>

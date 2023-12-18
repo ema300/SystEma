@@ -19,6 +19,7 @@ h1 {
   justify-content: center;
   flex-wrap: wrap;
   background-color: #091725;
+  border-radius: 8px;
 }
 
 #ingresar_producto {
@@ -43,11 +44,11 @@ h1 {
   width: 100%;
   margin: 0em 0em 1em 0em;
   background-color: rgb(226, 226, 226);
-  padding: 1em 0em 1em 1em;
+  padding: 0em 0em 0em 0em;
   border-radius: 8px;
-  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
+  
 }
 
 #vendido-actual {
@@ -250,19 +251,72 @@ hr {
 
 
 
-
-
-
-
-
-
-
 .copyright {
   text-align: right;
   color: #ccc;
   margin: 1rem;
   padding: 1rem;
 }
+
+
+
+/* Otra pagina*/
+
+#lista_producto {
+  display: flex;
+  /* width: 100%; */
+  margin: 1em 1em 0em 1em;
+  background-color: #091725;
+  padding: 1em 1em 1em 1em;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+#herramientas {
+  display: flex;
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 0em 0em 0em 0em;
+  border-radius: 8px;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+
+#busqueda {
+  display: flex;
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 1em 0em 1em 1em;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+input#busqueda {
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  border-radius: 8px;
+  border: 1px solid #818181;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*Diseño Mobile */
 @media screen and (max-width: 700px) {
   body {
@@ -450,6 +504,47 @@ hr {
     border: 1px solid #ccc;
     padding: 5px;
 }
+
+/* Otra pagina*/
+
+#lista_producto {
+  display: flex;
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 1em 0em 1em 1em;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+#herramientas {
+  display: flex;
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 1em 0em 1em 1em;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+#busqueda {
+  display: flex;
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 1em 0em 1em 1em;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+input#busqueda {
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  border-radius: 8px;
+  border: 1px solid #818181;
+}
+
+
 }
 
 
