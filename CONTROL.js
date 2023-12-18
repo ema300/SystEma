@@ -187,7 +187,7 @@ function displayProductsInTable(productsToDisplay = productos) {
       // Agregar un botón de eliminar a cada fila
       var deleteCell = row.insertCell();
       var deleteButton = document.createElement('button');
-      deleteButton.innerHTML = 'Eliminar';
+      deleteButton.innerHTML = 'x';
       deleteButton.id = 'eliminar'; // Asigna el ID 'btn-eliminar' al botón
 
       deleteButton.addEventListener('click', function () {
@@ -287,7 +287,6 @@ document.getElementById('guardar').addEventListener('click', function () {
 
 
 
-
   // Restar la cantidad comprada al stock
   nuevoStock = stock - cantidad;
   copiaCantidad = copiaCantidad + cantidad;
@@ -318,7 +317,9 @@ document.getElementById('guardar').addEventListener('click', function () {
   localStorage.setItem('Ident', id.toString());
 
   if (nombre.trim() === '' || isNaN(precio) || isNaN(cantidad) || precio < 0 || cantidad < 0) {
+   
     alert('Por favor, complete todos los campos correctamente y asegúrese de que el precio y la cantidad no sean negativos.');
+    refrescarPagina();
     return;
   }
 

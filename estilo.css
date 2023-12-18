@@ -38,6 +38,18 @@ h1 {
   flex-wrap: wrap;
 }
 
+#menu {
+  display: flex;
+  width: 100%;
+  margin: 0em 0em 1em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 1em 0em 1em 1em;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
 #vendido-actual {
   font-size: 2em;
   width: 100%;
@@ -50,7 +62,16 @@ h1 {
   padding: 2em 2em 2em 2em;
   border-radius: 8px;
 }
-
+table {
+  display: none;
+  margin: 0em 0em 0em 0em;
+  padding: 0em 0em 0em 0em;
+  border-collapse: collapse;
+  display: flex;
+  justify-content: space-around;
+  border-radius: 5px;
+  font-size: 1em;
+}
 #opciones-historial {
   display: flex;
   width: 100%;
@@ -87,16 +108,10 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
+  margin: 1em 1em 1em 1em;
+
 }
 
-table {
-  margin: 0em 0em 0em 0em;
-  padding: 0em 0em 0em 0em;
-  border-collapse: collapse;
-  display: flex;
-  justify-content: space-around;
-  border-radius: 5px;
-}
 
 th,
 td {
@@ -112,33 +127,28 @@ input#search-input {
 
 button#finalizar-compra {
   
-  margin: 1em 1em 1em 1em;
 }
 
 button#sort-button {
   
   background-color: #0fc1e0;
 
-  margin: 1em 1em 1em 1em;
 }
 
 button#exportar-xlsx {
   background-color: #02861f;
 
-  margin: 1em 1em 1em 1em;
 }
 
 button#borrar-compra {
   background-color: rgb(66, 66, 66);
 
-  margin: 1em 1em 1em 1em;
 }
 
 
 button#subir-stock{
   background-color: #000000;
 
-  margin: 1em 1em 1em 1em;
 }
 
 
@@ -147,14 +157,12 @@ button#subir-stock{
 /* Estilo para el botón "Buscar" */
 #search-button {
   background-color: #0fc1e0;
-  margin: 1em 1em 1em 1em;
 
 }
 
 /* Estilo para el botón "Mostrar Todos" */
 #show-all-button {
   background-color: #0fc1e0;
-  margin: 1em 1em 1em 1em;
 }
 
 #guardar {
@@ -162,7 +170,6 @@ button#subir-stock{
 }
 #exportar-stock-xlsx {
   background-color: #02861f;
-  margin: 0em 1em 0em 1em;
   float: none;
 }
 
@@ -174,10 +181,8 @@ button#subir-stock{
 
 #botones-tabla-modal {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
-
-
 
 
 h2 {
@@ -202,6 +207,52 @@ hr {
   align-items: center;
 }
 
+/* Estilos para el modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  height: 90%;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.close {
+  color: #aaa;
+  display: flex;
+  width: 100%;
+  font-size: 28px;
+  font-weight: bold;
+  flex-direction: row-reverse;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+
+
+
 
 
 
@@ -212,7 +263,7 @@ hr {
   margin: 1rem;
   padding: 1rem;
 }
-/*Diseño para Escritorio */
+/*Diseño Mobile */
 @media screen and (max-width: 700px) {
   body {
     font-family: Arial, sans-serif;
@@ -243,15 +294,28 @@ hr {
     width: 90%;
 }
 
-  #compra_actual {
-    display: flex;
-    width: 100%;
-    margin: 0em 0em 0em 0em;
-    background-color: rgb(226, 226, 226);
-    padding: 0em 0em 0em 0em;
-    border-radius: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
+#compra_actual {
+  display: flex;
+  width: 100%;
+  margin: 0em 0em 0em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 0em 0em 0em 0em;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 7em;
+}
+
+#menu {
+  display: flex;
+  width: 100%;
+  margin: 0em 0em 0em 0em;
+  background-color: rgb(226, 226, 226);
+  padding: 0em 0em 0em 0em;
+  border-radius: 8px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  height: 7em;
 }
 .busqueda {
   margin: 0em 0em 0em 0em;
@@ -321,28 +385,27 @@ hr {
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    margin: 1em 1em 1em 1em;
+
+  }
+
+  #botones-tabla-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /* width: 100%; */
   }
   #exportar-stock-xlsx {
     background-color: #02861f;
-    margin: 0em 1em 0em 1em;
     float: none;
   }
-  table {
-    display: none;
-    margin: 0em 0em 0em 0em;
-    padding: 0em 0em 0em 0em;
-    border-collapse: collapse;
-    display: flex;
-    justify-content: space-around;
-    border-radius: 5px;
-  }
 
-  th,
-  td {
+
+  
+  th, td {
     text-align: center;
     border: 1px solid #ccc;
-  }
-
+}
   input#search-input {
     margin: 0em 0em 0em 0em;
     width: 88%;
@@ -374,8 +437,19 @@ hr {
     font-size: 1em;
   }
 
+  table {
+    margin: 0em 0em 0em 0em;
+    padding: 0em 0em 0em 0em;
+    border-collapse: collapse;
 
-
+    border-radius: 5px;
+    font-size: 0.6em;
+}
+#tabla-productos th, td {
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
 }
 
 
@@ -387,56 +461,3 @@ hr {
 
 
 
-#botones-tabla-modal {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  /* width: 100%; */
-}
-/* Estilos para el modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  height: 90%;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.close {
-  color: #aaa;
-  display: flex;
-  width: 100%;
-  font-size: 28px;
-  font-weight: bold;
-  flex-direction: row-reverse;
-}
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-
-
-
-#botones-compra-actual{
-
-}
