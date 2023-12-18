@@ -16,20 +16,8 @@ localStorage.setItem('c', '1234');
 
 
 
-
-
-
-
-
-document.getElementById('cargar-archivo').addEventListener('click', function () {
-  var input = document.getElementById('archivo-xlsx');
-
-  input.click(); // Simula el clic en el input para seleccionar un archivo
-  refrescarPagina();
-
-});
-
 document.getElementById('archivo-xlsx').addEventListener('change', function (e) {
+ 
   var file = e.target.files[0]; // Obtiene el archivo seleccionado
 
 
@@ -42,7 +30,7 @@ document.getElementById('archivo-xlsx').addEventListener('change', function (e) 
       var firstSheetName = workbook.SheetNames[0];
       var worksheet = workbook.Sheets[firstSheetName];
       var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      refrescarPagina();
+     
       // Mostrar los datos en una tabla
       mostrarDatosEnTabla(jsonData);
       // Crear lista de productos para autocompletado
@@ -96,18 +84,33 @@ function crearListaAutocompletado(data) {
 // Autocompletado del precio al seleccionar el nombre del producto
 document.getElementById('nombre').addEventListener('input', function () {
   var inputNombre = this.value.toLowerCase();
-  var options = document.getElementById('opciones-productos').getElementsByTagName('option');
-
-  for (var i = 0; i < options.length; i++) {
-    if (options[i].value.toLowerCase() === inputNombre) {
-      var precio = options[i].getAttribute('data-precio');
-      var stock = options[i].getAttribute('data-stock'); // Obtener el stock
-
-      document.getElementById('precio').value = precio;
-      document.getElementById('stock').value = stock; // Mostrar el stock
-      break;
+  if (inputNombre.length===1) {
+     refrescarPagina()
+  } else {
+    var options = document.getElementById('opciones-productos').getElementsByTagName('option');
+  
+    for (var i = 0; i < options.length; i++) {
+      if (options[i].value.toLowerCase() === inputNombre) {
+        var precio=0;
+        var stock=0;
+       
+  
+        precio = options[i].getAttribute('data-precio');
+        stock = options[i].getAttribute('data-stock'); // Obtener el stock
+        if (isNaN(precio)) {
+          precio = 0; // Asignar cero si el valor es NaN
+        }
+        if (isNaN(stock)) {
+          stock = 0; // Asignar cero si el valor es NaN
+  
+        }
+        document.getElementById('precio').value = precio;
+        document.getElementById('stock').value = stock; // Mostrar el stock
+        break;
+      }
     }
   }
+ 
 });
 
 

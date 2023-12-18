@@ -23,8 +23,9 @@
 
     <div id="compra_actual">
       <!-- Botón para cargar archivo XLSX -->
-      <input type="file" id="archivo-xlsx" accept=".xlsx">
-      <button type="button" id="cargar-archivo">Cargar Archivo XLSX</button>
+      <input type="file" style="display: none;" id="archivo-xlsx" accept=".xlsx">
+      <button type="button" onclick="document.getElementById('archivo-xlsx').click()" >Cargar Archivo XLSX</button>
+
       <!-- Botón para abrir el modal -->
       <button id="btnMostrarModal">Mostrar Datos XLSX</button>
     </div>
@@ -151,6 +152,7 @@
 
   <!-- Incluye la biblioteca xlsx-style -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+  
   <script src="CONTROL.js"></script>
 
 </body>
