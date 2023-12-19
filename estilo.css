@@ -30,9 +30,16 @@ h1 {
   border-radius: 8px;
   width: 26%;
 }
+#bloque-carrito {
+  display: flex;
+  width: 67%;
+  border-radius: 8px;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
 #compra_actual {
   display: flex;
-  width: 64%;
+ 
   margin: 0em 0em 1em 1em;
   background-color: rgb(226, 226, 226);
   padding: 1em 0em 1em 1em;
@@ -42,8 +49,7 @@ h1 {
 }
 #contenido-tabla {
   display: flex;
-  width: 100%;
-  margin: 0em 0em 1em 0em;
+  margin: 0em 0em 1em 1em;
   background-color: rgb(226, 226, 226);
   padding: 1em 0em 1em 1em;
   border-radius: 8px;
@@ -206,11 +212,6 @@ h2 {
   font-weight: bold;
 }
 
-hr {
-  height: 2px;
-  background-color: #ccc;
-  border: none;
-}
 .busqueda {
   margin: 0em 0em 0em 0em;
   padding: 1em 0em 1em 1em;
@@ -298,13 +299,27 @@ hr {
 }
 
 #busqueda {
+    display: flex;
+    width: 97%;
+    margin: 0em 0em 1em 0em;
+    background-color: rgb(226, 226, 226);
+    padding: 1em 1em 1em 1em;
+    border-radius: 8px;
+    flex-wrap: wrap;
+}
+
+
+
+
+#compra_actual {
   display: flex;
   width: 100%;
-  margin: 0em 0em 1em 0em;
+  margin: 0em 0em 0em 0em;
   background-color: rgb(226, 226, 226);
-  padding: 1em 0em 1em 1em;
+  padding: 0em 0em 0em 0em;
   border-radius: 8px;
-  flex-wrap: wrap;
+  justify-content: center;
+  height: 14em;
 }
 input#busqueda {
   width: 100%;
@@ -317,6 +332,17 @@ input#busqueda {
 
 
 
+
+#bloque-historial {
+    display: flex;
+    width: 100%;
+    margin: 0em 0em 0em 0em;
+    background-color: rgb(226, 226, 226);
+    padding: 1em 0em 1em 0em;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    height: 7em;
+}
 
 
 

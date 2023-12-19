@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
- 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adminstración de Productos</title>
-    <link rel="stylesheet" href="estilo.css">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adminstración de Productos</title>
+  <link rel="stylesheet" href="estilo.css">
 
 </head>
 
@@ -21,7 +22,7 @@
       <button id="btnMostrarModal">Mostrar Stock Disponible</button>
       <!-- Botón para crear un archivo de Excel -->
 
-      <button  onclick="window.location.href = 'crear_lista_stock.html'">Crear Lista de Stock</button>
+      <button onclick="window.location.href = 'crear_lista_stock.html'">Crear Lista de Stock</button>
 
     </div>
 
@@ -58,10 +59,11 @@
       <div class="modal-content">
         <span class="close">&times;</span>
         <div id="botones-tabla-modal">
-       
+
           <!-- Botón para cargar archivo XLSX -->
           <input type="file" style="display: none;" id="archivo-xlsx" accept=".xlsx">
-          <button id="subir-stock" type="button" onclick="document.getElementById('archivo-xlsx').click()">Subir Stock</button>
+          <button id="subir-stock" type="button" onclick="document.getElementById('archivo-xlsx').click()">Subir
+            Stock</button>
           <button id="exportar-stock-xlsx">Descargar tabla</button>
           <h2>Control de Stock</h2>
 
@@ -76,36 +78,37 @@
     </div>
     <br>
     <br>
-    <div id="compra_actual">
-      <div id="vendido-actual">Total: $0.00</div>
-      <br>
-      <div id="botones-compra-actual">
-        <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
-        <button id="borrar-compra">Cancelar Compra</button>
+
+    <div id="bloque-carrito">
+      <div id="compra_actual">
+        <div id="vendido-actual">Total: $0.00</div>
+        <br>
+        <div id="botones-compra-actual">
+          <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
+          <button id="borrar-compra">Cancelar Compra</button>
+        </div>
+
+
       </div>
 
 
+
+      <div id="contenido-tabla">
+
+        <table id="tabla-productos">
+          <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Acciones</th>
+          </tr>
+        </table>
+      </div>
     </div>
-
-
-
-    <div id="contenido-tabla">
-
-      <table id="tabla-productos">
-        <tr >
-          <th>ID</th>
-          <th>Producto</th>
-          <th>Precio</th>
-          <th>Cantidad</th>
-          <th>Total</th>
-          <th>Fecha</th>
-          <th>Hora</th>
-          <th>Acciones</th>
-        </tr>
-      </table>
-    </div>
-
-    <hr>
     <div id="historial">
 
 
@@ -126,11 +129,12 @@
       </div>
       <br>
 
-      <div id="total-precio">Total: $0.00</div>
+      <div id="total-precio">
+        Total: $0.00</div>
       <table id="historial-table">
 
         <thead>
-          <tr  >
+          <tr>
             <th>ID</th>
             <th>Producto</th>
             <th>Precio</th>
