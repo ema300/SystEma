@@ -97,9 +97,7 @@ function crearListaAutocompletado(data) {
 // Autocompletado del precio al seleccionar el nombre del producto
 document.getElementById('nombre').addEventListener('input', function () {
   var inputNombre = this.value.toLowerCase();
-  if (inputNombre.length === 1) {
-    refrescarPagina()
-  } else {
+ 
     var options = document.getElementById('opciones-productos').getElementsByTagName('option');
 
     for (var i = 0; i < options.length; i++) {
@@ -122,7 +120,7 @@ document.getElementById('nombre').addEventListener('input', function () {
         break;
       }
     }
-  }
+  
 
 });
 
