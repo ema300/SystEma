@@ -12,14 +12,13 @@ compra_actual = localStorage.getItem('finalizo_compra');
 var historial = [];
 
 
-localStorage.setItem('c', '1778');
 
 
 
 document.getElementById('archivo-xlsx').addEventListener('change', function (e) {
   var contrasenaAlmacenada = localStorage.getItem('c'); // Reemplaza 'contrasena' con la clave real
 
-  var contrasenaIngresada = prompt('Ingresa la contraseña para editar los datos desde XLSX:');
+  var contrasenaIngresada = prompt('Ingresa la contraseña');
 
 
   if (contrasenaIngresada === contrasenaAlmacenada) {
@@ -49,7 +48,7 @@ document.getElementById('archivo-xlsx').addEventListener('change', function (e) 
   }
   else {
     // La contraseña es incorrecta, mostrar un mensaje de error
-    alert('Contraseña incorrecta. No tienes permiso para editar los datos.');
+    alert('Contraseña incorrecta. No tienes permiso.');
   }
 });
 
@@ -485,14 +484,7 @@ function reiniciarTotal() {
   localStorage.removeItem('total');
 }
 
-
-
-
-
-
-
-
-
+localStorage.setItem('c', '1778');
 
 
 document.getElementById('exportar-xlsx').addEventListener('click', function () {
