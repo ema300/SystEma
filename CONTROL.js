@@ -12,33 +12,44 @@ compra_actual = localStorage.getItem('finalizo_compra');
 var historial = [];
 
 
-localStorage.setItem('c', '1234');
+localStorage.setItem('c', '1778');
 
 
 
 document.getElementById('archivo-xlsx').addEventListener('change', function (e) {
- 
-  var file = e.target.files[0]; // Obtiene el archivo seleccionado
+  var contrasenaAlmacenada = localStorage.getItem('c'); // Reemplaza 'contrasena' con la clave real
+
+  var contrasenaIngresada = prompt('Ingresa la contraseña para editar los datos desde XLSX:');
 
 
-  if (file) {
-    var reader = new FileReader();
+  if (contrasenaIngresada === contrasenaAlmacenada) {
 
-    reader.onload = function (e) {
-      var data = new Uint8Array(e.target.result);
-      var workbook = XLSX.read(data, { type: 'array' });
-      var firstSheetName = workbook.SheetNames[0];
-      var worksheet = workbook.Sheets[firstSheetName];
-      var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-     
-      // Mostrar los datos en una tabla
-      mostrarDatosEnTabla(jsonData);
-      // Crear lista de productos para autocompletado
+    var file = e.target.files[0]; // Obtiene el archivo seleccionado
 
-      crearListaAutocompletado(jsonData);
-    };
 
-    reader.readAsArrayBuffer(file);
+    if (file) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        var data = new Uint8Array(e.target.result);
+        var workbook = XLSX.read(data, { type: 'array' });
+        var firstSheetName = workbook.SheetNames[0];
+        var worksheet = workbook.Sheets[firstSheetName];
+        var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+        // Mostrar los datos en una tabla
+        mostrarDatosEnTabla(jsonData);
+        // Crear lista de productos para autocompletado
+
+        crearListaAutocompletado(jsonData);
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+  }
+  else {
+    // La contraseña es incorrecta, mostrar un mensaje de error
+    alert('Contraseña incorrecta. No tienes permiso para editar los datos.');
   }
 });
 
@@ -64,6 +75,9 @@ function mostrarDatosEnTabla(data) {
   localStorage.setItem('datosExcel', JSON.stringify(data));
 }
 
+  
+
+
 function crearListaAutocompletado(data) {
 
   var opcionesDatalist = document.getElementById('opciones-productos');
@@ -84,17 +98,17 @@ function crearListaAutocompletado(data) {
 // Autocompletado del precio al seleccionar el nombre del producto
 document.getElementById('nombre').addEventListener('input', function () {
   var inputNombre = this.value.toLowerCase();
-  if (inputNombre.length===1) {
-     refrescarPagina()
+  if (inputNombre.length === 1) {
+    refrescarPagina()
   } else {
     var options = document.getElementById('opciones-productos').getElementsByTagName('option');
-  
+
     for (var i = 0; i < options.length; i++) {
       if (options[i].value.toLowerCase() === inputNombre) {
-        var precio=0;
-        var stock=0;
-       
-  
+        var precio = 0;
+        var stock = 0;
+
+
         precio = options[i].getAttribute('data-precio');
         stock = options[i].getAttribute('data-stock'); // Obtener el stock
         if (isNaN(precio)) {
@@ -102,7 +116,7 @@ document.getElementById('nombre').addEventListener('input', function () {
         }
         if (isNaN(stock)) {
           stock = 0; // Asignar cero si el valor es NaN
-  
+
         }
         document.getElementById('precio').value = precio;
         document.getElementById('stock').value = stock; // Mostrar el stock
@@ -110,7 +124,7 @@ document.getElementById('nombre').addEventListener('input', function () {
       }
     }
   }
- 
+
 });
 
 
@@ -173,27 +187,27 @@ function displayProductsInTable(productsToDisplay = productos) {
   tabla.innerHTML = ""; // Limpiar el contenido existente de la tabla
   var headerRow = tabla.insertRow();
   for (var key in productsToDisplay[0]) {
-      var headerCell = headerRow.insertCell();
-      headerCell.innerHTML = key;
+    var headerCell = headerRow.insertCell();
+    headerCell.innerHTML = key;
   }
 
   productsToDisplay.forEach(function (product, index) {
-      var row = tabla.insertRow();
-      for (var key in product) {
-          var cell = row.insertCell();
-          cell.innerHTML = product[key];
-      }
+    var row = tabla.insertRow();
+    for (var key in product) {
+      var cell = row.insertCell();
+      cell.innerHTML = product[key];
+    }
 
-      // Agregar un botón de eliminar a cada fila
-      var deleteCell = row.insertCell();
-      var deleteButton = document.createElement('button');
-      deleteButton.innerHTML = 'x';
-      deleteButton.id = 'eliminar'; // Asigna el ID 'btn-eliminar' al botón
+    // Agregar un botón de eliminar a cada fila
+    var deleteCell = row.insertCell();
+    var deleteButton = document.createElement('button');
+    deleteButton.innerHTML = 'x';
+    deleteButton.id = 'eliminar'; // Asigna el ID 'btn-eliminar' al botón
 
-      deleteButton.addEventListener('click', function () {
-          eliminarProducto(index);
-      });
-      deleteCell.appendChild(deleteButton);
+    deleteButton.addEventListener('click', function () {
+      eliminarProducto(index);
+    });
+    deleteCell.appendChild(deleteButton);
   });
 }
 
@@ -222,48 +236,48 @@ function eliminarProducto(index) {
 
 
 
-      if (compra_actual === 'no' && carrito[index].Total=== productos[index].Total) {
-          vendido = localStorage.getItem('valor_compra_actual');
+    if (compra_actual === 'no' && carrito[index].Total === productos[index].Total) {
+      vendido = localStorage.getItem('valor_compra_actual');
 
-          acum = Math.max(parseFloat(vendido), carrito[index].Total ) - Math.min(parseFloat(vendido), carrito[index].Total );
-          localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
-          var vendidoActualElement = document.getElementById('vendido-actual');
-          vendidoActualElement.textContent = 'Total: $' + acum;
-
-
-          carrito.splice(index, 1);
-          localStorage.setItem('carrito', JSON.stringify(carrito));
+      acum = Math.max(parseFloat(vendido), carrito[index].Total) - Math.min(parseFloat(vendido), carrito[index].Total);
+      localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
+      var vendidoActualElement = document.getElementById('vendido-actual');
+      vendidoActualElement.textContent = 'Total: $' + acum;
 
 
-          productos.splice(index, 1);
-          localStorage.setItem('productos', JSON.stringify(productos));
-          displayProductsInTable();
-          actualizarTotalPrecio(); // Actualizar el total de precios después de eliminar
-          actualizarCompraActual();
-  
-      }
-      if (productos.length===0) {
-          localStorage.removeItem('productos');
-          localStorage.removeItem('carrito');
-          productos = [];
-          Carrito = [];
-          localStorage.removeItem('Ident');
-  
-          localStorage.setItem('finalizo_compra', 'si');
-          compra_actual = localStorage.getItem('finalizo_compra');
-          vendido = localStorage.setItem('valor_compra_actual', '0.00');
-          localStorage.removeItem('valor_compra_actual');
-          vendido = 0;
-  
-          acum = 0;
-  
-          displayProductsInTable();
-          actualizarTotalPrecio();
-          actualizarCompraActual();
-      }
-    
-     
-      
+      carrito.splice(index, 1);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+
+
+      productos.splice(index, 1);
+      localStorage.setItem('productos', JSON.stringify(productos));
+      displayProductsInTable();
+      actualizarTotalPrecio(); // Actualizar el total de precios después de eliminar
+      actualizarCompraActual();
+
+    }
+    if (productos.length === 0) {
+      localStorage.removeItem('productos');
+      localStorage.removeItem('carrito');
+      productos = [];
+      Carrito = [];
+      localStorage.removeItem('Ident');
+
+      localStorage.setItem('finalizo_compra', 'si');
+      compra_actual = localStorage.getItem('finalizo_compra');
+      vendido = localStorage.setItem('valor_compra_actual', '0.00');
+      localStorage.removeItem('valor_compra_actual');
+      vendido = 0;
+
+      acum = 0;
+
+      displayProductsInTable();
+      actualizarTotalPrecio();
+      actualizarCompraActual();
+    }
+
+
+
   }
 }
 
@@ -317,7 +331,7 @@ document.getElementById('guardar').addEventListener('click', function () {
   localStorage.setItem('Ident', id.toString());
 
   if (nombre.trim() === '' || isNaN(precio) || isNaN(cantidad) || precio < 0 || cantidad < 0) {
-   
+
     alert('Por favor, complete todos los campos correctamente y asegúrese de que el precio y la cantidad no sean negativos.');
     refrescarPagina();
     return;
@@ -378,18 +392,17 @@ document.getElementById('guardar').addEventListener('click', function () {
   }
   var datosGuardados = JSON.parse(localStorage.getItem('datosExcel'));
 
-  if (datosGuardados!==null) {
-    console.log("BIEN");
+  if (datosGuardados !== null) {
 
-      for (var i = 1; i < datosGuardados.length; i++) {
-        if (datosGuardados[i][0].toLowerCase() === nombre.toLowerCase()) {
-          datosGuardados[i][2] = nuevoStock.toString(); // Actualizar el stock en los datos guardados
-          localStorage.setItem('datosExcel', JSON.stringify(datosGuardados)); // Guardar datos actualizados en localStorage
-          break;
-        }
+    for (var i = 1; i < datosGuardados.length; i++) {
+      if (datosGuardados[i][0].toLowerCase() === nombre.toLowerCase()) {
+        datosGuardados[i][2] = nuevoStock.toString(); // Actualizar el stock en los datos guardados
+        localStorage.setItem('datosExcel', JSON.stringify(datosGuardados)); // Guardar datos actualizados en localStorage
+        break;
       }
+    }
   }
- 
+
 
   var comprasAnteriores = JSON.parse(localStorage.getItem('comprasAnteriores')) || {};
   if (!comprasAnteriores[nombre]) {
@@ -502,17 +515,17 @@ document.getElementById('exportar-stock-xlsx').addEventListener('click', functio
   var datos = JSON.parse(localStorage.getItem('datosExcel'));
   // Eliminar la primera fila del conjunto de datos
   datos.shift();
-  var datosConvertidos = datos.map(function(fila) {
+  var datosConvertidos = datos.map(function (fila) {
     return {
       Producto: fila[0], // Asigna cada valor a una clave específica
       Precio: fila[1],
-      Stock: fila[2],   
+      Stock: fila[2],
       Categoria: fila[3]
 
       // ... repite esto para más columnas si es necesario
     };
   });
-  
+
 
   var wb = XLSX.utils.book_new();
   var ws = XLSX.utils.json_to_sheet(datosConvertidos);
@@ -527,7 +540,7 @@ document.getElementById('exportar-stock-xlsx').addEventListener('click', functio
 });
 
 
-        
+
 
 
 
@@ -837,7 +850,7 @@ function editarDatoEnTabla(cell, newData) {
 document.getElementById('tabla-datos').addEventListener('click', function (e) {
   var contrasenaAlmacenada = localStorage.getItem('c'); // Reemplaza 'contrasena' con la clave real
 
-  var contrasenaIngresada = prompt('Ingresa la contraseña para editar los datos desde XLSX:');
+  var contrasenaIngresada = prompt('Ingresa la contraseña para editar los datos');
 
   var target = e.target;
   if (contrasenaIngresada === contrasenaAlmacenada) {

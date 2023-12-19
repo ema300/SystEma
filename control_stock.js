@@ -101,11 +101,11 @@ botonIncrementarPrecio.addEventListener("click", function () {
 botonIncrementarPorcentajePrecio.addEventListener("click", function () {
     incrementarPrecioPorcentajeDeTodosLosProductos();
 });
-
+/* 
 botonRedondearPrecios.addEventListener("click", function () {
     redondearPreciosDeTodosLosProductos();
 });
-
+*/
 window.addEventListener("load", function () {
     mostrarTodosLosProductos();
 });
