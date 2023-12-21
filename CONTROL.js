@@ -558,7 +558,7 @@ function borrar_compra() {
 
   compra_actual = localStorage.getItem('finalizo_compra');
   vendido = localStorage.setItem('valor_compra_actual', '0.00');
-
+  refrescarPagina();
 }
 
 
