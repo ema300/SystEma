@@ -74,7 +74,7 @@ botonVaciar.addEventListener("click", function () {
     const confirmacion = confirm("¿Estás seguro de que deseas vaciar todos los productos?");
     if (confirmacion) {
         vaciarTodosLosProductos();
-        limpiarFiltroCategoria();
+        
         refrescarPagina();
     }
 });
@@ -138,24 +138,33 @@ function agregarProductoATabla(producto) {
 
 
 function editarProducto(producto, fila) {
-    const nuevoNombre = prompt("Editar Nombre:", producto.nombre);
     const nuevoPrecio = parseFloat(prompt("Editar Precio:", producto.precio));
     const nuevoStock = parseInt(prompt("Editar Stock:", producto.stock)); // Cambio de "cantidad" a "stock"
     const nuevaCategoria = prompt("Editar Categoría:", producto.categoria);
 
-    if (nuevoNombre !== null && !isNaN(nuevoPrecio) && !isNaN(nuevoStock) && nuevaCategoria !== null) {
-        producto.nombre = nuevoNombre;
+    if ( !isNaN(nuevoPrecio) && !isNaN(nuevoStock) && nuevaCategoria !== null) {
         producto.precio = nuevoPrecio;
         producto.stock = nuevoStock; // Cambio de "cantidad" a "stock"
         producto.categoria = nuevaCategoria;
 
         // Actualizar los campos de la fila con los nuevos valores
-        fila.querySelector("td:nth-child(1)").textContent = nuevoNombre;
         fila.querySelector("td:nth-child(2)").textContent = nuevoPrecio;
         fila.querySelector("td:nth-child(3)").textContent = nuevoStock; // Cambio de "cantidad" a "stock"
         fila.querySelector("td:nth-child(4)").textContent = nuevaCategoria;
 
-        actualizarProducto(producto);
+        const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+        productosExistentes.forEach((p, index) => {
+            console.log(p.nombre);
+            console.log(producto.nombre);
+            if (p.nombre === producto.nombre) {
+              // Si se encuentra un producto con el mismo nombre, se actualiza en el array existente
+              productosExistentes[index] = producto;
+            }
+          });
+          
+           
+        localStorage.setItem("productosC", JSON.stringify( productosExistentes));
+    
     }
 }
 
@@ -165,19 +174,7 @@ function eliminarProducto(producto) {
     localStorage.setItem("productosC", JSON.stringify(productosActualizados));
 }
 
-function actualizarProducto(producto) {
-    const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
-    const productosActualizados = productosExistentes.map((p) => {
-        console.log(p.nombre);
-        console.log(producto.nombre);
-        if (p.nombre !== producto.nombre) {
-           
-            return producto;
-        }
-        return p;
-    });
-    localStorage.setItem("productosC", JSON.stringify(productosActualizados));
-}
+  
 
 
 
