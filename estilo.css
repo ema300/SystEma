@@ -80,13 +80,36 @@ h1 {
   padding: 2em 2em 2em 2em;
   border-radius: 8px;
 }
-table {
-  display: none;
+#bloque-productos {
+  /* display: flex; */
+  /* width: 100%; */
+  /* margin: 0em 0em 0em 0em; */
+  background-color: rgb(226, 226, 226);
+  padding: 1em 0em 1em 0em;
+  border-radius: 8px;
+  /* height: 7em; */
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  justify-content: center;
+}
+
+
+table{
+  /* display: none; */
+  /* margin: 0em 0em 0em 0em; */
+  /* padding: 0em 0em 0em 0em; */
+   border-collapse: collapse; 
+  /* display: flex; */
+  border-radius: 5px;
+  font-size: 1em;
+}
+#tabla-datos {
+  /* display: none; */
   margin: 0em 0em 0em 0em;
   padding: 0em 0em 0em 0em;
   border-collapse: collapse;
-  display: flex;
-  justify-content: space-around;
+
   border-radius: 5px;
   font-size: 1em;
 }
@@ -287,6 +310,20 @@ h2 {
   align-items: center;
 }
 
+
+#bloque-productos {
+  /* display: flex; */
+  /* width: 100%; */
+  /* margin: 0em 0em 0em 0em; */
+  background-color: rgb(226, 226, 226);
+  padding: 1em 1em 1em 1em;
+  border-radius: 8px;
+  /* height: 7em; */
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  justify-content: center;
+}
 #herramientas {
   display: flex;
   width: 100%;
@@ -579,6 +616,12 @@ input#busqueda {
   padding: 0.5em 0.5em 0.5em 0.5em;
   border-radius: 8px;
   border: 1px solid #818181;
+}
+
+#tabla-datos th, td {
+  text-align: center;
+  border: 1px solid #ccc;
+ 
 }
 
 

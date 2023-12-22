@@ -1,6 +1,6 @@
 
 const formularioProducto = document.getElementById("formulario-producto");
-const cuerpoTablaProductos = document.querySelector("#tabla-productos tbody");
+const cuerpoTablaProductos = document.querySelector("tabla-datos");
 const entradaBusqueda = document.getElementById("busqueda");
 const botonBuscar = document.getElementById("boton-buscar");
 const filtroCategoria = document.getElementById("filtro-categoria");
@@ -113,17 +113,19 @@ window.addEventListener("load", function () {
 
 
 function agregarProductoATabla(producto) {
+    const tablaProductos = document.getElementById("tabla-datos");
+
     const fila = document.createElement("tr");
     fila.innerHTML = `
-<td>${producto.nombre}</td>
-<td>${producto.precio}</td>
-<td>${producto.stock}</td>
-<td>${producto.categoria}</td>
-<td>
-<button class="boton-editar">Editar</button>
-<button class="boton-eliminar">Eliminar</button>
-</td>
-`;
+        <td>${producto.nombre}</td>
+        <td>${producto.precio}</td>
+        <td>${producto.stock}</td>
+        <td>${producto.categoria}</td>
+        <td>
+            <button class="boton-editar">Editar</button>
+            <button class="boton-eliminar">Eliminar</button>
+        </td>
+    `;
 
     const botonEditar = fila.querySelector(".boton-editar");
     const botonEliminar = fila.querySelector(".boton-eliminar");
@@ -140,42 +142,10 @@ function agregarProductoATabla(producto) {
         }
     });
 
-    // Inserta la nueva fila al principio de la tabla
-    if (cuerpoTablaProductos.firstChild) {
-        cuerpoTablaProductos.insertBefore(fila, cuerpoTablaProductos.firstChild);
-    } else {
-        cuerpoTablaProductos.appendChild(fila);
-    }
-}
-function filtrarProductos(textoBusqueda) {
-    const filas = cuerpoTablaProductos.querySelectorAll("tr");
-    filas.forEach((fila) => {
-        const celdaNombre = fila.querySelector("td:first-child");
-        const celdaStock = fila.querySelector("td:nth-child(3)"); // Cambio de "cantidad" a "stock"
-        const nombre = celdaNombre.textContent.toLowerCase();
-        const stock = celdaStock.textContent.toLowerCase(); // Cambio de "cantidad" a "stock"
-
-        if (nombre.includes(textoBusqueda) || stock <= textoBusqueda) { // Cambio de "cantidad" a "stock"
-            fila.style.display = "";
-        } else {
-            fila.style.display = "none";
-        }
-    });
+    tablaProductos.appendChild(fila);
 }
 
-function filtrarProductosPorCategoria(categoria) {
-    const filas = cuerpoTablaProductos.querySelectorAll("tr");
-    filas.forEach((fila) => {
-        const celdaCategoria = fila.querySelector("td:nth-child(4)");
-        const categoriaProducto = celdaCategoria.textContent;
 
-        if (categoria === "" || categoriaProducto === categoria) {
-            fila.style.display = "";
-        } else {
-            fila.style.display = "none";
-        }
-    });
-}
 
 function editarProducto(producto, fila) {
     const nuevoNombre = prompt("Editar Nombre:", producto.nombre);
@@ -208,7 +178,10 @@ function eliminarProducto(producto) {
 function actualizarProducto(producto) {
     const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
     const productosActualizados = productosExistentes.map((p) => {
-        if (p.nombre === producto.nombre) {
+        console.log(p.nombre);
+        console.log(producto.nombre);
+        if (p.nombre !== producto.nombre) {
+           
             return producto;
         }
         return p;
@@ -216,13 +189,42 @@ function actualizarProducto(producto) {
     localStorage.setItem("productosC", JSON.stringify(productosActualizados));
 }
 
+function filtrarProductos(textoBusqueda) {
+    const filas = cuerpoTablaProductos.querySelectorAll("tr");
+    filas.forEach((fila) => {
+        const celdaNombre = fila.querySelector("td:first-child");
+        const celdaStock = fila.querySelector("td:nth-child(3)"); // Cambio de "cantidad" a "stock"
+        const nombre = celdaNombre.textContent.toLowerCase();
+        const stock = celdaStock.textContent.toLowerCase(); // Cambio de "cantidad" a "stock"
+
+        if (nombre.includes(textoBusqueda) || stock <= textoBusqueda) { // Cambio de "cantidad" a "stock"
+            fila.style.display = "";
+        } else {
+            fila.style.display = "none";
+        }
+    });
+}
+
+function filtrarProductosPorCategoria(categoria) {
+    const filas = cuerpoTablaProductos.querySelectorAll("tr");
+    filas.forEach((fila) => {
+        const celdaCategoria = fila.querySelector("td:nth-child(4)");
+        const categoriaProducto = celdaCategoria.textContent;
+
+        if (categoria === "" || categoriaProducto === categoria) {
+            fila.style.display = "";
+        } else {
+            fila.style.display = "none";
+        }
+    });
+}
+
+
 function vaciarTodosLosProductos() {
     localStorage.removeItem("productosC");
-    cuerpoTablaProductos.innerHTML = "";
 }
 
 function mostrarTodosLosProductos() {
-    cuerpoTablaProductos.innerHTML = ""; // Limpia la tabla
 
     const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
 
@@ -243,6 +245,7 @@ function incrementarPrecioDeTodosLosProductos() {
         });
         localStorage.setItem("productosC", JSON.stringify(productosActualizados));
         mostrarTodosLosProductos();
+        refrescarPagina();
     } else {
         alert("Ingrese un número válido para el aumento de precio.");
     }
@@ -258,6 +261,7 @@ function incrementarPrecioPorcentajeDeTodosLosProductos() {
         });
         localStorage.setItem("productosC", JSON.stringify(productosActualizados));
         mostrarTodosLosProductos();
+        refrescarPagina();
     } else {
         alert("Ingrese un número válido para el aumento de precio en porcentaje.");
     }
@@ -271,6 +275,7 @@ function redondearPreciosDeTodosLosProductos() {
     });
     localStorage.setItem("productosC", JSON.stringify(productosRedondeados));
     mostrarTodosLosProductos();
+    refrescarPagina();
 }
 
 function agregarCategoriaAlDropdown(categoria) {
