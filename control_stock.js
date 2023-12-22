@@ -1,9 +1,7 @@
 
 const formularioProducto = document.getElementById("formulario-producto");
 const cuerpoTablaProductos = document.querySelector("tabla-datos");
-const entradaBusqueda = document.getElementById("busqueda");
 const botonBuscar = document.getElementById("boton-buscar");
-const filtroCategoria = document.getElementById("filtro-categoria");
 const botonVaciar = document.getElementById("boton-vaciar");
 const botonMostrarTodos = document.getElementById("boton-mostrar-todos");
 const botonIncrementarPrecio = document.getElementById("boton-incrementar-precio");
@@ -43,15 +41,7 @@ function exportarAExcel() {
     // Guardar el archivo
     XLSX.writeFile(wb, 'productos.xlsx');
 }
-botonBuscar.addEventListener("click", function () {
-    const textoBusqueda = entradaBusqueda.value.toLowerCase();
-    filtrarProductos(textoBusqueda);
-});
 
-filtroCategoria.addEventListener("change", function () {
-    const categoriaSeleccionada = filtroCategoria.value;
-    filtrarProductosPorCategoria(categoriaSeleccionada);
-});
 
 formularioProducto.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -75,8 +65,7 @@ formularioProducto.addEventListener("submit", function (e) {
 
     agregarProductoATabla(producto);
 
-    // Agregar la categoría al filtro
-    agregarCategoriaAlDropdown(categoria);
+
 
     formularioProducto.reset();
 });
@@ -91,7 +80,8 @@ botonVaciar.addEventListener("click", function () {
 });
 
 botonMostrarTodos.addEventListener("click", function () {
-    mostrarTodosLosProductos();
+   
+    refrescarPagina();
 });
 
 botonIncrementarPrecio.addEventListener("click", function () {
@@ -189,35 +179,9 @@ function actualizarProducto(producto) {
     localStorage.setItem("productosC", JSON.stringify(productosActualizados));
 }
 
-function filtrarProductos(textoBusqueda) {
-    const filas = cuerpoTablaProductos.querySelectorAll("tr");
-    filas.forEach((fila) => {
-        const celdaNombre = fila.querySelector("td:first-child");
-        const celdaStock = fila.querySelector("td:nth-child(3)"); // Cambio de "cantidad" a "stock"
-        const nombre = celdaNombre.textContent.toLowerCase();
-        const stock = celdaStock.textContent.toLowerCase(); // Cambio de "cantidad" a "stock"
 
-        if (nombre.includes(textoBusqueda) || stock <= textoBusqueda) { // Cambio de "cantidad" a "stock"
-            fila.style.display = "";
-        } else {
-            fila.style.display = "none";
-        }
-    });
-}
 
-function filtrarProductosPorCategoria(categoria) {
-    const filas = cuerpoTablaProductos.querySelectorAll("tr");
-    filas.forEach((fila) => {
-        const celdaCategoria = fila.querySelector("td:nth-child(4)");
-        const categoriaProducto = celdaCategoria.textContent;
 
-        if (categoria === "" || categoriaProducto === categoria) {
-            fila.style.display = "";
-        } else {
-            fila.style.display = "none";
-        }
-    });
-}
 
 
 function vaciarTodosLosProductos() {
@@ -230,9 +194,9 @@ function mostrarTodosLosProductos() {
 
     for (const producto of productosAlmacenados) {
         agregarProductoATabla(producto);
-        // Agregar la categoría al filtro
-        agregarCategoriaAlDropdown(producto.categoria);
+      
     }
+    
 }
 
 function incrementarPrecioDeTodosLosProductos() {
@@ -278,22 +242,8 @@ function redondearPreciosDeTodosLosProductos() {
     refrescarPagina();
 }
 
-function agregarCategoriaAlDropdown(categoria) {
-    const dropdownCategoria = document.getElementById("filtro-categoria");
-    if (dropdownCategoria) {
-        const opcion = document.createElement("option");
-        opcion.text = categoria;
-        opcion.value = categoria;
-        dropdownCategoria.appendChild(opcion);
-    }
-}
 
-function limpiarFiltroCategoria() {
-    const dropdownCategoria = document.getElementById("filtro-categoria");
-    if (dropdownCategoria) {
-        dropdownCategoria.selectedIndex = 0; // Establece la opción predeterminada
-    }
-}
+
 
 
 //Refrescar la pagina
