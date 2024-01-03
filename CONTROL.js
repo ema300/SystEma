@@ -4,6 +4,24 @@ var vendido = 0.00;
 var acum = 0;
 var nuevoStock = 0;
 var copiaCantidad = 0;
+
+
+// inicio Variables Modal
+
+var cuerpoTablaProductos = document.querySelector("tabla-stock");
+var botonBuscar = document.getElementById("boton-buscar");
+var botonVaciar = document.getElementById("boton-vaciar");
+var botonMostrarTodos = document.getElementById("boton-mostrar-todos");
+var botonIncrementarPrecio = document.getElementById("boton-incrementar-precio");
+var botonIncrementarPorcentajePrecio = document.getElementById("boton-incrementar-porcentaje-precio");
+var botonRedondearPrecios = document.getElementById("boton-redondear-precios");
+var botonExportar = document.getElementById('exportar-stock-xlsx');
+
+// fin variables modal
+
+
+
+
 localStorage.setItem('finalizo_compra', 'no');
 // Obtén el valor almacenado en localStorage
 compra_actual = localStorage.getItem('finalizo_compra');
@@ -15,114 +33,56 @@ var historial = [];
 
 
 
-document.getElementById('archivo-xlsx').addEventListener('change', function (e) {
-  var contrasenaAlmacenada = localStorage.getItem('c'); // Reemplaza 'contrasena' con la clave real
 
-  var contrasenaIngresada = prompt('Ingresa la contraseña');
-
-
-  if (contrasenaIngresada === contrasenaAlmacenada) {
-
-    var file = e.target.files[0]; // Obtiene el archivo seleccionado
-
-
-    if (file) {
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        var data = new Uint8Array(e.target.result);
-        var workbook = XLSX.read(data, { type: 'array' });
-        var firstSheetName = workbook.SheetNames[0];
-        var worksheet = workbook.Sheets[firstSheetName];
-        var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-        // Mostrar los datos en una tabla
-        mostrarDatosEnTabla(jsonData);
-        // Crear lista de productos para autocompletado
-
-        crearListaAutocompletado(jsonData);
-      };
-
-      reader.readAsArrayBuffer(file);
-    }
-  }
-  else {
-    // La contraseña es incorrecta, mostrar un mensaje de error
-    alert('Contraseña incorrecta. No tienes permiso.');
-  }
-});
-
-function mostrarDatosEnTabla(data) {
-
-  var tabla = document.getElementById('tabla-datos');
-  tabla.innerHTML = ''; // Limpiar contenido existente de la tabla
-
-  var headerRow = tabla.createTHead().insertRow();
-  for (var header of data[0]) {
-    var headerCell = headerRow.insertCell();
-    headerCell.textContent = header;
-  }
-
-  for (var i = 1; i < data.length; i++) {
-    var row = tabla.insertRow();
-    for (var j = 0; j < data[i].length; j++) {
-      var cell = row.insertCell();
-      cell.textContent = data[i][j];
-    }
-  }
-  // Guardar los datos en localStorage
-  localStorage.setItem('datosExcel', JSON.stringify(data));
-}
 
   
 
 
-function crearListaAutocompletado(data) {
 
+function crearListaAutocompletado(data) {
   var opcionesDatalist = document.getElementById('opciones-productos');
-  data.slice(1).forEach(function (row) {
-    var nombreProducto = row[0]; // Asumiendo que la columna 0 es el nombre del producto
-    var precioProducto = row[1]; // Asumiendo que la columna 1 es el precio del producto
-    var stockProducto = row[2]; // Asumiendo que la columna 2 es el stock del producto
+
+  data.forEach(function (producto) {
+    var nombreProducto = producto.nombre;
+    var precioProducto = producto.precio;
+    var stockProducto = producto.stock;
 
     var option = document.createElement('option');
     option.value = nombreProducto;
     option.setAttribute('data-precio', precioProducto);
-    option.setAttribute('data-stock', stockProducto); // Agregar stock como atributo
+    option.setAttribute('data-stock', stockProducto);
     opcionesDatalist.appendChild(option);
   });
 }
 
 
+
 // Autocompletado del precio al seleccionar el nombre del producto
 document.getElementById('nombre').addEventListener('input', function () {
   var inputNombre = this.value.toLowerCase();
- 
-    var options = document.getElementById('opciones-productos').getElementsByTagName('option');
+  var options = document.getElementById('opciones-productos').getElementsByTagName('option');
 
-    for (var i = 0; i < options.length; i++) {
-      if (options[i].value.toLowerCase() === inputNombre) {
-        var precio = 0;
-        var stock = 0;
+  for (var i = 0; i < options.length; i++) {
+    var nombreProducto = options[i].value.toLowerCase();
 
+    if (nombreProducto === inputNombre) {
+      var precio = options[i].getAttribute('data-precio');
+      var stock = options[i].getAttribute('data-stock');
 
-        precio = options[i].getAttribute('data-precio');
-        stock = options[i].getAttribute('data-stock'); // Obtener el stock
-        if (isNaN(precio)) {
-          precio = 0; // Asignar cero si el valor es NaN
-        }
-        if (isNaN(stock)) {
-          stock = 0; // Asignar cero si el valor es NaN
-
-        }
-        document.getElementById('precio').value = precio;
-        document.getElementById('stock').value = stock; // Mostrar el stock
-        break;
+      if (isNaN(precio)) {
+        precio = 0;
       }
-    }
-  
+      if (isNaN(stock)) {
+        stock = 0;
+      }
 
+      document.getElementById('precio').value = precio;
+      document.getElementById('stock').value = stock;
+      break;
+    }
+  }
 });
+
 
 
 
@@ -178,6 +138,16 @@ window.addEventListener('load', function () {
   if (localStorage.getItem('historial')) {
     historial = JSON.parse(localStorage.getItem('historial'));
   }
+
+if (localStorage.getItem('productosC')) {
+  const pro= JSON.parse(localStorage.getItem("productosC")) || [];
+  console.log(pro);
+  mostrarTodosLosProductos();
+  crearListaAutocompletado(pro);
+}
+
+
+
 });
 function displayProductsInTable(productsToDisplay = productos) {
   var tabla = document.getElementById('tabla-productos');
@@ -373,7 +343,6 @@ document.getElementById('guardar').addEventListener('click', function () {
 
 
   // Encontrar la fila correspondiente en la tabla de datos desde XLSX
-  var tabla = document.getElementById('tabla-datos');
   var filas = tabla.rows;
 
   for (var i = 0; i < filas.length; i++) {
@@ -501,33 +470,6 @@ document.getElementById('exportar-xlsx').addEventListener('click', function () {
 
 
 
-document.getElementById('exportar-stock-xlsx').addEventListener('click', function () {
-  var datos = JSON.parse(localStorage.getItem('datosExcel'));
-  // Eliminar la primera fila del conjunto de datos
-  datos.shift();
-  var datosConvertidos = datos.map(function (fila) {
-    return {
-      Producto: fila[0], // Asigna cada valor a una clave específica
-      Precio: fila[1],
-      Stock: fila[2],
-      Categoria: fila[3]
-
-      // ... repite esto para más columnas si es necesario
-    };
-  });
-
-
-  var wb = XLSX.utils.book_new();
-  var ws = XLSX.utils.json_to_sheet(datosConvertidos);
-  XLSX.utils.book_append_sheet(wb, ws, 'Productos-stock');
-
-  var now = new Date();
-  var datePart = now.toISOString().slice(0, 10).replace(/-/g, '-');
-  var timePart = now.toTimeString().slice(0, 8).replace(/:/g, '-');
-  var fileName = 'productos-stock-editar_' + datePart + '_' + timePart + '.xlsx';
-
-  XLSX.writeFile(wb, fileName);
-});
 
 
 
@@ -709,30 +651,49 @@ function actualizarCompraActual() {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Obtener referencia al botón y al modal
   var btnMostrarModal = document.getElementById('btnMostrarModal');
   var modal = document.getElementById('modal');
-
-  // Evento al hacer clic en el botón para mostrar el modal
-  btnMostrarModal.addEventListener('click', function () {
-    modal.style.display = 'block'; // Mostrar el modal
-  });
-
-  // Evento para cerrar el modal al hacer clic en el botón de cerrar (×)
   var closeBtn = document.querySelector('.close');
-  closeBtn.addEventListener('click', function () {
-    refrescarPagina();
 
-    modal.style.display = 'none'; // Ocultar el modal al hacer clic en el botón de cerrar
+  // Función para abrir el modal
+  function abrirModal() {
+    modal.style.display = 'block';
+  }
+
+  // Función para cerrar el modal
+  function cerrarModal() {
+    modal.style.display = 'none';
+    refrescarPagina();
+  }
+
+  // Verificar si hay un estado guardado en el almacenamiento local
+  var modalEstado = localStorage.getItem('modalEstado');
+
+  // Si el estado es 'abierto', abrir el modal
+  if (modalEstado === 'abierto') {
+    abrirModal();
+  }
+
+  btnMostrarModal.addEventListener('click', function () {
+    abrirModal();
+    // Guardar el estado en el almacenamiento local cuando se abre el modal
+    localStorage.setItem('modalEstado', 'abierto');
   });
 
-  // Cierra el modal si se hace clic fuera del área del modal
+  closeBtn.addEventListener('click', function () {
+    cerrarModal();
+    // Eliminar el estado del almacenamiento local al cerrar el modal
+    localStorage.removeItem('modalEstado');
+  });
+
   window.addEventListener('click', function (event) {
     if (event.target == modal) {
-      modal.style.display = 'none';
+      cerrarModal();
+      localStorage.removeItem('modalEstado');
     }
   });
 });
+
 
 
 
@@ -804,92 +765,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
 
 
-function editarDatosEnTabla(row, newData) {
-  for (var j = 0; j < newData.length; j++) {
-    row.cells[j].innerText = newData[j];
-  }
-}
-
-// Función para eliminar la fila correspondiente en la tabla y el localStorage
-function eliminarFilaDatosXLSX(rowIndex) {
-  var tabla = document.getElementById('tabla-datos');
-  var filas = tabla.rows;
-
-  var data = JSON.parse(localStorage.getItem('datosExcel'));
-
-  var nombreProducto = filas[rowIndex].cells[0].innerText.toLowerCase();
-
-  // Eliminar la fila correspondiente en el localStorage
-  for (var i = 1; i < data.length; i++) {
-    if (data[i][0].toLowerCase() === nombreProducto) {
-      data.splice(i, 1);
-      break;
-    }
-  }
-  localStorage.setItem('datosExcel', JSON.stringify(data));
-
-  // Eliminar la fila en la tabla
-  tabla.deleteRow(rowIndex);
-}
-
-// Evento para editar y eliminar datos al hacer clic en la tabla "Datos desde Xlsx"
-function editarDatoEnTabla(cell, newData) {
-  cell.innerText = newData;
-}
-
-document.getElementById('tabla-datos').addEventListener('click', function (e) {
-  var contrasenaAlmacenada = localStorage.getItem('c'); // Reemplaza 'contrasena' con la clave real
-
-  var contrasenaIngresada = prompt('Ingresa la contraseña para editar los datos');
-
-  var target = e.target;
-  if (contrasenaIngresada === contrasenaAlmacenada) {
-    if (target.tagName === 'TD') {
-
-      var cell = target;
-
-      var newData = prompt('Editar dato:', cell.innerText);
-
-      if (newData !== null) {
-        if (confirm(`¿Estás seguro de editar "?`)) {
-
-          editarDatoEnTabla(cell, newData);
-
-          // Obtener la fila y actualizar el localStorage con el dato editado
-          var row = cell.parentElement;
-          var storedData = JSON.parse(localStorage.getItem('datosExcel'));
-          var rowIndex = row.rowIndex;
-          var columnIndex = cell.cellIndex;
-          if (columnIndex === 1 || columnIndex === 2) { // Si la celda es de Precio o Stock
-            if (!esNumero(newData)) {
-              alert('Por favor, ingresa un valor numérico para Precio o Stock.');
-              return;
-            }
-          }
-          cell.textContent = newData;
-
-          // Obtener la fila y actualizar el localStorage con el dato editado
-          var storedData = JSON.parse(localStorage.getItem('datosExcel'));
-          storedData[rowIndex][columnIndex] = newData;
-
-          localStorage.setItem('datosExcel', JSON.stringify(storedData));
-        }
-      }
-
-    } else if (target.tagName === 'BUTTON') {
-      var confirmacion = confirm('¿Estás seguro de que deseas eliminar esta fila?');
-      if (confirmacion) {
-        var rowIndex = target.parentElement.rowIndex;
-        eliminarFilaDatosXLSX(rowIndex);
-        refrescarPagina();
-      }
-    }
-
-  } else {
-    // La contraseña es incorrecta, mostrar un mensaje de error
-    alert('Contraseña incorrecta. No tienes permiso para editar los datos.');
-  }
-});
 
 
 
@@ -916,6 +791,324 @@ function esNumero(valor) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// codigo modal control de stock
+
+
+
+
+
+
+const agregarBtn = document.getElementById('agregarBtn');
+
+agregarBtn.addEventListener('click', function() {
+    const nombre = document.getElementById('nombr').value;
+    const precio = parseFloat (document.getElementById('preci').value);
+    const stock = parseInt (document.getElementById('st').value);
+    const categoria = document.getElementById('categoria').value;
+    const producto = {
+      nombre,
+      precio,
+      stock, 
+      categoria
+  };
+
+  const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+  productosExistentes.push(producto);
+  localStorage.setItem("productosC", JSON.stringify(productosExistentes));
+  agregarProductoATabla(producto);
+
+   
+
+  
+});
+
+
+botonVaciar.addEventListener("click", function () {
+    const confirmacion = confirm("¿Estás seguro de que deseas vaciar todos los productos?");
+    if (confirmacion) {
+        vaciarTodosLosProductos();
+        
+        refrescarPagina();
+    }
+});
+
+botonMostrarTodos.addEventListener("click", function () {
+   
+    refrescarPagina();
+});
+
+botonIncrementarPrecio.addEventListener("click", function () {
+    incrementarPrecioDeTodosLosProductos();
+});
+
+botonIncrementarPorcentajePrecio.addEventListener("click", function () {
+    incrementarPrecioPorcentajeDeTodosLosProductos();
+});
+
+botonRedondearPrecios.addEventListener("click", function () {
+    redondearPreciosDeTodosLosProductos();
+});
+
+
+
+
+
+function agregarProductoATabla(producto) {
+    const tablaProductos = document.getElementById("tabla-stock");
+
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+        <td>${producto.nombre}</td>
+        <td>${producto.precio}</td>
+        <td>${producto.stock}</td>
+        <td>${producto.categoria}</td>
+        <td>
+            <button class="boton-editar">Editar</button>
+            <button class="boton-eliminar">Eliminar</button>
+        </td>
+    `;
+
+    const botonEditar = fila.querySelector(".boton-editar");
+    const botonEliminar = fila.querySelector(".boton-eliminar");
+
+    botonEditar.addEventListener("click", function () {
+        editarProducto(producto, fila);
+    });
+
+    botonEliminar.addEventListener("click", function () {
+        const confirmacion = confirm("¿Estás seguro de que deseas eliminar este producto?");
+        if (confirmacion) {
+            fila.remove();
+            eliminarProducto(producto);
+        }
+    });
+
+    tablaProductos.appendChild(fila);
+}
+
+
+
+function editarProducto(producto, fila) {
+    const nuevoPrecio = parseFloat(prompt("Editar Precio:", producto.precio));
+    const nuevoStock = parseInt(prompt("Editar Stock:", producto.stock)); // Cambio de "cantidad" a "stock"
+    const nuevaCategoria = prompt("Editar Categoría:", producto.categoria);
+
+    if ( !isNaN(nuevoPrecio) && !isNaN(nuevoStock) && nuevaCategoria !== null) {
+        producto.precio = nuevoPrecio;
+        producto.stock = nuevoStock; // Cambio de "cantidad" a "stock"
+        producto.categoria = nuevaCategoria;
+
+        // Actualizar los campos de la fila con los nuevos valores
+        fila.querySelector("td:nth-child(2)").textContent = nuevoPrecio;
+        fila.querySelector("td:nth-child(3)").textContent = nuevoStock; // Cambio de "cantidad" a "stock"
+        fila.querySelector("td:nth-child(4)").textContent = nuevaCategoria;
+
+        const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+        productosExistentes.forEach((p, index) => {
+            console.log(p.nombre);
+            console.log(producto.nombre);
+            if (p.nombre === producto.nombre) {
+              // Si se encuentra un producto con el mismo nombre, se actualiza en el array existente
+              productosExistentes[index] = producto;
+            }
+          });
+          
+           
+        localStorage.setItem("productosC", JSON.stringify( productosExistentes));
+    
+    }
+}
+
+function eliminarProducto(producto) {
+    const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+    const productosActualizados = productosExistentes.filter((p) => p.nombre !== producto.nombre);
+    localStorage.setItem("productosC", JSON.stringify(productosActualizados));
+}
+
+  
+
+
+
+
+
+
+function vaciarTodosLosProductos() {
+    localStorage.removeItem("productosC");
+}
+
+function mostrarTodosLosProductos() {
+
+    const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
+
+    for (const producto of productosAlmacenados) {
+        agregarProductoATabla(producto);
+      
+    }
+    
+}
+
+function incrementarPrecioDeTodosLosProductos() {
+    const cantidadAumento = parseFloat(prompt("Ingrese el aumento de precio (sin decimales):"));
+    if (!isNaN(cantidadAumento)) {
+        const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
+        const productosActualizados = productosAlmacenados.map((producto) => {
+            producto.precio += cantidadAumento;
+            return producto;
+        });
+        localStorage.setItem("productosC", JSON.stringify(productosActualizados));
+        mostrarTodosLosProductos();
+        refrescarPagina();
+    } else {
+        alert("Ingrese un número válido para el aumento de precio.");
+    }
+}
+
+function incrementarPrecioPorcentajeDeTodosLosProductos() {
+    const porcentajeAumento = parseFloat(prompt("Ingrese el aumento de precio en porcentaje:"));
+    if (!isNaN(porcentajeAumento)) {
+        const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
+        const productosActualizados = productosAlmacenados.map((producto) => {
+            producto.precio += (producto.precio * porcentajeAumento) / 100;
+            return producto;
+        });
+        localStorage.setItem("productosC", JSON.stringify(productosActualizados));
+        mostrarTodosLosProductos();
+        refrescarPagina();
+    } else {
+        alert("Ingrese un número válido para el aumento de precio en porcentaje.");
+    }
+}
+
+function redondearPreciosDeTodosLosProductos() {
+    const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
+    const productosRedondeados = productosAlmacenados.map((producto) => {
+        producto.precio = Math.round(producto.precio);
+        return producto;
+    });
+    localStorage.setItem("productosC", JSON.stringify(productosRedondeados));
+    mostrarTodosLosProductos();
+    refrescarPagina();
+}
+
+
+
+
+
+//Refrescar la pagina
+
+function refrescarPagina() {
+    location.reload();
+}
+
+
+
+
+
+
+// Función para exportar la tabla a un archivo XLSX
+function exportarTablaXLSX() {
+  const filas = document.querySelectorAll('#tabla-stock tr');
+
+  // Crear un libro de trabajo
+  const workbook = XLSX.utils.book_new();
+  const wsData = [];
+
+  filas.forEach((fila) => {
+    const rowData = [];
+    const celdas = fila.querySelectorAll('td:not(:last-child)');
+
+    celdas.forEach((celda) => {
+      rowData.push(celda.textContent);
+    });
+
+    wsData.push(rowData);
+  });
+
+  const worksheet = XLSX.utils.aoa_to_sheet(wsData);
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+  // Nombre del archivo basado en la fecha y hora actual
+  const now = new Date();
+  const fecha = `${now.getFullYear()}_${now.getMonth() + 1}_${now.getDate()}`;
+  const hora = `${now.getHours()}-${now.getMinutes()}`;
+  const nombreArchivo = `"stock"${fecha}-${hora}.xlsx`;
+
+  // Guardar el archivo XLSX
+  XLSX.writeFile(workbook, nombreArchivo);
+}
+
+// Obtener el botón de exportar
+
+// Agregar un evento de clic al botón para exportar la tabla
+botonExportar.addEventListener('click', function () {
+  exportarTablaXLSX();
+});
+
+
+
+
+
+
+function cargarArchivo() {
+  const input = document.getElementById('inputArchivoXLSX');
+  
+  // Verificar si se seleccionó un archivo
+  if (!input.files || input.files.length === 0) {
+    alert('Por favor, selecciona un archivo.');
+    return;
+  }
+  
+  const archivo = input.files[0];
+  const lector = new FileReader();
+  
+  lector.onload = function(evento) {
+    const contenidoArchivo = evento.target.result;
+    const workbook = XLSX.read(contenidoArchivo, { type: 'binary' });
+    const nombrePrimeraHoja = workbook.SheetNames[0];
+    const hoja = workbook.Sheets[nombrePrimeraHoja];
+    
+    const datos = XLSX.utils.sheet_to_json(hoja, { header: 1 });
+    
+    // Empezar desde 1 para omitir el encabezado
+    for (let i = 0; i < datos.length; i++) {
+      const [nombre, precio, stock, categoria] = datos[i];
+      const producto = { nombre, precio, stock, categoria };
+    const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+    productosExistentes.push(producto);
+    localStorage.setItem("productosC", JSON.stringify(productosExistentes));
+      agregarProductoATabla(producto);
+    }
+  };
+  
+  lector.readAsBinaryString(archivo);
+}
 
 
 

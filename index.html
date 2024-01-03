@@ -1,174 +1,224 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
+  <head>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adminstración de Productos</title>
-  <link rel="stylesheet" href="estilo.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adminstración de Productos</title>
+    <link rel="stylesheet" href="estilo.css">
 
-</head>
+  </head>
 
-<body>
-
-
-  <div class="contenido">
+  <body>
 
 
-    <div id="menu">
-
-      <!-- Botón para abrir el modal -->
-      <button id="btnMostrarModal">Mostrar Stock Disponible</button>
-      <!-- Botón para crear un archivo de Excel -->
-
-      <button onclick="window.location.href = 'crear_lista_stock.html'">Crear Lista de Stock</button>
-
-    </div>
+    <div class="contenido">
 
 
-    <div id="ingresar_producto">
+      <div id="menu">
 
-      <form id="formulario-producto">
-
-
-        <h1>Productos</h1>
-
-        <button type="button" onclick="refrescarPagina()">Limpiar campos</button>
-
-        <label for="nombre">Nombre del Producto:</label>
-        <input type="text" id="nombre" list="opciones-productos" required>
-        <datalist id="opciones-productos"></datalist>
-
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" required><br>
-
-        <label for="stock">Stock:</label>
-        <input type="text" id="stock" readonly>
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" required><br>
-
-        <button type="button" id="guardar">Añadir</button>
-      </form>
+        <!-- Botón para abrir el modal -->
+        <button id="btnMostrarModal">Mostrar Stock Disponible</button>
 
 
-    </div>
+      </div>
 
-    <!-- Contenedor del modal -->
-    <div id="modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div id="botones-tabla-modal">
 
-          <!-- Botón para cargar archivo XLSX -->
-          <input type="file" style="display: none;" id="archivo-xlsx" accept=".xlsx">
-          <button id="subir-stock" type="button" onclick="document.getElementById('archivo-xlsx').click()">Subir
-            Stock</button>
-          <button id="exportar-stock-xlsx">Descargar tabla</button>
-          <h2>Control de Stock</h2>
+      <div id="ingresar_producto">
+
+        <form id="formulario-producto">
+
+
+          <h1>Productos</h1>
+
+          <button type="button" onclick="refrescarPagina()">Limpiar campos</button>
+
+          <label for="nombre">Nombre del Producto:</label>
+          <input type="text" id="nombre" list="opciones-productos" required>
+          <datalist id="opciones-productos"></datalist>
+
+          <label for="precio">Precio:</label>
+          <input type="number" id="precio" required><br>
+
+          <label for="stock">Stock:</label>
+          <input type="text" id="stock" readonly>
+          <label for="cantidad">Cantidad:</label>
+          <input type="number" id="cantidad" required><br>
+
+          <button type="button" id="guardar">Añadir</button>
+        </form>
+
+
+      </div>
+
+      <!-- Contenedor del modal -->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+
+
+
+
+
+          <h1>Control de Stock</h1>
+
+          <div id="lista_producto">
+
+
+            <div id="ingresar_producto">
+
+              <h1>Agregar Producto</h1>
+              <button type="button" onclick="refrescarPagina()">Limpiar campos</button>
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombr" required>
+              <br>
+              <label for="precio">Precio:</label>
+              <input type="number" id="preci" required>
+              <br>
+              <label for="stock">Stock:</label>
+              <input type="number" id="st" required>
+              <br>
+              <label for="categoria">Categoría:</label>
+              <input type="text" id="categoria" required>
+              <br>
+              <button id="agregarBtn">Agregar Producto</button>
+            </div>
+          </div>
+
+          <div id="lista_producto">
+            <h1>Lista de Productos</h1>
+            <button id="exportar-stock-xlsx">Exportar a Excel</button>
+            <!-- Botón para cargar archivo XLSX -->
+            <div>
+              <input type="file" id="inputArchivoXLSX">
+              <button id="subir-stock" onclick="cargarArchivo()">Cargar</button>
+            </div>
+       
+
+
+            <div id="herramientas">
+              <button id="boton-vaciar">Limpiar todo</button>
+              <button id="boton-incrementar-precio">Aumentar Precio</button>
+              <button id="boton-incrementar-porcentaje-precio">Aumentar Precio en Porcentaje</button>
+              <button id="boton-redondear-precios">Redondear Precios</button>
+            </div>
+            <div id="busqueda">
+              <label for="busqueda">Buscar por Nombre o Stock:</label>
+              <input type="text" id="busqueda" placeholder="Nombre o Stock">
+
+
+              <button id="boton-buscar">Buscar</button>
+              <button id="boton-mostrar-todos">Mostrar Todos</button>
+
+            </div>
+
+            <div id="bloque-productos">
+
+              <table id="tabla-stock">
+                <tr>
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Categoría</th>
+                  <th>Acciones</th>
+              </tr>
+              </table>
+            </div>
+          </div>
+
 
         </div>
-
-
-        <table id="tabla-datos">
-          <!-- Aquí se mostrarán los datos -->
-        </table>
-
-      </div>
-    </div>
-    <br>
-    <br>
-
-    <div id="bloque-carrito">
-      <div id="compra_actual">
-        <div id="vendido-actual">Total: $0.00
-          
-        </div>
-        <br>
-        <div id="botones-compra-actual">
-          <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
-          <button id="borrar-compra">Cancelar Compra</button>
-        </div>
-
-
-      </div>
-
-
-
-      <div id="contenido-tabla">
-
-        <table id="tabla-productos">
-          <tr>
-            <th>ID</th>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Cantidad</th>
-            <th>Total</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Acciones</th>
-          </tr>
-        </table>
-      </div>
-    </div>
-
-
-    <div id="historial">
-
-
-      <!-- Tabla para mostrar el historial de productos -->
-
-      <h2>Historial de Compras</h2>
-      <div id="opciones-historial">
-        <button onclick="limpiarHistorial()">Vaciar Historial</button>
-        <button id="exportar-xlsx">Exportar a Excel</button>
-      </div>
-
-
-      <div class="busqueda">
-        <input type="text" id="search-input" placeholder="Buscar por Nombre, Fecha, Hora o Precio">
-        <button id="search-button">Buscar</button>
-        <button id="show-all-button">Mostrar Todos</button>
-
       </div>
       <br>
+      <br>
 
-      <div id="total-precio">
-        Total: $0.00</div>
-      <table id="historial-table">
+      <div id="bloque-carrito">
+        <div id="compra_actual">
+          <div id="vendido-actual">Total: $0.00
 
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Cantidad</th>
-            <th>Total</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-          </tr>
-        </thead>
-      </table>
+          </div>
+          <br>
+          <div id="botones-compra-actual">
+            <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
+            <button id="borrar-compra">Cancelar Compra</button>
+          </div>
+
+
+        </div>
+
+
+
+        <div id="contenido-tabla">
+
+          <table id="tabla-productos">
+            <tr>
+              <th>ID</th>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Total</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Acciones</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+
+      <div id="historial">
+
+
+        <!-- Tabla para mostrar el historial de productos -->
+
+        <h2>Historial de Compras</h2>
+        <div id="opciones-historial">
+          <button onclick="limpiarHistorial()">Vaciar Historial</button>
+          <button id="exportar-xlsx">Exportar a Excel</button>
+        </div>
+
+
+        <div class="busqueda">
+          <input type="text" id="search-input" placeholder="Buscar por Nombre, Fecha, Hora o Precio">
+          <button id="search-button">Buscar</button>
+          <button id="show-all-button">Mostrar Todos</button>
+
+        </div>
+        <br>
+
+        <div id="total-precio">
+          Total: $0.00</div>
+        <table id="historial-table">
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Total</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+
+
+
+    </div>
+    <div class="copyright">
+      © 2023 Desarrollado por SystEma. Derechos reservados.
     </div>
 
+    <!-- Incluye la biblioteca xlsx-style -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
 
+    <script src="CONTROL.js"></script>
 
-
-  </div>
-  <div class="copyright">
-    © 2023 Desarrollado por SystEma. Derechos reservados.
-  </div>
-
-
-
-
-
-  <!-- Incluye la biblioteca xlsx-style -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
-
-  <script src="CONTROL.js"></script>
-
-</body>
+  </body>
 
 
 </html>

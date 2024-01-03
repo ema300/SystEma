@@ -29,7 +29,7 @@ h1 {
   padding: 0em 2em 1em 2em;
   border-radius: 8px;
   width: 26%;
-  height:36em;
+  height:auto;
 }
 #bloque-carrito {
   display: flex;
@@ -119,14 +119,7 @@ table{
   align-items: center;
   flex-direction: row-reverse;
 }
-#formulario-producto {
-  margin: 0em 0em 0em 0em;
-  padding: 0em 0em 0em 0em;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-}
+
 
 label {
   display: block;
@@ -169,6 +162,10 @@ input#search-input {
 button#finalizar-compra {
   
 }
+ button#agregarBtn{
+  margin: 1em 0em 0em 0em ;
+width: 100%;
+ }
 
 button#sort-button {
   
@@ -188,7 +185,7 @@ button#borrar-compra {
 
 
 button#subir-stock{
-  background-color: #000000;
+  background-color: #02861f;
 
 }
 
@@ -208,6 +205,8 @@ button#subir-stock{
 
 #guardar {
   background-color: #0fc1e0;
+  width: 100%;
+  margin: 1em 0em 0em 0em;
 }
 #exportar-stock-xlsx {
   background-color: #02861f;
@@ -258,17 +257,15 @@ h2 {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
-  height: 90%;
+  margin: 2%;
+  height: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 .close {
   color: #aaa;
   display: flex;
@@ -299,7 +296,7 @@ h2 {
 
 #lista_producto {
   display: flex;
-  /* width: 100%; */
+  width: 100%;
   margin: 1em 1em 0em 1em;
   background-color: #091725;
   padding: 1em 1em 1em 1em;
@@ -312,7 +309,7 @@ h2 {
 
 
 #bloque-productos {
-  /* display: flex; */
+  display: flex;
   width: 97%; 
   /* margin: 0em 0em 0em 0em; */
   background-color: rgb(226, 226, 226);
@@ -479,14 +476,7 @@ input#busqueda {
     align-items: center;
     flex-direction: column;
 }
-  #formulario-producto {
-    margin: 0em 0em 0em 0em;
-    padding: 0em 0em 0em 0em;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-}
+
 
 #botones-compra-actual {
   display: flex;
@@ -624,6 +614,34 @@ input#busqueda {
  
 }
 
+#bloque-productos {
+  /* display: flex; */
+  width: auto; 
+  /* margin: 0em 0em 0em 0em; */
+  background-color: rgb(226, 226, 226);
+  padding: 1em 1em 1em 1em;
+  border-radius: 8px;
+  /* height: 7em; */
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  justify-content: center;
+}
+
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 2%;
+  height: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  /* width: 100%; */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #091725;
+}
 
 }
 
