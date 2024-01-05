@@ -4,13 +4,12 @@ var vendido = 0.00;
 var acum = 0;
 var nuevoStock = 0;
 var copiaCantidad = 0;
-var pro=[];
+var pro = [];
 
 
 // inicio Variables Modal
 
 var cuerpoTablaProductos = document.querySelector("tabla-stock");
-var botonBuscar = document.getElementById("boton-buscar");
 var botonVaciar = document.getElementById("boton-vaciar");
 var botonMostrarTodos = document.getElementById("boton-mostrar-todos");
 var botonIncrementarPrecio = document.getElementById("boton-incrementar-precio");
@@ -36,7 +35,7 @@ var historial = [];
 
 
 
-  
+
 
 
 
@@ -130,21 +129,16 @@ window.addEventListener('load', function () {
     //   actualizarTotalPrecio(); // Actualizar el total de precios
     actualizarCompraActual();
   }
-  /*if (localStorage.getItem('datosExcel')) {
-    var datosGuardados = JSON.parse(localStorage.getItem('datosExcel'));
-    // Mostrar los datos guardados en la tabla y crear lista de autocompletado
-    mostrarDatosEnTabla(datosGuardados);
-    crearListaAutocompletado(datosGuardados);
-  }*/
+
   if (localStorage.getItem('historial')) {
     historial = JSON.parse(localStorage.getItem('historial'));
   }
 
-if (localStorage.getItem('productosC')) {
-  pro= JSON.parse(localStorage.getItem("productosC")) || [];
-  mostrarTodosLosProductos();
-  crearListaAutocompletado(pro);
-}
+  if (localStorage.getItem('productosC')) {
+    pro = JSON.parse(localStorage.getItem("productosC")) || [];
+    mostrarTodosLosProductos();
+    crearListaAutocompletado(pro);
+  }
 
 
 
@@ -382,7 +376,7 @@ function actualizarStock() {
     }
   }
 
- 
+
   localStorage.setItem('productosC', JSON.stringify(pro));
   pro[0].stock
 }
@@ -397,10 +391,6 @@ const historialTable = document.getElementById('historial-table');
 
 
 
-// Función para cargar datos del historial desde localStorage al cargar la página
-
-// Llamar a la función para cargar datos del historial desde localStorage al cargar la página
-//   cargarHistorialDesdeLocalStorage();
 
 
 // Función para limpiar el historial y el localStorage
@@ -529,14 +519,14 @@ document.getElementById('borrar-compra').addEventListener('click', function () {
 function finalizar_compra() {
   var confirmacion = confirm('¿Estás seguro de que deseas finalizar la compra?');
   if (confirmacion) {
-     
+
 
 
 
 
 
     localStorage.setItem('finalizo_compra', 'si');
-//    alert("finalizo la compra")
+    //    alert("finalizo la compra")
     actualizarStock();
 
 
@@ -623,14 +613,14 @@ document.getElementById('show-all-button').addEventListener('click', function ()
 
 function actualizarCompraActual() {
   if (compra_actual === 'no') {
- // alert('No finalizo');
+    // alert('No finalizo');
     vendido = localStorage.getItem('valor_compra_actual');
     acum = parseFloat(acum) + parseFloat(vendido);
     localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
     var vendidoActualElement = document.getElementById('vendido-actual');
     vendidoActualElement.textContent = 'Total: $' + acum;
   } else {
- // alert('Si finalizo');
+    // alert('Si finalizo');
     vendido = 0;
     var vendidoActualElement = document.getElementById('vendido-actual');
     vendidoActualElement.textContent = 'Total: $' + vendido.toFixed(2);
@@ -676,9 +666,31 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   btnMostrarModal.addEventListener('click', function () {
-    abrirModal();
-    // Guardar el estado en el almacenamiento local cuando se abre el modal
-    localStorage.setItem('modalEstado', 'abierto');
+
+
+
+    var contrasenaAlmacenada = localStorage.getItem('c'); // Reemplaza 'contrasena' con la clave real
+
+    var contrasenaIngresada = prompt('Ingresa la contraseña para acceder');
+
+    if (contrasenaIngresada === contrasenaAlmacenada) {
+      abrirModal();
+      // Guardar el estado en el almacenamiento local cuando se abre el modal
+      localStorage.setItem('modalEstado', 'abierto');
+    }
+    else {
+      // La contraseña es incorrecta, mostrar un mensaje de error
+      alert('Contraseña incorrecta. No tienes permiso.');
+    }
+
+
+
+
+
+
+
+
+
   });
 
   closeBtn.addEventListener('click', function () {
@@ -773,7 +785,7 @@ window.addEventListener('DOMContentLoaded', function () {
 //Refrescar la pagina
 
 function refrescarPagina() {
- location.reload();
+  location.reload();
 }
 
 
@@ -828,16 +840,27 @@ function esNumero(valor) {
 
 const agregarBtn = document.getElementById('agregarBtn');
 
-agregarBtn.addEventListener('click', function() {
-    const nombre = document.getElementById('nombr').value;
-    const precio = parseFloat (document.getElementById('preci').value);
-    const stock = parseInt (document.getElementById('st').value);
-    const categoria = document.getElementById('categoria').value;
-    const producto = {
-      nombre,
-      precio,
-      stock, 
-      categoria
+agregarBtn.addEventListener('click', function () {
+  const nombre = document.getElementById('nombr').value;
+  const precio = parseFloat(document.getElementById('preci').value);
+  const stock = parseInt(document.getElementById('st').value);
+  const categoria = document.getElementById('categoria').value;
+
+
+  if (nombre.length < 1) {
+    alert('Complete el nombre del producto');
+    return;
+  }
+  if (categoria.length < 1) {
+    alert('complete la categoria del producto');
+    return;
+  }
+
+  const producto = {
+    nombre,
+    precio,
+    stock,
+    categoria
   };
 
   const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
@@ -845,36 +868,37 @@ agregarBtn.addEventListener('click', function() {
   localStorage.setItem("productosC", JSON.stringify(productosExistentes));
   agregarProductoATabla(producto);
 
-   
+  mostrarPorUnSegundo("Se agrego correctament");
 
-  
+
+
 });
 
 
 botonVaciar.addEventListener("click", function () {
-    const confirmacion = confirm("¿Estás seguro de que deseas vaciar todos los productos?");
-    if (confirmacion) {
-        vaciarTodosLosProductos();
-        
-        refrescarPagina();
-    }
+  const confirmacion = confirm("¿Estás seguro de que deseas vaciar todos los productos?");
+  if (confirmacion) {
+    vaciarTodosLosProductos();
+
+    refrescarPagina();
+  }
 });
 
 botonMostrarTodos.addEventListener("click", function () {
-   
-    refrescarPagina();
+
+  refrescarPagina();
 });
 
 botonIncrementarPrecio.addEventListener("click", function () {
-    incrementarPrecioDeTodosLosProductos();
+  incrementarPrecioDeTodosLosProductos();
 });
 
 botonIncrementarPorcentajePrecio.addEventListener("click", function () {
-    incrementarPrecioPorcentajeDeTodosLosProductos();
+  incrementarPrecioPorcentajeDeTodosLosProductos();
 });
 
 botonRedondearPrecios.addEventListener("click", function () {
-    redondearPreciosDeTodosLosProductos();
+  redondearPreciosDeTodosLosProductos();
 });
 
 
@@ -882,10 +906,10 @@ botonRedondearPrecios.addEventListener("click", function () {
 
 
 function agregarProductoATabla(producto) {
-    const tablaProductos = document.getElementById("tabla-stock");
+  const tablaProductos = document.getElementById("tabla-stock");
 
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
         <td>${producto.nombre}</td>
         <td>${producto.precio}</td>
         <td>${producto.stock}</td>
@@ -896,64 +920,64 @@ function agregarProductoATabla(producto) {
         </td>
     `;
 
-    const botonEditar = fila.querySelector(".boton-editar");
-    const botonEliminar = fila.querySelector(".boton-eliminar");
+  const botonEditar = fila.querySelector(".boton-editar");
+  const botonEliminar = fila.querySelector(".boton-eliminar");
 
-    botonEditar.addEventListener("click", function () {
-        editarProducto(producto, fila);
-    });
+  botonEditar.addEventListener("click", function () {
+    editarProducto(producto, fila);
+  });
 
-    botonEliminar.addEventListener("click", function () {
-        const confirmacion = confirm("¿Estás seguro de que deseas eliminar este producto?");
-        if (confirmacion) {
-            fila.remove();
-            eliminarProducto(producto);
-        }
-    });
+  botonEliminar.addEventListener("click", function () {
+    const confirmacion = confirm("¿Estás seguro de que deseas eliminar este producto?");
+    if (confirmacion) {
+      fila.remove();
+      eliminarProducto(producto);
+    }
+  });
 
-    tablaProductos.appendChild(fila);
+  tablaProductos.appendChild(fila);
 }
 
 
 
 function editarProducto(producto, fila) {
-    const nuevoPrecio = parseFloat(prompt("Editar Precio:", producto.precio));
-    const nuevoStock = parseInt(prompt("Editar Stock:", producto.stock)); // Cambio de "cantidad" a "stock"
-    const nuevaCategoria = prompt("Editar Categoría:", producto.categoria);
+  const nuevoPrecio = parseFloat(prompt("Editar Precio:", producto.precio));
+  const nuevoStock = parseInt(prompt("Editar Stock:", producto.stock)); // Cambio de "cantidad" a "stock"
+  const nuevaCategoria = prompt("Editar Categoría:", producto.categoria);
 
-    if ( !isNaN(nuevoPrecio) && !isNaN(nuevoStock) && nuevaCategoria !== null) {
-        producto.precio = nuevoPrecio;
-        producto.stock = nuevoStock; // Cambio de "cantidad" a "stock"
-        producto.categoria = nuevaCategoria;
+  if (!isNaN(nuevoPrecio) && !isNaN(nuevoStock) && nuevaCategoria !== null) {
+    producto.precio = nuevoPrecio;
+    producto.stock = nuevoStock; // Cambio de "cantidad" a "stock"
+    producto.categoria = nuevaCategoria;
 
-        // Actualizar los campos de la fila con los nuevos valores
-        fila.querySelector("td:nth-child(2)").textContent = nuevoPrecio;
-        fila.querySelector("td:nth-child(3)").textContent = nuevoStock; // Cambio de "cantidad" a "stock"
-        fila.querySelector("td:nth-child(4)").textContent = nuevaCategoria;
+    // Actualizar los campos de la fila con los nuevos valores
+    fila.querySelector("td:nth-child(2)").textContent = nuevoPrecio;
+    fila.querySelector("td:nth-child(3)").textContent = nuevoStock; // Cambio de "cantidad" a "stock"
+    fila.querySelector("td:nth-child(4)").textContent = nuevaCategoria;
 
-        const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
-        productosExistentes.forEach((p, index) => {
-         
-          
-            if (p.nombre === producto.nombre) {
-              // Si se encuentra un producto con el mismo nombre, se actualiza en el array existente
-              productosExistentes[index] = producto;
-            }
-          });
-          
-           
-        localStorage.setItem("productosC", JSON.stringify( productosExistentes));
-    
-    }
+    const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+    productosExistentes.forEach((p, index) => {
+
+
+      if (p.nombre === producto.nombre) {
+        // Si se encuentra un producto con el mismo nombre, se actualiza en el array existente
+        productosExistentes[index] = producto;
+      }
+    });
+
+
+    localStorage.setItem("productosC", JSON.stringify(productosExistentes));
+
+  }
 }
 
 function eliminarProducto(producto) {
-    const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
-    const productosActualizados = productosExistentes.filter((p) => p.nombre !== producto.nombre);
-    localStorage.setItem("productosC", JSON.stringify(productosActualizados));
+  const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+  const productosActualizados = productosExistentes.filter((p) => p.nombre !== producto.nombre);
+  localStorage.setItem("productosC", JSON.stringify(productosActualizados));
 }
 
-  
+
 
 
 
@@ -961,61 +985,61 @@ function eliminarProducto(producto) {
 
 
 function vaciarTodosLosProductos() {
-    localStorage.removeItem("productosC");
+  localStorage.removeItem("productosC");
 }
 
 function mostrarTodosLosProductos() {
 
-    const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
+  const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
 
-    for (const producto of productosAlmacenados) {
-        agregarProductoATabla(producto);
-      
-    }
-    
+  for (const producto of productosAlmacenados) {
+    agregarProductoATabla(producto);
+
+  }
+
 }
 
 function incrementarPrecioDeTodosLosProductos() {
-    const cantidadAumento = parseFloat(prompt("Ingrese el aumento de precio (sin decimales):"));
-    if (!isNaN(cantidadAumento)) {
-        const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
-        const productosActualizados = productosAlmacenados.map((producto) => {
-            producto.precio += cantidadAumento;
-            return producto;
-        });
-        localStorage.setItem("productosC", JSON.stringify(productosActualizados));
-        mostrarTodosLosProductos();
-        refrescarPagina();
-    } else {
-        alert("Ingrese un número válido para el aumento de precio.");
-    }
+  const cantidadAumento = parseFloat(prompt("Ingrese el aumento de precio (sin decimales):"));
+  if (!isNaN(cantidadAumento)) {
+    const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
+    const productosActualizados = productosAlmacenados.map((producto) => {
+      producto.precio += cantidadAumento;
+      return producto;
+    });
+    localStorage.setItem("productosC", JSON.stringify(productosActualizados));
+    mostrarTodosLosProductos();
+    refrescarPagina();
+  } else {
+    alert("Ingrese un número válido para el aumento de precio.");
+  }
 }
 
 function incrementarPrecioPorcentajeDeTodosLosProductos() {
-    const porcentajeAumento = parseFloat(prompt("Ingrese el aumento de precio en porcentaje:"));
-    if (!isNaN(porcentajeAumento)) {
-        const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
-        const productosActualizados = productosAlmacenados.map((producto) => {
-            producto.precio += (producto.precio * porcentajeAumento) / 100;
-            return producto;
-        });
-        localStorage.setItem("productosC", JSON.stringify(productosActualizados));
-        mostrarTodosLosProductos();
-        refrescarPagina();
-    } else {
-        alert("Ingrese un número válido para el aumento de precio en porcentaje.");
-    }
+  const porcentajeAumento = parseFloat(prompt("Ingrese el aumento de precio en porcentaje:"));
+  if (!isNaN(porcentajeAumento)) {
+    const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
+    const productosActualizados = productosAlmacenados.map((producto) => {
+      producto.precio += (producto.precio * porcentajeAumento) / 100;
+      return producto;
+    });
+    localStorage.setItem("productosC", JSON.stringify(productosActualizados));
+    mostrarTodosLosProductos();
+    refrescarPagina();
+  } else {
+    alert("Ingrese un número válido para el aumento de precio en porcentaje.");
+  }
 }
 
 function redondearPreciosDeTodosLosProductos() {
-    const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
-    const productosRedondeados = productosAlmacenados.map((producto) => {
-        producto.precio = Math.round(producto.precio);
-        return producto;
-    });
-    localStorage.setItem("productosC", JSON.stringify(productosRedondeados));
-    mostrarTodosLosProductos();
-    refrescarPagina();
+  const productosAlmacenados = JSON.parse(localStorage.getItem("productosC")) || [];
+  const productosRedondeados = productosAlmacenados.map((producto) => {
+    producto.precio = Math.round(producto.precio);
+    return producto;
+  });
+  localStorage.setItem("productosC", JSON.stringify(productosRedondeados));
+  mostrarTodosLosProductos();
+  refrescarPagina();
 }
 
 
@@ -1025,7 +1049,7 @@ function redondearPreciosDeTodosLosProductos() {
 //Refrescar la pagina
 
 function refrescarPagina() {
-    location.reload();
+  location.reload();
 }
 
 
@@ -1079,37 +1103,93 @@ botonExportar.addEventListener('click', function () {
 
 function cargarArchivo() {
   const input = document.getElementById('inputArchivoXLSX');
-  
+
   // Verificar si se seleccionó un archivo
   if (!input.files || input.files.length === 0) {
     alert('Por favor, selecciona un archivo.');
     return;
   }
-  
+
   const archivo = input.files[0];
   const lector = new FileReader();
-  
-  lector.onload = function(evento) {
+
+  lector.onload = function (evento) {
     const contenidoArchivo = evento.target.result;
     const workbook = XLSX.read(contenidoArchivo, { type: 'binary' });
     const nombrePrimeraHoja = workbook.SheetNames[0];
     const hoja = workbook.Sheets[nombrePrimeraHoja];
-    
+
     const datos = XLSX.utils.sheet_to_json(hoja, { header: 1 });
-    
+
     // Empezar desde 1 para omitir el encabezado
     for (let i = 0; i < datos.length; i++) {
       const [nombre, precio, stock, categoria] = datos[i];
       const producto = { nombre, precio, stock, categoria };
-    const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
-    productosExistentes.push(producto);
-    localStorage.setItem("productosC", JSON.stringify(productosExistentes));
+      const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+      productosExistentes.push(producto);
+      localStorage.setItem("productosC", JSON.stringify(productosExistentes));
       agregarProductoATabla(producto);
     }
   };
-  
+
   lector.readAsBinaryString(archivo);
 }
 
 
 
+
+
+
+
+
+
+// Agregar un event listener de clic al botón de búsqueda
+document.getElementById('boton-buscar').addEventListener('click', function () {
+  const buscando = document.getElementById('buscando').value.trim().toLowerCase();
+  const Table = document.getElementById('tabla-stock');
+  for (var i = 1; i < Table.rows.length; i++) {
+    var found = false;
+    var row = Table.rows[i];
+
+    for (var j = 0; j < row.cells.length; j++) {
+      var cellText = row.cells[j].textContent.toLowerCase();
+
+      // Verificar si el término de búsqueda es un número
+      if (isNumeric(buscando) && isNumeric(cellText)) {
+        if (parseFloat(cellText) <= parseFloat(buscando)) {
+          found = true;
+          break;
+        }
+      } else if (cellText.includes(buscando)) {
+        found = true;
+        break;
+      }
+    }
+
+    if (found) {
+      row.style.display = ''; // Mostrar la fila si se encontró el término de búsqueda
+    } else {
+      row.style.display = 'none'; // Ocultar la fila si no se encontró el término de búsqueda
+    }
+  }
+});
+
+function isNumeric(value) {
+  return /^-?\d+(\.\d+)?$/.test(value);
+}
+
+// Restaurar la visualización de todas las filas al hacer clic en "Mostrar Todos"
+document.getElementById('boton-mostrar-todos').addEventListener('click', function () {
+  refrescarPagina();
+});
+
+
+function mostrarPorUnSegundo(texto) {
+  var miParrafo = document.getElementById('miParrafo');
+  miParrafo.innerText = texto; // Establecer el texto proporcionado
+  miParrafo.style.display = 'block'; // Mostrar el párrafo
+
+  setTimeout(function () {
+    miParrafo.style.display = 'none'; // Ocultar el párrafo después de 1 segundo
+  }, 1000);
+}
