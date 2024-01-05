@@ -1103,36 +1103,42 @@ botonExportar.addEventListener('click', function () {
 
 function cargarArchivo() {
   const input = document.getElementById('inputArchivoXLSX');
+  const confirmacion = confirm("Se vaciara la lista y se cargara la lista con productos del archivo ingresado");
+  if (confirmacion) {
+    vaciarTodosLosProductos();
+    refrescarPagina();
+    // Verificar si se seleccionó un archivo
+    if (!input.files || input.files.length === 0) {
+      alert('Por favor, selecciona un archivo.');
+      return;
+    }
 
-  // Verificar si se seleccionó un archivo
-  if (!input.files || input.files.length === 0) {
-    alert('Por favor, selecciona un archivo.');
-    return;
+    const archivo = input.files[0];
+    const lector = new FileReader();
+
+    lector.onload = function (evento) {
+      const contenidoArchivo = evento.target.result;
+      const workbook = XLSX.read(contenidoArchivo, { type: 'binary' });
+      const nombrePrimeraHoja = workbook.SheetNames[0];
+      const hoja = workbook.Sheets[nombrePrimeraHoja];
+
+      const datos = XLSX.utils.sheet_to_json(hoja, { header: 1 });
+
+      // Empezar desde 1 para omitir el encabezado
+      for (let i = 0; i < datos.length; i++) {
+        const [nombre, precio, stock, categoria] = datos[i];
+        const producto = { nombre, precio, stock, categoria };
+        const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+        productosExistentes.push(producto);
+        localStorage.setItem("productosC", JSON.stringify(productosExistentes));
+        agregarProductoATabla(producto);
+      }
+    };
+
+    lector.readAsBinaryString(archivo);
+    
   }
 
-  const archivo = input.files[0];
-  const lector = new FileReader();
-
-  lector.onload = function (evento) {
-    const contenidoArchivo = evento.target.result;
-    const workbook = XLSX.read(contenidoArchivo, { type: 'binary' });
-    const nombrePrimeraHoja = workbook.SheetNames[0];
-    const hoja = workbook.Sheets[nombrePrimeraHoja];
-
-    const datos = XLSX.utils.sheet_to_json(hoja, { header: 1 });
-
-    // Empezar desde 1 para omitir el encabezado
-    for (let i = 0; i < datos.length; i++) {
-      const [nombre, precio, stock, categoria] = datos[i];
-      const producto = { nombre, precio, stock, categoria };
-      const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
-      productosExistentes.push(producto);
-      localStorage.setItem("productosC", JSON.stringify(productosExistentes));
-      agregarProductoATabla(producto);
-    }
-  };
-
-  lector.readAsBinaryString(archivo);
 }
 
 
