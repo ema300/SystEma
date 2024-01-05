@@ -4,6 +4,7 @@ var vendido = 0.00;
 var acum = 0;
 var nuevoStock = 0;
 var copiaCantidad = 0;
+var pro=[];
 
 
 // inicio Variables Modal
@@ -129,19 +130,18 @@ window.addEventListener('load', function () {
     //   actualizarTotalPrecio(); // Actualizar el total de precios
     actualizarCompraActual();
   }
-  if (localStorage.getItem('datosExcel')) {
+  /*if (localStorage.getItem('datosExcel')) {
     var datosGuardados = JSON.parse(localStorage.getItem('datosExcel'));
     // Mostrar los datos guardados en la tabla y crear lista de autocompletado
     mostrarDatosEnTabla(datosGuardados);
     crearListaAutocompletado(datosGuardados);
-  }
+  }*/
   if (localStorage.getItem('historial')) {
     historial = JSON.parse(localStorage.getItem('historial'));
   }
 
 if (localStorage.getItem('productosC')) {
-  const pro= JSON.parse(localStorage.getItem("productosC")) || [];
-  console.log(pro);
+  pro= JSON.parse(localStorage.getItem("productosC")) || [];
   mostrarTodosLosProductos();
   crearListaAutocompletado(pro);
 }
@@ -276,7 +276,10 @@ document.getElementById('guardar').addEventListener('click', function () {
     alert('La cantidad seleccionada excede el stock disponible');
     return;
   }
-
+  if (cantidad === 0) {
+    alert('La cantidad no puede ser 0');
+    return;
+  }
   // Restringir el stock mínimo a 0
   nuevoStock = Math.max(nuevoStock, 0);
 
@@ -342,32 +345,7 @@ document.getElementById('guardar').addEventListener('click', function () {
   }
 
 
-  // Encontrar la fila correspondiente en la tabla de datos desde XLSX
-  var filas = tabla.rows;
 
-  for (var i = 0; i < filas.length; i++) {
-    var nombreProductoTabla = filas[i].cells[0].innerText; // Suponiendo que la primera celda es el nombre del producto
-
-    // Buscar la fila correspondiente al producto comprado
-    if (nombreProductoTabla.toLowerCase() === nombre.toLowerCase()) {
-      // Actualizar el stock en la tabla de datos desde XLSX
-      filas[i].cells[2].innerText = nuevoStock; // Suponiendo que la tercera celda es el stock
-
-      break; // Salir del bucle después de actualizar el stock
-    }
-  }
-  var datosGuardados = JSON.parse(localStorage.getItem('datosExcel'));
-
-  if (datosGuardados !== null) {
-
-    for (var i = 1; i < datosGuardados.length; i++) {
-      if (datosGuardados[i][0].toLowerCase() === nombre.toLowerCase()) {
-        datosGuardados[i][2] = nuevoStock.toString(); // Actualizar el stock en los datos guardados
-        localStorage.setItem('datosExcel', JSON.stringify(datosGuardados)); // Guardar datos actualizados en localStorage
-        break;
-      }
-    }
-  }
 
 
   var comprasAnteriores = JSON.parse(localStorage.getItem('comprasAnteriores')) || {};
@@ -393,7 +371,21 @@ document.getElementById('guardar').addEventListener('click', function () {
 });
 
 
+function actualizarStock() {
+  for (let i = 0; i < productos.length; i++) {
 
+    for (let j = 0; j < pro.length; j++) {
+
+      if (productos[i].Producto === pro[j].nombre) {
+        pro[j].stock -= productos[i].Cantidad;
+      }
+    }
+  }
+
+ 
+  localStorage.setItem('productosC', JSON.stringify(pro));
+  pro[0].stock
+}
 
 // Obtener datos del localStorage
 
@@ -537,13 +529,22 @@ document.getElementById('borrar-compra').addEventListener('click', function () {
 function finalizar_compra() {
   var confirmacion = confirm('¿Estás seguro de que deseas finalizar la compra?');
   if (confirmacion) {
+     
+
+
+
+
 
     localStorage.setItem('finalizo_compra', 'si');
+//    alert("finalizo la compra")
+    actualizarStock();
+
 
     // Obtener la fecha y hora actuales
     var { fecha, hora } = obtenerFechaYHoraActuales();
 
     // Agregar los productos comprados al historial con fecha y hora
+
     productos.forEach(producto => {
       historial.push({
         "ID": producto.ID,
@@ -622,14 +623,14 @@ document.getElementById('show-all-button').addEventListener('click', function ()
 
 function actualizarCompraActual() {
   if (compra_actual === 'no') {
-    console.log('No finalizo');
+ // alert('No finalizo');
     vendido = localStorage.getItem('valor_compra_actual');
     acum = parseFloat(acum) + parseFloat(vendido);
     localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
     var vendidoActualElement = document.getElementById('vendido-actual');
     vendidoActualElement.textContent = 'Total: $' + acum;
   } else {
-    console.log('Si finalizo');
+ // alert('Si finalizo');
     vendido = 0;
     var vendidoActualElement = document.getElementById('vendido-actual');
     vendidoActualElement.textContent = 'Total: $' + vendido.toFixed(2);
@@ -772,7 +773,7 @@ window.addEventListener('DOMContentLoaded', function () {
 //Refrescar la pagina
 
 function refrescarPagina() {
-  location.reload();
+ location.reload();
 }
 
 
@@ -932,8 +933,8 @@ function editarProducto(producto, fila) {
 
         const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
         productosExistentes.forEach((p, index) => {
-            console.log(p.nombre);
-            console.log(producto.nombre);
+         
+          
             if (p.nombre === producto.nombre) {
               // Si se encuentra un producto con el mismo nombre, se actualiza en el array existente
               productosExistentes[index] = producto;
