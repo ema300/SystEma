@@ -378,7 +378,7 @@ function actualizarStock() {
 
 
   localStorage.setItem('productosC', JSON.stringify(pro));
-  pro[0].stock
+
 }
 
 // Obtener datos del localStorage
@@ -856,6 +856,19 @@ agregarBtn.addEventListener('click', function () {
     return;
   }
 
+
+
+  for (let i = 0; i < pro.length; i++) {
+  
+      if (nombre === pro[i].nombre) {
+        alert('Ya hay un producto con ese nombre');
+        return;
+      }
+    
+  }
+
+
+
   const producto = {
     nombre,
     precio,
@@ -868,7 +881,7 @@ agregarBtn.addEventListener('click', function () {
   localStorage.setItem("productosC", JSON.stringify(productosExistentes));
   agregarProductoATabla(producto);
 
-  mostrarPorUnSegundo("Se agrego correctament");
+  mostrarPorUnSegundo("Se agrego correctamente");
 
 
 
