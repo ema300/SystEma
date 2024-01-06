@@ -5,7 +5,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adminstración de Productos</title>
+    <title>Administración de Productos</title>
     <link rel="stylesheet" href="estilo.css">
 
   </head>
@@ -19,7 +19,7 @@
       <div id="menu">
 
         <!-- Botón para abrir el modal -->
-        <button id="btnMostrarModal">Mostrar Stock Disponible</button>
+        <button id="btnMostrarModal">Control de Stock</button>
 
 
       </div>
@@ -92,7 +92,7 @@
             <h1>Lista de Productos</h1>
             <button id="exportar-stock-xlsx">Exportar a Excel</button>
             <!-- Botón para cargar archivo XLSX -->
-            <div>
+            <div id="archivos">
               <input type="file" id="inputArchivoXLSX">
               <button id="subir-stock" onclick="cargarArchivo()">Cargar</button>
             </div>
@@ -181,7 +181,7 @@
 
 
         <div class="busqueda">
-          <input type="text" id="search-input" placeholder="Buscar por Nombre, Fecha, Hora o Precio">
+          <input type="text" id="search-input" placeholder="Buscar por nombre, fecha, hora o precio">
           <button id="search-button">Buscar</button>
           <button id="show-all-button">Mostrar Todos</button>
 
