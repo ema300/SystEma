@@ -46,7 +46,7 @@ h1 {
   padding: 1em 0em 1em 1em;
   border-radius: 8px;
   flex-wrap: wrap;
-  height: 7em;
+  height: auto;
 }
 #contenido-tabla {
   display: flex;
@@ -69,10 +69,11 @@ h1 {
   
 }
 
+
 #vendido-actual {
   font-size: 2em;
   width: 100%;
-  margin: 0.5em 0em 0em 1em;
+  margin: 0.5em 0em 0.5em 1em;
 }
 #historial {
   width: 100%;
@@ -372,8 +373,11 @@ input#busqueda {
 
 
 
-
-
+#resultado {
+  font-size: 1.7em;
+  margin: 0em 0em 0em 0em;
+  padding: 0em 0em 0em 0em;
+}
 
 
 
@@ -478,10 +482,11 @@ input#busqueda {
     flex-direction: column;
 }
 
+  #botones-compra-actual {
+  margin: 0em 0em 0em 0em;
+  }
 
-#botones-compra-actual {
-  display: flex;
-}
+
   label {
     display: block;
     font-weight: bold;

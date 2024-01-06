@@ -5,6 +5,7 @@ var acum = 0;
 var nuevoStock = 0;
 var copiaCantidad = 0;
 var pro = [];
+var vendidoActualElement;
 
 
 // inicio Variables Modal
@@ -143,10 +144,12 @@ window.addEventListener('load', function () {
 
 
 });
+
+
 function displayProductsInTable(productsToDisplay = productos) {
-  var tabla = document.getElementById('tabla-productos');
+  const tabla = document.getElementById('tabla-productos');
   tabla.innerHTML = ""; // Limpiar el contenido existente de la tabla
-  var headerRow = tabla.insertRow();
+  const headerRow = tabla.insertRow();
   for (var key in productsToDisplay[0]) {
     var headerCell = headerRow.insertCell();
     headerCell.innerHTML = key;
@@ -166,11 +169,12 @@ function displayProductsInTable(productsToDisplay = productos) {
     deleteButton.id = 'eliminar'; // Asigna el ID 'btn-eliminar' al botón
 
     deleteButton.addEventListener('click', function () {
-      eliminarProducto(index);
+      eliminarProduc(index);
     });
     deleteCell.appendChild(deleteButton);
   });
 }
+
 
 
 
@@ -189,20 +193,17 @@ function obtenerFechaYHoraActuales() {
 }
 
 
-function eliminarProducto(index) {
+function eliminarProduc(index) {
+
   if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-
-
-
-
-
 
     if (compra_actual === 'no' && carrito[index].Total === productos[index].Total) {
       vendido = localStorage.getItem('valor_compra_actual');
 
       acum = Math.max(parseFloat(vendido), carrito[index].Total) - Math.min(parseFloat(vendido), carrito[index].Total);
       localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
-      var vendidoActualElement = document.getElementById('vendido-actual');
+      
+    vendidoActualElement = document.getElementById('vendido-actual');
       vendidoActualElement.textContent = 'Total: $' + acum;
 
 
@@ -215,6 +216,7 @@ function eliminarProducto(index) {
       displayProductsInTable();
       actualizarTotalPrecio(); // Actualizar el total de precios después de eliminar
       actualizarCompraActual();
+      refrescarPagina();
 
     }
     if (productos.length === 0) {
@@ -617,7 +619,7 @@ function actualizarCompraActual() {
     vendido = localStorage.getItem('valor_compra_actual');
     acum = parseFloat(acum) + parseFloat(vendido);
     localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
-    var vendidoActualElement = document.getElementById('vendido-actual');
+    vendidoActualElement = document.getElementById('vendido-actual');
     vendidoActualElement.textContent = 'Total: $' + acum;
   } else {
     // alert('Si finalizo');
@@ -1211,4 +1213,39 @@ function mostrarPorUnSegundo(texto) {
   setTimeout(function () {
     miParrafo.style.display = 'none'; // Ocultar el párrafo después de 1 segundo
   }, 1000);
+}
+
+
+
+
+
+
+
+
+
+function calcularVuelto() {
+  var montoPagado = parseFloat(document.getElementById('montoPagado').value);
+  var precioProductos = localStorage.getItem('valor_compra_actual');;
+  
+
+  var vuelto = formatNumber(montoPagado) - precioProductos;
+  if (vuelto>-1) {
+    document.getElementById('resultado').innerText = 'El vuelto es: ' + vuelto.toFixed(2);
+
+  } else {
+    vuelto=vuelto*(-1);
+    document.getElementById('resultado').innerText = 'Falta pagar ' + vuelto.toFixed(2);
+
+  }
+}
+
+
+function formatNumber(value) {
+  // Verificar si el valor es NaN
+  if (isNaN(value)) {
+    return "0.00"; // Devolver "0.00" si el valor es NaN
+  } else {
+    // Formatear el número a dos decimales
+    return value.toFixed(2);
+  }
 }

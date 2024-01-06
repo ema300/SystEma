@@ -96,7 +96,7 @@
               <input type="file" id="inputArchivoXLSX">
               <button id="subir-stock" onclick="cargarArchivo()">Cargar</button>
             </div>
-       
+
 
 
             <div id="herramientas">
@@ -123,7 +123,7 @@
                   <th>Stock</th>
                   <th>Categoría</th>
                   <th>Acciones</th>
-              </tr>
+                </tr>
               </table>
             </div>
           </div>
@@ -138,6 +138,14 @@
         <div id="compra_actual">
           <div id="vendido-actual">Total: $0.00
 
+          </div> 
+
+          <div>
+            <label for="montoPagado">Monto pagado:</label>
+            <input type="number" id="montoPagado">
+
+            <button onclick="calcularVuelto()">Calcular vuelto</button>
+            <p id="resultado"></p>
           </div>
           <br>
           <div id="botones-compra-actual">
