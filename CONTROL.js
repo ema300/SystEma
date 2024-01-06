@@ -848,7 +848,6 @@ agregarBtn.addEventListener('click', function () {
   const stock = parseInt(document.getElementById('st').value);
   const categoria = document.getElementById('categoria').value;
 
-
   if (nombre.length < 1) {
     alert('Complete el nombre del producto');
     return;
@@ -857,7 +856,6 @@ agregarBtn.addEventListener('click', function () {
     alert('complete la categoria del producto');
     return;
   }
-
 
 
   for (let i = 0; i < pro.length; i++) {
