@@ -879,6 +879,8 @@ agregarBtn.addEventListener('click', function () {
   const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
   productosExistentes.push(producto);
   localStorage.setItem("productosC", JSON.stringify(productosExistentes));
+  pro = JSON.parse(localStorage.getItem("productosC")) || [];
+
   agregarProductoATabla(producto);
 
   mostrarPorUnSegundo("Se agrego correctamente");
