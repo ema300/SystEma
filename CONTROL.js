@@ -198,6 +198,7 @@ function eliminarProduc(index) {
   if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
 
     if (compra_actual === 'no' && carrito[index].Total === productos[index].Total) {
+      
       vendido = localStorage.getItem('valor_compra_actual');
 
       acum = Math.max(parseFloat(vendido), carrito[index].Total) - Math.min(parseFloat(vendido), carrito[index].Total);
@@ -205,7 +206,7 @@ function eliminarProduc(index) {
       
     vendidoActualElement = document.getElementById('vendido-actual');
       vendidoActualElement.textContent = 'Total: $' + acum;
-
+     
 
       carrito.splice(index, 1);
       localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -989,7 +990,16 @@ function editarProducto(producto, fila) {
 function eliminarProducto(producto) {
   const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
   const productosActualizados = productosExistentes.filter((p) => p.nombre !== producto.nombre);
-  localStorage.setItem("productosC", JSON.stringify(productosActualizados));
+ 
+  if (productosActualizados.length==0) {
+    console.log('vacio');
+    vaciarTodosLosProductos();
+    refrescarPagina();
+  }
+  else{
+    localStorage.setItem("productosC", JSON.stringify(productosActualizados));
+
+  }
 }
 
 
