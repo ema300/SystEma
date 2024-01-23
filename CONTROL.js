@@ -200,11 +200,15 @@ function eliminarProduc(index) {
     if (compra_actual === 'no' && carrito[index].Total === productos[index].Total) {
       
       vendido = localStorage.getItem('valor_compra_actual');
-
+      console.log(Math.max(parseFloat(vendido), carrito[index].Total));
+      console.log("-");
+      console.log(Math.min(parseFloat(vendido), carrito[index].Total));
       acum = Math.max(parseFloat(vendido), carrito[index].Total) - Math.min(parseFloat(vendido), carrito[index].Total);
+     
+      console.log(acum);
       localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
       
-    vendidoActualElement = document.getElementById('vendido-actual');
+      vendidoActualElement = document.getElementById('vendido-actual');
       vendidoActualElement.textContent = 'Total: $' + acum;
      
 
@@ -216,8 +220,8 @@ function eliminarProduc(index) {
       localStorage.setItem('productos', JSON.stringify(productos));
       displayProductsInTable();
       actualizarTotalPrecio(); // Actualizar el total de precios después de eliminar
-      actualizarCompraActual();
-      refrescarPagina();
+   
+     // refrescarPagina();
 
     }
     if (productos.length === 0) {
@@ -482,9 +486,6 @@ function borrar_compra() {
   acum = 0;
 
 
-
-  compra_actual = localStorage.getItem('finalizo_compra');
-  vendido = localStorage.setItem('valor_compra_actual', '0.00');
   refrescarPagina();
 }
 
