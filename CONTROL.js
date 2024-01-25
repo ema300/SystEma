@@ -141,7 +141,7 @@ window.addEventListener('load', function () {
     crearListaAutocompletado(pro);
   }
 
-
+  llenarDesplegableCategorias();
 
 });
 
@@ -200,12 +200,8 @@ function eliminarProduc(index) {
     if (compra_actual === 'no' && carrito[index].Total === productos[index].Total) {
       
       vendido = localStorage.getItem('valor_compra_actual');
-      console.log(Math.max(parseFloat(vendido), carrito[index].Total));
-      console.log("-");
-      console.log(Math.min(parseFloat(vendido), carrito[index].Total));
       acum = Math.max(parseFloat(vendido), carrito[index].Total) - Math.min(parseFloat(vendido), carrito[index].Total);
      
-      console.log(acum);
       localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
       
       vendidoActualElement = document.getElementById('vendido-actual');
@@ -849,6 +845,7 @@ agregarBtn.addEventListener('click', function () {
   const precio = parseFloat(document.getElementById('preci').value);
   const stock = parseInt(document.getElementById('st').value);
   const categoria = document.getElementById('categoria').value;
+  guardarCategoria();
 
   if (nombre.length < 1) {
     alert('Complete el nombre del producto');
@@ -886,7 +883,8 @@ agregarBtn.addEventListener('click', function () {
   agregarProductoATabla(producto);
 
   mostrarPorUnSegundo("Se agrego correctamente");
-
+// Llamada inicial para llenar el desplegable al cargar la página
+llenarDesplegableCategorias();
 
 
 });
@@ -896,14 +894,13 @@ botonVaciar.addEventListener("click", function () {
   const confirmacion = confirm("¿Estás seguro de que deseas vaciar todos los productos?");
   if (confirmacion) {
     vaciarTodosLosProductos();
-
     refrescarPagina();
   }
 });
 
 botonMostrarTodos.addEventListener("click", function () {
+mostrarTodosLosProductos();
 
-  refrescarPagina();
 });
 
 botonIncrementarPrecio.addEventListener("click", function () {
@@ -920,13 +917,12 @@ botonRedondearPrecios.addEventListener("click", function () {
 
 
 
-
-
 function agregarProductoATabla(producto) {
   const tablaProductos = document.getElementById("tabla-stock");
 
   const fila = document.createElement("tr");
   fila.innerHTML = `
+        <td><input type="checkbox" class="checkbox-producto"></td>
         <td>${producto.nombre}</td>
         <td>${producto.precio}</td>
         <td>${producto.stock}</td>
@@ -937,6 +933,7 @@ function agregarProductoATabla(producto) {
         </td>
     `;
 
+  const checkboxProducto = fila.querySelector(".checkbox-producto");
   const botonEditar = fila.querySelector(".boton-editar");
   const botonEliminar = fila.querySelector(".boton-eliminar");
 
@@ -954,6 +951,7 @@ function agregarProductoATabla(producto) {
 
   tablaProductos.appendChild(fila);
 }
+
 
 
 
@@ -984,7 +982,7 @@ function editarProducto(producto, fila) {
 
 
     localStorage.setItem("productosC", JSON.stringify(productosExistentes));
-
+    
   }
 }
 
@@ -993,7 +991,7 @@ function eliminarProducto(producto) {
   const productosActualizados = productosExistentes.filter((p) => p.nombre !== producto.nombre);
  
   if (productosActualizados.length==0) {
-    console.log('vacio');
+ 
     vaciarTodosLosProductos();
     refrescarPagina();
   }
@@ -1012,6 +1010,8 @@ function eliminarProducto(producto) {
 
 function vaciarTodosLosProductos() {
   localStorage.removeItem("productosC");
+  localStorage.removeItem('categorias');
+
 }
 
 function mostrarTodosLosProductos() {
@@ -1024,6 +1024,59 @@ function mostrarTodosLosProductos() {
   }
 
 }
+
+function guardarCategoria() {
+  // Obtener la categoría ingresada
+  const nuevaCategoria = document.getElementById('categoria').value;
+  // Verificar si la categoría ya existe en localStorage
+  const categoriasGuardadas = JSON.parse(localStorage.getItem('categorias')) || [];
+  if (categoriasGuardadas.includes(nuevaCategoria)) {
+    console.log('Categoría existente', nuevaCategoria);
+    // Si la categoría ya existe, mostrar un mensaje o realizar la acción correspondiente
+    return;
+  }
+
+  // Agregar la nueva categoría a la lista
+  categoriasGuardadas.push(nuevaCategoria);
+
+  // Guardar la lista actualizada en localStorage
+  localStorage.setItem('categorias', JSON.stringify(categoriasGuardadas));
+
+  // Otra acción que desees realizar después de guardar la categoría
+  console.log('Categoría guardada exitosamente:', nuevaCategoria);
+}
+
+function llenarDesplegableCategorias() {
+  const selectCategoria = document.getElementById('selectCategory');
+  const categoriasGuardadas = JSON.parse(localStorage.getItem('categorias')) || [];
+
+  // Limpiar opciones existentes
+  selectCategoria.innerHTML = '';
+
+  // Llenar el desplegable con las categorías almacenadas
+  categoriasGuardadas.forEach(function(categoria) {
+      var option = document.createElement('option');
+      option.value = categoria;
+      option.text = categoria;
+      selectCategoria.appendChild(option);
+  });
+
+  // Agregar evento al cambio de la categoría seleccionada
+  selectCategoria.addEventListener('change', function() {
+    // Obtener el valor seleccionado
+    const selectedCategory = selectCategoria.value;
+
+    // Actualizar el campo de búsqueda con la categoría seleccionada
+    document.getElementById('buscando').value = selectedCategory;
+  });
+}
+
+
+
+
+
+// Función para llenar dinámicamente el desplegable con las categorías almacenadas
+
 
 function incrementarPrecioDeTodosLosProductos() {
   const cantidadAumento = parseFloat(prompt("Ingrese el aumento de precio (sin decimales):"));
@@ -1068,6 +1121,60 @@ function redondearPreciosDeTodosLosProductos() {
   refrescarPagina();
 }
 
+
+function incrementarPrecios() {
+  const tipoIncremento = document.getElementById("tipoIncremento").value;
+  const valorIncremento = document.getElementById("valorIncremento").value.trim();
+
+  // Verificar que haya al menos un producto marcado
+  const productosMarcados = document.querySelectorAll(".checkbox-producto:checked");
+  if (productosMarcados.length === 0) {
+    alert("¡No se seleccionó ningún producto!");
+    return;
+  }
+
+  // Verificar que el valor de incremento sea válido
+  const incremento = parseFloat(valorIncremento.replace(/,/g, ''));
+
+  if (!isNaN(incremento)) {
+    // Obtener los productos marcados por el checkbox
+    productosMarcados.forEach(checkbox => {
+      // Obtener la fila correspondiente al checkbox marcado
+      const fila = checkbox.closest("tr");
+
+      // Obtener el precio actual del producto en la fila
+      const precioActual = parseFloat(fila.querySelector("td:nth-child(3)").textContent);
+
+      // Incrementar por precio o por porcentaje según la opción seleccionada
+      let nuevoPrecio;
+      if (tipoIncremento === "precio") {
+        nuevoPrecio = precioActual + incremento;
+      } else if (tipoIncremento === "porcentaje") {
+        nuevoPrecio = precioActual * (1 + incremento / 100);
+      }
+
+      // Actualizar el precio y la fila
+      fila.querySelector("td:nth-child(3)").textContent = nuevoPrecio;
+
+      // Actualizar el objeto producto si es necesario (puedes ajustar esto según tus necesidades)
+      const nombreProducto = fila.querySelector("td:nth-child(2)").textContent;
+      const producto = { /* Obtener el producto correspondiente al nombre */ };
+
+      // Actualizar productos en el almacenamiento local
+      const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
+      const index = productosExistentes.findIndex(p => p.nombre === nombreProducto);
+
+      if (index !== -1) {
+        productosExistentes[index].precio = nuevoPrecio;
+        // Puedes realizar otras actualizaciones necesarias aquí
+      }
+
+      localStorage.setItem("productosC", JSON.stringify(productosExistentes));
+    });
+  } else {
+    alert("Ingrese un valor numérico válido para el incremento.");
+  }
+}
 
 
 
@@ -1170,49 +1277,91 @@ function cargarArchivo() {
 
 
 
-
-
-
-
-
-// Agregar un event listener de clic al botón de búsqueda
 document.getElementById('boton-buscar').addEventListener('click', function () {
+  const filtro = document.getElementById('filtro').value;
   const buscando = document.getElementById('buscando').value.trim().toLowerCase();
-  const Table = document.getElementById('tabla-stock');
-  for (var i = 1; i < Table.rows.length; i++) {
-    var found = false;
-    var row = Table.rows[i];
 
-    for (var j = 0; j < row.cells.length; j++) {
-      var cellText = row.cells[j].textContent.toLowerCase();
+  // Obtener productos del localStorage
+  const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
 
-      // Verificar si el término de búsqueda es un número
-      if (isNumeric(buscando) && isNumeric(cellText)) {
-        if (parseFloat(cellText) <= parseFloat(buscando)) {
-          found = true;
-          break;
-        }
-      } else if (cellText.includes(buscando)) {
-        found = true;
-        break;
-      }
+  // Limpiar la tabla antes de mostrar los resultados filtrados
+  limpiarTabla();
+
+  // Mostrar solo los productos que cumplen con las condiciones de búsqueda
+  productosExistentes.forEach(producto => {
+    if (cumpleCondiciones(producto, filtro, buscando)) {
+      agregarProductoATabla(producto);
     }
-
-    if (found) {
-      row.style.display = ''; // Mostrar la fila si se encontró el término de búsqueda
-    } else {
-      row.style.display = 'none'; // Ocultar la fila si no se encontró el término de búsqueda
-    }
-  }
+  });
 });
 
-function isNumeric(value) {
-  return /^-?\d+(\.\d+)?$/.test(value);
+function cumpleCondiciones(producto, filtro, buscando) {
+  const nombre = producto.nombre.toLowerCase();
+  const categoria = producto.categoria.toLowerCase();
+
+  switch (filtro) {
+    case 'nombre':
+      return nombre.includes(buscando);
+    case 'precio':
+      return !isNaN(producto.precio) && producto.precio <= parseFloat(buscando);
+    case 'stock':
+      return !isNaN(producto.stock) && producto.stock <= parseFloat(buscando);
+    case 'categoria':
+      return categoria.includes(buscando);
+    default:
+      return false;
+  }
 }
+function agregarProductoATabla(producto) {
+  const tablaProductos = document.getElementById("tabla-stock");
+
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
+    <td><input type="checkbox" class="checkbox-producto"></td>
+    <td>${producto.nombre}</td>
+    <td>${producto.precio}</td>
+    <td>${producto.stock}</td>
+    <td>${producto.categoria}</td>
+    <td>
+        <button class="boton-editar">Editar</button>
+        <button class="boton-eliminar">Eliminar</button>
+    </td>
+  `;
+
+  const checkboxProducto = fila.querySelector(".checkbox-producto");
+  const botonEditar = fila.querySelector(".boton-editar");
+  const botonEliminar = fila.querySelector(".boton-eliminar");
+
+  botonEditar.addEventListener("click", function () {
+    editarProducto(producto, fila);
+  });
+
+  botonEliminar.addEventListener("click", function () {
+    const confirmacion = confirm("¿Estás seguro de que deseas eliminar este producto?");
+    if (confirmacion) {
+      fila.remove();
+      eliminarProducto(producto);
+    }
+  });
+
+  tablaProductos.appendChild(fila);
+}
+
+
+
+function limpiarTabla() {
+  // Limpiar la tabla (eliminar todas las filas excepto la primera, que son los encabezados)
+  const table = document.getElementById('tabla-stock');
+  while (table.rows.length > 1) {
+    table.deleteRow(1);
+  }
+}
+
 
 // Restaurar la visualización de todas las filas al hacer clic en "Mostrar Todos"
 document.getElementById('boton-mostrar-todos').addEventListener('click', function () {
   refrescarPagina();
+  
 });
 
 
