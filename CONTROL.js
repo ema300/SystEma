@@ -74,9 +74,8 @@ document.getElementById('nombre').addEventListener('input', function () {
         precio = 0;
       }
       if (isNaN(stock)) {
-        stock = 0;
+        stock = Infinity;
       }
-
       document.getElementById('precio').value = precio;
       document.getElementById('stock').value = stock;
       break;
@@ -198,15 +197,15 @@ function eliminarProduc(index) {
   if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
 
     if (compra_actual === 'no' && carrito[index].Total === productos[index].Total) {
-      
+
       vendido = localStorage.getItem('valor_compra_actual');
       acum = Math.max(parseFloat(vendido), carrito[index].Total) - Math.min(parseFloat(vendido), carrito[index].Total);
-     
+
       localStorage.setItem('valor_compra_actual', JSON.stringify(acum));
-      
+
       vendidoActualElement = document.getElementById('vendido-actual');
       vendidoActualElement.textContent = 'Total: $' + acum;
-     
+
 
       carrito.splice(index, 1);
       localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -216,8 +215,8 @@ function eliminarProduc(index) {
       localStorage.setItem('productos', JSON.stringify(productos));
       displayProductsInTable();
       actualizarTotalPrecio(); // Actualizar el total de precios después de eliminar
-   
-     // refrescarPagina();
+
+      // refrescarPagina();
 
     }
     if (productos.length === 0) {
@@ -275,8 +274,13 @@ document.getElementById('guardar').addEventListener('click', function () {
   }
   if (cantidad === 0) {
     alert('La cantidad no puede ser 0');
+    
+  }
+  if (precio === 0) {
+    alert("El precio no puede ser cero. Por favor, ingrese un valor válido.");
     return;
   }
+
   // Restringir el stock mínimo a 0
   nuevoStock = Math.max(nuevoStock, 0);
 
@@ -842,31 +846,53 @@ const agregarBtn = document.getElementById('agregarBtn');
 
 agregarBtn.addEventListener('click', function () {
   const nombre = document.getElementById('nombr').value;
-  const precio = parseFloat(document.getElementById('preci').value);
-  const stock = parseInt(document.getElementById('st').value);
+  const precioInput = document.getElementById('preci').value;
+  const stockInput = document.getElementById('st').value;
   const categoria = document.getElementById('categoria').value;
-  guardarCategoria();
+
+  // Validación de precio
+  let precio;
+  if (precioInput.trim() === '') {
+    precio = 0;
+  } 
+  else if (isNaN(parseFloat(precioInput))) {
+    alert('El precio debe ser un número');
+    return;
+  } 
+  else {
+    precio = parseFloat(precioInput);
+  }
+
+  // Validación de stock
+  let stock;
+  if (stockInput.trim() === '') {
+    stock = Infinity;
+  } 
+  else if (isNaN(parseInt(stockInput))) {
+    alert('El stock debe ser un número');
+    return;
+  } 
+  else {
+    stock = parseInt(stockInput);
+  }
 
   if (nombre.length < 1) {
     alert('Complete el nombre del producto');
     return;
   }
   if (categoria.length < 1) {
-    alert('complete la categoria del producto');
+    alert('Complete la categoría del producto');
     return;
   }
 
+  guardarCategoria();
 
   for (let i = 0; i < pro.length; i++) {
-  
-      if (nombre === pro[i].nombre) {
-        alert('Ya hay un producto con ese nombre');
-        return;
-      }
-    
+    if (nombre === pro[i].nombre) {
+      alert('Ya hay un producto con ese nombre');
+      return;
+    }
   }
-
-
 
   const producto = {
     nombre,
@@ -882,12 +908,11 @@ agregarBtn.addEventListener('click', function () {
 
   agregarProductoATabla(producto);
 
-  mostrarPorUnSegundo("Se agrego correctamente");
-// Llamada inicial para llenar el desplegable al cargar la página
-llenarDesplegableCategorias();
-
-
+  mostrarPorUnSegundo("Se agregó correctamente");
+  // Llamada inicial para llenar el desplegable al cargar la página
+  llenarDesplegableCategorias();
 });
+
 
 
 botonVaciar.addEventListener("click", function () {
@@ -899,7 +924,7 @@ botonVaciar.addEventListener("click", function () {
 });
 
 botonMostrarTodos.addEventListener("click", function () {
-mostrarTodosLosProductos();
+  mostrarTodosLosProductos();
 
 });
 
@@ -982,20 +1007,20 @@ function editarProducto(producto, fila) {
 
 
     localStorage.setItem("productosC", JSON.stringify(productosExistentes));
-    
+
   }
 }
 
 function eliminarProducto(producto) {
   const productosExistentes = JSON.parse(localStorage.getItem("productosC")) || [];
   const productosActualizados = productosExistentes.filter((p) => p.nombre !== producto.nombre);
- 
-  if (productosActualizados.length==0) {
- 
+
+  if (productosActualizados.length == 0) {
+
     vaciarTodosLosProductos();
     refrescarPagina();
   }
-  else{
+  else {
     localStorage.setItem("productosC", JSON.stringify(productosActualizados));
 
   }
@@ -1054,15 +1079,15 @@ function llenarDesplegableCategorias() {
   selectCategoria.innerHTML = '';
 
   // Llenar el desplegable con las categorías almacenadas
-  categoriasGuardadas.forEach(function(categoria) {
-      var option = document.createElement('option');
-      option.value = categoria;
-      option.text = categoria;
-      selectCategoria.appendChild(option);
+  categoriasGuardadas.forEach(function (categoria) {
+    var option = document.createElement('option');
+    option.value = categoria;
+    option.text = categoria;
+    selectCategoria.appendChild(option);
   });
 
   // Agregar evento al cambio de la categoría seleccionada
-  selectCategoria.addEventListener('change', function() {
+  selectCategoria.addEventListener('change', function () {
     // Obtener el valor seleccionado
     const selectedCategory = selectCategoria.value;
 
@@ -1269,7 +1294,7 @@ function cargarArchivo() {
     };
 
     lector.readAsBinaryString(archivo);
-    
+
   }
 
 }
@@ -1361,7 +1386,7 @@ function limpiarTabla() {
 // Restaurar la visualización de todas las filas al hacer clic en "Mostrar Todos"
 document.getElementById('boton-mostrar-todos').addEventListener('click', function () {
   refrescarPagina();
-  
+
 });
 
 
@@ -1386,14 +1411,14 @@ function mostrarPorUnSegundo(texto) {
 function calcularVuelto() {
   var montoPagado = parseFloat(document.getElementById('montoPagado').value);
   var precioProductos = localStorage.getItem('valor_compra_actual');;
-  
+
 
   var vuelto = formatNumber(montoPagado) - precioProductos;
-  if (vuelto>-1) {
+  if (vuelto > -1) {
     document.getElementById('resultado').innerText = 'El vuelto es: ' + vuelto.toFixed(2);
 
   } else {
-    vuelto=vuelto*(-1);
+    vuelto = vuelto * (-1);
     document.getElementById('resultado').innerText = 'Falta pagar ' + vuelto.toFixed(2);
 
   }
