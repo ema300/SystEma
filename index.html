@@ -74,10 +74,10 @@
               <input type="text" id="nombr" required>
               <br>
               <label for="precio">Precio:</label>
-              <input type="number" id="preci" >
+              <input type="number" id="preci">
               <br>
               <label for="stock">Stock:</label>
-              <input type="number" id="st" >
+              <input type="number" id="st">
               <br>
               <label for="categoria">Categoría:</label>
               <input type="text" id="categoria" required>
@@ -113,13 +113,13 @@
                 <option value="precio">Por Precio</option>
                 <option value="porcentaje">Por Porcentaje</option>
               </select>
-            
+
               <label for="incremento">Incremento:</label>
               <input type="number" id="valorIncremento" min="0" value="0">
-            
+
               <button onclick="incrementarPrecios()">Incrementar Precios</button>
             </div>
-            
+
 
 
             <div id="bloque-productos">
@@ -134,12 +134,12 @@
                   <option value="stock">Stock</option>
                   <option value="categoria">Categoría</option>
                 </select>
-              
-          
-        
+
+
+
                 <input type="text" id="buscando" placeholder="Ingrese término de búsqueda">
                 <button id="boton-buscar">Buscar</button>
-              
+
                 <button id="boton-mostrar-todos">Mostrar Todos</button>
                 <h3>Categorías Existentes</h3>
                 <select id="selectCategory">
@@ -172,10 +172,29 @@
           <div id="vendido-actual">Total: $0.00
 
           </div>
+<div>
+          <p id="total_pagar"> </p>
 
+</div>
           <div>
+
+            <label for="porcentaje">Porcentaje:</label>
+            <input type="number" id="porcentaje">
+
+            <button onclick="calcularAdicional()">Calcular Adicional</button>
+            <p id="totalConAdicional"></p>
+
+            <label for="descuento">Descuento:</label>
+            <input type="number" id="descuento">
+
+            <button onclick="calcularDescuento()">Aplicar Descuento</button>
+            <p id="totalConDescuento"></p>
+
+
             <label for="montoPagado">Monto pagado:</label>
             <input type="number" id="montoPagado">
+
+
 
             <button onclick="calcularVuelto()">Calcular vuelto</button>
             <p id="resultado"></p>

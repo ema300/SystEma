@@ -440,7 +440,10 @@ select#filtro {
 
 
 
-
+#total_pagar{
+  font-size: 3em;
+  text-align: left;
+}
 
 
 
@@ -809,6 +812,12 @@ input#valorIncremento {
   background-color: white;
   border-radius: 5px;
   width: auto;
+}
+
+
+#total_pagar{
+  font-size: 3em;
+  text-align: left;
 }
 }
 
