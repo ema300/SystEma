@@ -52,7 +52,154 @@
 
       </div>
 
-      <!-- Contenedor del modal -->
+
+
+
+      <div id="bloque-carrito">
+        <div id="compra_actual">
+          <div id="vendido-actual">Total: $0.00
+
+          </div>
+
+
+
+          <div id="botones-compra-actual">
+            <!-- Botón para abrir el modal -->
+            <button id="btnMostrarModalPago">Confirmar Compra</button>
+            <button id="borrar-compra" onclick="cancelar_compra()">Cancelar Compra</button>
+
+          </div>
+
+        </div>
+        <div id="contenido-tabla">
+
+          <table id="tabla-productos">
+            <tr>
+              <th>ID</th>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Total</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Acciones</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+
+      <div id="historial">
+
+
+        <!-- Tabla para mostrar el historial de productos -->
+
+        <h2>Historial de Compras</h2>
+        <div id="opciones-historial">
+          <button onclick="limpiarHistorial()">Vaciar Historial</button>
+          <button id="exportar-xlsx">Exportar a Excel</button>
+        </div>
+
+
+        <div class="busqueda">
+          <input type="text" id="search-input" placeholder="Buscar por nombre, fecha, hora o precio">
+          <button id="search-button">Buscar</button>
+          <button id="show-all-button">Mostrar Todos</button>
+
+        </div>
+        <br>
+
+        <div id="total-precio">
+          Total: $0.00</div>
+        <table id="historial-table">
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Total</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- Contenedor del modal pagar-->
+
+
+
+
+      <div id="modalPago" class="modalPago">
+        <div class="modal-content-Pago">
+          <span class="closePago">&times;</span>
+
+          <div>
+            <p id="total_pagar"> </p>
+
+          </div>
+          <!-- Agrega opciones de pago -->
+          <label for="formaPago">Forma de Pago:</label>
+          <select id="formaPago">
+            <option value="efectivo">Efectivo</option>
+            <option value="debito">Tarjeta de Débito</option>
+            <option value="credito">Tarjeta de Crédito</option>
+            <option value="transferencia">Transferencia Bancaria</option>
+            <option value="qr">Pago QR</option>
+          </select>
+
+          <label for="porcentaje">Adicional %</label>
+          <input type="number" id="porcentaje">
+
+          <p id="totalConAdicional"></p>
+
+          <label for="descuento">Descuento %</label>
+          <input type="number" id="descuento">
+
+          <button onclick="calcularDescuento()">Aplicar</button>
+          <p id="totalConDescuento"></p>
+
+
+          <label for="montoPagado">Monto Abonado:</label>
+          <input type="number" id="montoPagado">
+
+
+
+          <button onclick="calcularVuelto()">Calcular vuelto</button>
+          <p id="resultado"></p>
+
+          <br>
+          <div id="botones-compra-actual">
+            <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
+            <button id="borrar-compra">Cancelar Compra</button>
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+      <!-- Contenedor del modal control de stock-->
       <div id="modal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
@@ -164,107 +311,9 @@
 
         </div>
       </div>
-      <br>
-      <br>
-
-      <div id="bloque-carrito">
-        <div id="compra_actual">
-          <div id="vendido-actual">Total: $0.00
-
-          </div>
-<div>
-          <p id="total_pagar"> </p>
-
-</div>
-          <div>
-
-            <label for="porcentaje">Porcentaje:</label>
-            <input type="number" id="porcentaje">
-
-            <button onclick="calcularAdicional()">Calcular Adicional</button>
-            <p id="totalConAdicional"></p>
-
-            <label for="descuento">Descuento:</label>
-            <input type="number" id="descuento">
-
-            <button onclick="calcularDescuento()">Aplicar Descuento</button>
-            <p id="totalConDescuento"></p>
-
-
-            <label for="montoPagado">Monto pagado:</label>
-            <input type="number" id="montoPagado">
 
 
 
-            <button onclick="calcularVuelto()">Calcular vuelto</button>
-            <p id="resultado"></p>
-          </div>
-          <br>
-          <div id="botones-compra-actual">
-            <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
-            <button id="borrar-compra">Cancelar Compra</button>
-          </div>
-
-
-        </div>
-
-
-
-        <div id="contenido-tabla">
-
-          <table id="tabla-productos">
-            <tr>
-              <th>ID</th>
-              <th>Producto</th>
-              <th>Precio</th>
-              <th>Cantidad</th>
-              <th>Total</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Acciones</th>
-            </tr>
-          </table>
-        </div>
-      </div>
-
-
-      <div id="historial">
-
-
-        <!-- Tabla para mostrar el historial de productos -->
-
-        <h2>Historial de Compras</h2>
-        <div id="opciones-historial">
-          <button onclick="limpiarHistorial()">Vaciar Historial</button>
-          <button id="exportar-xlsx">Exportar a Excel</button>
-        </div>
-
-
-        <div class="busqueda">
-          <input type="text" id="search-input" placeholder="Buscar por nombre, fecha, hora o precio">
-          <button id="search-button">Buscar</button>
-          <button id="show-all-button">Mostrar Todos</button>
-
-        </div>
-        <br>
-
-        <div id="total-precio">
-          Total: $0.00</div>
-        <table id="historial-table">
-
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Producto</th>
-              <th>Precio</th>
-              <th>Cantidad</th>
-              <th>Total</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
 
 
 

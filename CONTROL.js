@@ -490,8 +490,8 @@ function borrar_compra() {
 }
 
 
-
-document.getElementById('borrar-compra').addEventListener('click', function () {
+function cancelar_compra() {
+  
   var confirmacion = confirm('¿Estás seguro de que deseas cancelar la compra?');
   if (confirmacion) {
 
@@ -499,9 +499,9 @@ document.getElementById('borrar-compra').addEventListener('click', function () {
     displayProductsInTable();
     actualizarCompraActual();
 
-
   }
-});
+  
+};
 
 
 
@@ -1406,56 +1406,95 @@ function mostrarPorUnSegundo(texto) {
 
 
 
-
 // Función para calcular el adicional
 function calcularAdicional() {
-
   var precioProductos = parseFloat(localStorage.getItem('valor_compra_actual'));
   var porcentaje = parseFloat(document.getElementById('porcentaje').value);
   var adicional = (precioProductos * porcentaje) / 100;
   var totalConAdicional = precioProductos + adicional;
-
+  if (!isNaN(adicional)) {
   // Mostrar el total con adicional en el elemento correspondiente
   document.getElementById('totalConAdicional').innerText = 'Total con Adicional: $' + totalConAdicional.toFixed(2);
 
   // Actualizar el total a pagar en el elemento total_pagar
   document.getElementById('total_pagar').innerText = 'Total Final: $' + totalConAdicional.toFixed(2) ;
+  }
+  else{
+    return;
+  }
 }
 
 // Función para calcular el descuento
 function calcularDescuento() {
+  calcularAdicional()
+  var precioProductos = parseFloat(localStorage.getItem('valor_compra_actual'));
 
+  //var precioConAdicional = parseFloat(document.getElementById('totalConAdicional').innerText.replace('Total con Adicional: $', ''));
   var precioConAdicional = parseFloat(document.getElementById('totalConAdicional').innerText.replace('Total con Adicional: $', ''));
+
   var descuento = parseFloat(document.getElementById('descuento').value);
-  var montoConDescuento = precioConAdicional - (precioConAdicional * descuento) / 100;
+  // Verificar si el descuento es un número válido
+  if (!isNaN(descuento) ) {
+    // Si el descuento es un número válido, realizar el descuento
+    if (!isNaN(precioConAdicional)) {
+      var montoConDescuento = precioConAdicional - (precioConAdicional * descuento) / 100;
 
-  // Mostrar el total con descuento en el elemento correspondiente
-  document.getElementById('totalConDescuento').innerText = 'Total con Descuento: $' + montoConDescuento.toFixed(2);
+    }
+    else{
+      var montoConDescuento = precioProductos - (precioProductos * descuento) / 100;
 
-  // Actualizar el total a pagar en el elemento total_pagar
-  document.getElementById('total_pagar').innerText = 'Total Final: $' + montoConDescuento.toFixed(2);
+    }
+
+    // Mostrar el total con descuento en el elemento correspondiente
+    document.getElementById('totalConDescuento').innerText = 'Total con Descuento: $' + montoConDescuento.toFixed(2);
+
+    // Actualizar el total a pagar en el elemento total_pagar
+    document.getElementById('total_pagar').innerText = 'Total Final: $' + montoConDescuento.toFixed(2);
+  } else {
+    // Si el descuento no es un número válido, no hacer nada
+    return;
+  }
 }
 
 
 
+var montoRestante;
 // Resto de la función calcularVuelto
 function calcularVuelto() {
-
+  
   var montoPagado = parseFloat(document.getElementById('montoPagado').value);
 
   // Calcular el vuelto o monto restante a pagar
   var precioFinal = parseFloat(document.getElementById('totalConDescuento').innerText.replace('Total con Descuento: $', '')) || parseFloat(document.getElementById('totalConAdicional').innerText.replace('Total con Adicional: $', '')) || parseFloat(localStorage.getItem('valor_compra_actual'));
   
   // Restar el monto pagado al precio final
-  var montoRestante = precioFinal - montoPagado;
+  montoRestante = precioFinal - montoPagado;
 
   // Mostrar el resultado basado en el valor calculado
   if (montoRestante >= 0) {
     // Si el monto restante es positivo, mostrar que falta pagar
     document.getElementById('resultado').innerText = 'Falta pagar: $' + montoRestante.toFixed(2);
+       // Crea un nuevo elemento <button> pagar lo que falta
+       var botonPagar = document.createElement('button');
+       botonPagar.id = 'Boton_falta_pagar';
+       botonPagar.innerText = 'Pagar Faltante';
+
+       botonPagar.onclick = function() {
+        mostrarModalPagoFaltaPagar()
+    };
+       resultado.appendChild(botonPagar);
+
+   
   } else {
     // Si el monto restante es negativo, mostrar el cambio
-    document.getElementById('resultado').innerText = 'El vuelto es: $' + (montoRestante * (-1)).toFixed(2);
+    if (isNaN(montoRestante)) {
+      document.getElementById('resultado').innerText = 'El vuelto es: $' + 0;
+
+    }
+    else {
+      document.getElementById('resultado').innerText = 'El vuelto es: $' + (montoRestante * (-1)).toFixed(2);
+
+    }
   }
 }
 
@@ -1480,4 +1519,90 @@ function vaciarVariablesCompra() {
   document.getElementById('total_pagar').innerText = '';
   document.getElementById('montoPagado').value = '';
   document.getElementById('resultado').innerText = '';
+}
+
+
+
+
+
+
+
+  // Obtén referencias a los elementos relevantes
+  var btnMostrarModalPago = document.getElementById('btnMostrarModalPago');
+  var modalPago = document.getElementById('modalPago');
+  var closeModalButtonPago = document.querySelector('.closePago');
+
+// Agrega un evento de clic al botón para mostrar el modal
+btnMostrarModalPago.addEventListener('click', mostrarModalPago);
+
+  // Agrega un evento de clic al botón para mostrar el modal
+  btnMostrarModalPago.addEventListener('click', function() {
+    modalPago.style.display = 'block';
+  });
+
+  // Agrega un evento de clic al botón de cierre para ocultar el modal
+  closeModalButtonPago.addEventListener('click', function() {
+    modalPago.style.display = 'none';
+  });
+
+  // Cierra el modal si el usuario hace clic fuera de él
+  window.addEventListener('click', function(event) {
+    if (event.target === modalPago) {
+      modalPago.style.display = 'none';
+    }
+  });
+
+  function mostrarModalPago() {
+    var precioProductos = parseFloat(localStorage.getItem('valor_compra_actual'));
+
+    if (!isNaN(precioProductos)) {
+      // Obtén el precio de los productos desde localStorage
+  
+  
+    // Asigna el precio al elemento total_pagar
+    document.getElementById('total_pagar').innerText = 'Total a Pagar: $' + precioProductos.toFixed(2);
+  
+    // Muestra el modal
+    modalPago.style.display = 'block';
+    }
+    
+    
+  }
+
+  function mostrarModalPagoFaltaPagar() {
+    // Obtén el precio de los productos desde localStorage
+    var precioProductos = montoRestante;
+  
+    // Asigna el precio al elemento total_pagar
+    document.getElementById('total_pagar').innerText = 'Total Faltante a Pagar: $' + precioProductos.toFixed(2);
+   
+  document.getElementById('totalConAdicional').innerText = '';
+  document.getElementById('totalConDescuento').innerText = '';
+  document.getElementById('montoPagado').value = '';
+  document.getElementById('resultado').innerText = '';
+    
+  }
+
+
+
+
+
+
+  var formaPagoSelect = document.getElementById('formaPago');
+
+// Agrega un evento de cambio al <select>
+formaPagoSelect.addEventListener('change', limpiarCampos);
+
+// Función para limpiar los campos
+function limpiarCampos() {
+  // Limpiar campos relacionados con el adicional
+  document.getElementById('porcentaje').value = '';
+  document.getElementById('totalConAdicional').innerText = '';
+
+  // Limpiar campos relacionados con el descuento
+  document.getElementById('descuento').value = '';
+  document.getElementById('totalConDescuento').innerText = '';
+
+  // Limpiar campos relacionados con el vuelto
+  document.getElementById('montoPagado').value = '';
 }
