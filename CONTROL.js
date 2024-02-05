@@ -1648,7 +1648,7 @@ function generarIdUnico() {
 function pagos() {
   // Suponiendo que Apagar es una variable que contiene el monto total a pagar
   var totalPagar = Apagar.toFixed(2);
-  alert(totalPagar)
+
 
   // Obtener el elemento select con el id "formaPago"
   var formaPagoElement = document.getElementById("formaPago");
