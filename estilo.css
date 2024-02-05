@@ -446,6 +446,7 @@ select#formaPago {
   width: 11em;
   outline: none;
   border: 0px;
+   font-size: 1.5em; 
 }
 
 #total_pagar{

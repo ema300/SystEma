@@ -7,6 +7,7 @@ var copiaCantidad = 0;
 var pro = [];
 var vendidoActualElement;
 
+var Apagar=0;
 
 // inicio Variables Modal
 
@@ -415,6 +416,8 @@ function limpiarHistorial() {
 
 
     localStorage.removeItem('Ident');
+    localStorage.removeItem('contador');
+    localStorage.removeItem('pagos');
 
     // Limpiar localStorage
     localStorage.removeItem('historial');
@@ -525,7 +528,7 @@ function finalizar_compra() {
   if (confirmacion) {
 
 
-
+ pagos();
 
 
 
@@ -573,7 +576,7 @@ function finalizar_compra() {
 
     actualizarCompraActual();
     actualizarTotalPrecio();
-    refrescarPagina();
+    //refrescarPagina();
   }
 }
 
@@ -1438,11 +1441,11 @@ function calcularDescuento() {
     // Si el descuento es un número válido, realizar el descuento
     if (!isNaN(precioConAdicional)) {
       var montoConDescuento = precioConAdicional - (precioConAdicional * descuento) / 100;
-
+      Apagar=montoConDescuento ;
     }
     else{
       var montoConDescuento = precioProductos - (precioProductos * descuento) / 100;
-
+      Apagar=montoConDescuento ;
     }
 
     // Mostrar el total con descuento en el elemento correspondiente
@@ -1553,14 +1556,14 @@ btnMostrarModalPago.addEventListener('click', mostrarModalPago);
   });
 
   function mostrarModalPago() {
-    var precioProductos = parseFloat(localStorage.getItem('valor_compra_actual'));
+    Apagar = parseFloat(localStorage.getItem('valor_compra_actual'));
 
-    if (!isNaN(precioProductos)) {
+    if (!isNaN( Apagar)) {
       // Obtén el precio de los productos desde localStorage
   
   
     // Asigna el precio al elemento total_pagar
-    document.getElementById('total_pagar').innerText = 'Total a Pagar: $' + precioProductos.toFixed(2);
+    document.getElementById('total_pagar').innerText = 'Total a Pagar: $' +  Apagar.toFixed(2);
   
     // Muestra el modal
     modalPago.style.display = 'block';
@@ -1571,10 +1574,10 @@ btnMostrarModalPago.addEventListener('click', mostrarModalPago);
 
   function mostrarModalPagoFaltaPagar() {
     // Obtén el precio de los productos desde localStorage
-    var precioProductos = montoRestante;
+  Apagar = montoRestante;
   
     // Asigna el precio al elemento total_pagar
-    document.getElementById('total_pagar').innerText = 'Total Faltante a Pagar: $' + precioProductos.toFixed(2);
+    document.getElementById('total_pagar').innerText = 'Total Faltante a Pagar: $' + Apagar.toFixed(2);
    
   document.getElementById('totalConAdicional').innerText = '';
   document.getElementById('totalConDescuento').innerText = '';
@@ -1588,7 +1591,7 @@ btnMostrarModalPago.addEventListener('click', mostrarModalPago);
 
 
 
-  var formaPagoSelect = document.getElementById('formaPago');
+var formaPagoSelect = document.getElementById('formaPago');
 
 // Agrega un evento de cambio al <select>
 formaPagoSelect.addEventListener('change', limpiarCampos);
@@ -1605,4 +1608,103 @@ function limpiarCampos() {
 
   // Limpiar campos relacionados con el vuelto
   document.getElementById('montoPagado').value = '';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function generarIdUnico() {
+  // Definir o recuperar el contador desde localStorage
+  var contador = parseInt(localStorage.getItem('contador')) || 0;
+
+  // Incrementar el contador
+  contador++;
+
+  // Guardar el nuevo valor del contador en localStorage
+  localStorage.setItem('contador', contador);
+
+  // Crear el ID concatenando el contador con algún valor adicional
+  return  contador;
+}
+
+
+function pagos() {
+  // Suponiendo que Apagar es una variable que contiene el monto total a pagar
+  var totalPagar = Apagar;
+
+  // Obtener el elemento select con el id "formaPago"
+  var formaPagoElement = document.getElementById("formaPago");
+
+  // Obtener el valor seleccionado por defecto
+  var formaPagoSeleccionada = formaPagoElement.value;
+
+  // Obtener la fecha y hora actual
+  var fechaHora = new Date().toLocaleString();
+
+  // Crear un objeto con los datos
+  var detallesPago = {
+    Id: generarIdUnico(),
+    PageTransitionEventago: totalPagar,
+    FormaPago: formaPagoSeleccionada,
+    Fecha_Hora: fechaHora
+  };
+
+  // Obtener los detalles de pago existentes de localStorage
+  var pagosExist = JSON.parse(localStorage.getItem('pagos')) || [];
+
+  // Agregar el nuevo detalle de pago al array existente
+  pagosExist.push(detallesPago);
+
+  // Guardar el array actualizado en localStorage
+  localStorage.setItem('pagos', JSON.stringify(pagosExist));
+
+
+}
+
+
+
+function exportarExcelPagos() {
+  // Obtener los detalles de pago de localStorage
+  var pagosExist = JSON.parse(localStorage.getItem('pagos')) || [];
+
+  // Crear una matriz de datos para el archivo Excel
+  var data = [['ID', 'Monto', 'Forma de Pago', 'Fecha y Hora']];
+
+  pagosExist.forEach(function(pago) {
+    data.push([pago.Id, pago.PageTransitionEventago, pago.FormaPago, pago.Fecha_Hora]);
+  });
+
+  // Crear un libro de trabajo y una hoja de trabajo
+  var workbook = XLSX.utils.book_new();
+  var sheet = XLSX.utils.aoa_to_sheet(data);
+
+  // Agregar la hoja de trabajo al libro de trabajo
+  XLSX.utils.book_append_sheet(workbook, sheet, 'Detalles de Pago');
+
+
+
+  var now = new Date();
+  var datePart = now.toISOString().slice(0, 10).replace(/-/g, '-');
+  var timePart = now.toTimeString().slice(0, 8).replace(/:/g, '-');
+  var fileName = 'pagos_del_Dia_' + datePart + '_' + timePart + '.xlsx';
+
+  // Guardar el archivo
+  XLSX.writeFile(workbook, fileName);
 }
