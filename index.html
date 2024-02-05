@@ -98,7 +98,7 @@
         <div id="opciones-historial">
           <button onclick="limpiarHistorial()">Vaciar Historial y Pagos</button>
           <button id="exportar-xlsx">Exportar a Excel</button>
-          <button onclick="exportarExcelPagos()">Exportar a Excel PAGOS</button>
+          <button onclick="abrirModalMiModalPagos() ">Ver Detalles de Pagos</button>
 
         </div>
 
@@ -128,7 +128,6 @@
           </thead>
         </table>
       </div>
-
 
 
 
@@ -313,6 +312,38 @@
 
         </div>
       </div>
+
+      <!-- modal de pagos-->
+
+
+      <div id="modalHistorialPagos" class="modalHistorialPagos">
+        <div class="contenido-modal-Historial-Pagos">
+          <span class="cerrarHistorialPagos" onclick="cerrarModalHistorialPagos()">&times;</span>
+          <button onclick="exportarExcelPagos()">Exportar a Excel PAGOS</button>
+          <h2>Detalles de Pagos</h2>
+          <table id="tablaPagos">
+            <!-- Aquí se insertarán dinámicamente los detalles de pago -->
+          </table>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1647,7 +1647,8 @@ function generarIdUnico() {
 
 function pagos() {
   // Suponiendo que Apagar es una variable que contiene el monto total a pagar
-  var totalPagar = Apagar;
+  var totalPagar = Apagar.toFixed(2);
+  alert(totalPagar)
 
   // Obtener el elemento select con el id "formaPago"
   var formaPagoElement = document.getElementById("formaPago");
@@ -1661,7 +1662,7 @@ function pagos() {
   // Crear un objeto con los datos
   var detallesPago = {
     Id: generarIdUnico(),
-    PageTransitionEventago: totalPagar,
+    Pago: totalPagar,
     FormaPago: formaPagoSeleccionada,
     Fecha_Hora: fechaHora
   };
@@ -1685,10 +1686,10 @@ function exportarExcelPagos() {
   var pagosExist = JSON.parse(localStorage.getItem('pagos')) || [];
 
   // Crear una matriz de datos para el archivo Excel
-  var data = [['ID', 'Monto', 'Forma de Pago', 'Fecha y Hora']];
+  var data = [['ID', 'Pago', 'Medio', 'Fecha y Hora']];
 
   pagosExist.forEach(function(pago) {
-    data.push([pago.Id, pago.PageTransitionEventago, pago.FormaPago, pago.Fecha_Hora]);
+    data.push([pago.Id, pago.Pago, pago.FormaPago, pago.Fecha_Hora]);
   });
 
   // Crear un libro de trabajo y una hoja de trabajo
@@ -1703,8 +1704,72 @@ function exportarExcelPagos() {
   var now = new Date();
   var datePart = now.toISOString().slice(0, 10).replace(/-/g, '-');
   var timePart = now.toTimeString().slice(0, 8).replace(/:/g, '-');
-  var fileName = 'pagos_del_Dia_' + datePart + '_' + timePart + '.xlsx';
+  var fileName = 'pagos_del_dia_' + datePart + '_' + timePart + '.xlsx';
 
   // Guardar el archivo
   XLSX.writeFile(workbook, fileName);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function abrirModalMiModalPagos() {
+  var modal = document.getElementById("modalHistorialPagos");
+  modal.style.display = "block";
+
+  // Obtener detalles de pago de localStorage
+  var pagosExist = JSON.parse(localStorage.getItem('pagos')) || [];
+
+  // Generar HTML para la tabla
+  var tablaHTML = "<tr><th>ID</th><th>Pago</th><th>Medios de Pago</th><th>Fecha y Hora</th></tr>";
+
+  pagosExist.forEach(function(pago) {
+    tablaHTML += `<tr><td>${pago.Id}</td><td>${pago.Pago}</td><td>${pago.FormaPago}</td><td>${pago.Fecha_Hora}</td></tr>`;
+  });
+
+  // Insertar el HTML en la tabla
+  document.getElementById("tablaPagos").innerHTML = tablaHTML;
+}
+
+function cerrarModalHistorialPagos() {
+  var modal = document.getElementById("modalHistorialPagos");
+  modal.style.display = "none";
+}
+
+
