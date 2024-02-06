@@ -379,7 +379,13 @@ function actualizarStock() {
     for (let j = 0; j < pro.length; j++) {
 
       if (productos[i].Producto === pro[j].nombre) {
-        pro[j].stock -= productos[i].Cantidad;
+        if (isNaN(productos[i].Producto)) {
+          productos[i].Producto=Infinity;
+        }
+        else{
+          pro[j].stock = pro[j].stock - productos[i].Cantidad;
+
+        }
       }
     }
   }
@@ -528,7 +534,7 @@ function finalizar_compra() {
   if (confirmacion) {
 
 
- pagos();
+     pagos();
 
 
 
