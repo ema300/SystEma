@@ -169,23 +169,24 @@
 
           <label for="descuento">Descuento %</label>
           <input type="number" id="descuento">
-
-          <button onclick="calcularDescuento()">Aplicar</button>
           <p id="totalConDescuento"></p>
 
+          <button onclick="calcularDescuento()">Aplicar</button>
+   
 
-          <label for="montoPagado">Monto Abonado:</label>
+
+          <label for="montoPagado">Dinero Abonado:</label>
           <input type="number" id="montoPagado">
 
 
 
-          <button onclick="calcularVuelto()">Calcular vuelto</button>
+          <button onclick="calcularVuelto()">Ingresar</button>
           <p id="resultado"></p>
 
           <br>
           <div id="botones-compra-actual">
             <button id="finalizar-compra" onclick="finalizar_compra()">Finalizar Compra</button>
-            <button id="borrar-compra">Cancelar Compra</button>
+            <button id="borrar-compra" onclick="cancelar_compra()">Cancelar Compra</button>
           </div>
         </div>
 

@@ -1489,7 +1489,9 @@ function calcularVuelto() {
        botonPagar.innerText = 'Pagar Faltante';
 
        botonPagar.onclick = function() {
+        pagos()
         mostrarModalPagoFaltaPagar()
+
     };
        resultado.appendChild(botonPagar);
 
@@ -1597,10 +1599,7 @@ btnMostrarModalPago.addEventListener('click', mostrarModalPago);
 
 
 
-var formaPagoSelect = document.getElementById('formaPago');
 
-// Agrega un evento de cambio al <select>
-formaPagoSelect.addEventListener('change', limpiarCampos);
 
 // Función para limpiar los campos
 function limpiarCampos() {
@@ -1681,6 +1680,8 @@ function pagos() {
 
   // Guardar el array actualizado en localStorage
   localStorage.setItem('pagos', JSON.stringify(pagosExist));
+
+  limpiarCampos();
 
 
 }
