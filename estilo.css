@@ -574,7 +574,10 @@ select#formaPago {
   text-align: center;
 }
 
+#tipos_pagos span {
 
+  font-weight: bold;
+}
 
 
 
