@@ -7,7 +7,7 @@ var copiaCantidad = 0;
 var pro = [];
 var vendidoActualElement;
 
-var Apagar=0;
+var Apagar = 0;
 
 // inicio Variables Modal
 
@@ -275,7 +275,7 @@ document.getElementById('guardar').addEventListener('click', function () {
   }
   if (cantidad === 0) {
     alert('La cantidad no puede ser 0');
-    
+
   }
   if (precio === 0) {
     alert("El precio no puede ser cero. Por favor, ingrese un valor válido.");
@@ -379,13 +379,12 @@ function actualizarStock() {
     for (let j = 0; j < pro.length; j++) {
 
       if (productos[i].Producto === pro[j].nombre) {
-        if (isNaN(productos[i].Producto)) {
-          productos[i].Producto=Infinity;
-        }
-        else{
+
+        if (pro[j].stock !== null) {
           pro[j].stock = pro[j].stock - productos[i].Cantidad;
 
         }
+
       }
     }
   }
@@ -500,7 +499,7 @@ function borrar_compra() {
 
 
 function cancelar_compra() {
-  
+
   var confirmacion = confirm('¿Estás seguro de que deseas cancelar la compra?');
   if (confirmacion) {
 
@@ -509,7 +508,7 @@ function cancelar_compra() {
     actualizarCompraActual();
 
   }
-  
+
 };
 
 
@@ -534,7 +533,7 @@ function finalizar_compra() {
   if (confirmacion) {
 
 
-     pagos();
+    pagos();
 
 
 
@@ -863,11 +862,11 @@ agregarBtn.addEventListener('click', function () {
   let precio;
   if (precioInput.trim() === '') {
     precio = 0;
-  } 
+  }
   else if (isNaN(parseFloat(precioInput))) {
     alert('El precio debe ser un número');
     return;
-  } 
+  }
   else {
     precio = parseFloat(precioInput);
   }
@@ -876,11 +875,11 @@ agregarBtn.addEventListener('click', function () {
   let stock;
   if (stockInput.trim() === '') {
     stock = Infinity;
-  } 
+  }
   else if (isNaN(parseInt(stockInput))) {
     alert('El stock debe ser un número');
     return;
-  } 
+  }
   else {
     stock = parseInt(stockInput);
   }
@@ -1422,13 +1421,13 @@ function calcularAdicional() {
   var adicional = (precioProductos * porcentaje) / 100;
   var totalConAdicional = precioProductos + adicional;
   if (!isNaN(adicional)) {
-  // Mostrar el total con adicional en el elemento correspondiente
-  document.getElementById('totalConAdicional').innerText = 'Total con Adicional: $' + totalConAdicional.toFixed(2);
+    // Mostrar el total con adicional en el elemento correspondiente
+    document.getElementById('totalConAdicional').innerText = 'Total con Adicional: $' + totalConAdicional.toFixed(2);
 
-  // Actualizar el total a pagar en el elemento total_pagar
-  document.getElementById('total_pagar').innerText = 'Total Final: $' + totalConAdicional.toFixed(2) ;
+    // Actualizar el total a pagar en el elemento total_pagar
+    document.getElementById('total_pagar').innerText = 'Total Final: $' + totalConAdicional.toFixed(2);
   }
-  else{
+  else {
     return;
   }
 }
@@ -1443,15 +1442,15 @@ function calcularDescuento() {
 
   var descuento = parseFloat(document.getElementById('descuento').value);
   // Verificar si el descuento es un número válido
-  if (!isNaN(descuento) ) {
+  if (!isNaN(descuento)) {
     // Si el descuento es un número válido, realizar el descuento
     if (!isNaN(precioConAdicional)) {
       var montoConDescuento = precioConAdicional - (precioConAdicional * descuento) / 100;
-      Apagar=montoConDescuento ;
+      Apagar = montoConDescuento;
     }
-    else{
+    else {
       var montoConDescuento = precioProductos - (precioProductos * descuento) / 100;
-      Apagar=montoConDescuento ;
+      Apagar = montoConDescuento;
     }
 
     // Mostrar el total con descuento en el elemento correspondiente
@@ -1470,12 +1469,12 @@ function calcularDescuento() {
 var montoRestante;
 // Resto de la función calcularVuelto
 function calcularVuelto() {
-  
+
   var montoPagado = parseFloat(document.getElementById('montoPagado').value);
 
   // Calcular el vuelto o monto restante a pagar
   var precioFinal = parseFloat(document.getElementById('totalConDescuento').innerText.replace('Total con Descuento: $', '')) || parseFloat(document.getElementById('totalConAdicional').innerText.replace('Total con Adicional: $', '')) || parseFloat(localStorage.getItem('valor_compra_actual'));
-  
+
   // Restar el monto pagado al precio final
   montoRestante = precioFinal - montoPagado;
 
@@ -1483,19 +1482,19 @@ function calcularVuelto() {
   if (montoRestante >= 0) {
     // Si el monto restante es positivo, mostrar que falta pagar
     document.getElementById('resultado').innerText = 'Falta pagar: $' + montoRestante.toFixed(2);
-       // Crea un nuevo elemento <button> pagar lo que falta
-       var botonPagar = document.createElement('button');
-       botonPagar.id = 'Boton_falta_pagar';
-       botonPagar.innerText = 'Pagar Faltante';
+    // Crea un nuevo elemento <button> pagar lo que falta
+    var botonPagar = document.createElement('button');
+    botonPagar.id = 'Boton_falta_pagar';
+    botonPagar.innerText = 'Pagar Faltante';
 
-       botonPagar.onclick = function() {
-        pagos()
-        mostrarModalPagoFaltaPagar()
+    botonPagar.onclick = function () {
+      pagos()
+      mostrarModalPagoFaltaPagar()
 
     };
-       resultado.appendChild(botonPagar);
+    resultado.appendChild(botonPagar);
 
-   
+
   } else {
     // Si el monto restante es negativo, mostrar el cambio
     if (isNaN(montoRestante)) {
@@ -1538,61 +1537,61 @@ function vaciarVariablesCompra() {
 
 
 
-  // Obtén referencias a los elementos relevantes
-  var btnMostrarModalPago = document.getElementById('btnMostrarModalPago');
-  var modalPago = document.getElementById('modalPago');
-  var closeModalButtonPago = document.querySelector('.closePago');
+// Obtén referencias a los elementos relevantes
+var btnMostrarModalPago = document.getElementById('btnMostrarModalPago');
+var modalPago = document.getElementById('modalPago');
+var closeModalButtonPago = document.querySelector('.closePago');
 
 // Agrega un evento de clic al botón para mostrar el modal
 btnMostrarModalPago.addEventListener('click', mostrarModalPago);
 
-  // Agrega un evento de clic al botón para mostrar el modal
-  btnMostrarModalPago.addEventListener('click', function() {
-    modalPago.style.display = 'block';
-  });
+// Agrega un evento de clic al botón para mostrar el modal
+btnMostrarModalPago.addEventListener('click', function () {
+  modalPago.style.display = 'block';
+});
 
-  // Agrega un evento de clic al botón de cierre para ocultar el modal
-  closeModalButtonPago.addEventListener('click', function() {
+// Agrega un evento de clic al botón de cierre para ocultar el modal
+closeModalButtonPago.addEventListener('click', function () {
+  modalPago.style.display = 'none';
+});
+
+// Cierra el modal si el usuario hace clic fuera de él
+window.addEventListener('click', function (event) {
+  if (event.target === modalPago) {
     modalPago.style.display = 'none';
-  });
+  }
+});
 
-  // Cierra el modal si el usuario hace clic fuera de él
-  window.addEventListener('click', function(event) {
-    if (event.target === modalPago) {
-      modalPago.style.display = 'none';
-    }
-  });
+function mostrarModalPago() {
+  Apagar = parseFloat(localStorage.getItem('valor_compra_actual'));
 
-  function mostrarModalPago() {
-    Apagar = parseFloat(localStorage.getItem('valor_compra_actual'));
+  if (!isNaN(Apagar)) {
+    // Obtén el precio de los productos desde localStorage
 
-    if (!isNaN( Apagar)) {
-      // Obtén el precio de los productos desde localStorage
-  
-  
+
     // Asigna el precio al elemento total_pagar
-    document.getElementById('total_pagar').innerText = 'Total a Pagar: $' +  Apagar.toFixed(2);
-  
+    document.getElementById('total_pagar').innerText = 'Total a Pagar: $' + Apagar.toFixed(2);
+
     // Muestra el modal
     modalPago.style.display = 'block';
-    }
-    
-    
   }
 
-  function mostrarModalPagoFaltaPagar() {
-    // Obtén el precio de los productos desde localStorage
+
+}
+
+function mostrarModalPagoFaltaPagar() {
+  // Obtén el precio de los productos desde localStorage
   Apagar = montoRestante;
-  
-    // Asigna el precio al elemento total_pagar
-    document.getElementById('total_pagar').innerText = 'Total Faltante a Pagar: $' + Apagar.toFixed(2);
-   
+
+  // Asigna el precio al elemento total_pagar
+  document.getElementById('total_pagar').innerText = 'Total Faltante a Pagar: $' + Apagar.toFixed(2);
+
   document.getElementById('totalConAdicional').innerText = '';
   document.getElementById('totalConDescuento').innerText = '';
   document.getElementById('montoPagado').value = '';
   document.getElementById('resultado').innerText = '';
-    
-  }
+
+}
 
 
 
@@ -1646,7 +1645,7 @@ function generarIdUnico() {
   localStorage.setItem('contador', contador);
 
   // Crear el ID concatenando el contador con algún valor adicional
-  return  contador;
+  return contador;
 }
 
 
@@ -1695,7 +1694,7 @@ function exportarExcelPagos() {
   // Crear una matriz de datos para el archivo Excel
   var data = [['ID', 'Pago', 'Medio', 'Fecha y Hora']];
 
-  pagosExist.forEach(function(pago) {
+  pagosExist.forEach(function (pago) {
     data.push([pago.Id, pago.Pago, pago.FormaPago, pago.Fecha_Hora]);
   });
 
@@ -1766,7 +1765,7 @@ function abrirModalMiModalPagos() {
   // Generar HTML para la tabla
   var tablaHTML = "<tr><th>ID</th><th>Pago</th><th>Medios de Pago</th><th>Fecha y Hora</th></tr>";
 
-  pagosExist.forEach(function(pago) {
+  pagosExist.forEach(function (pago) {
     tablaHTML += `<tr><td>${pago.Id}</td><td>${pago.Pago}</td><td>${pago.FormaPago}</td><td>${pago.Fecha_Hora}</td></tr>`;
   });
 
