@@ -155,11 +155,11 @@
           <!-- Agrega opciones de pago -->
           <label for="formaPago">Forma de Pago:</label>
           <select id="formaPago">
-            <option value="efectivo">Efectivo</option>
-            <option value="debito">Tarjeta de Débito</option>
-            <option value="credito">Tarjeta de Crédito</option>
-            <option value="transferencia">Transferencia Bancaria</option>
-            <option value="qr">Pago QR</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Débito">Tarjeta de Débito</option>
+            <option value="Crédito">Tarjeta de Crédito</option>
+            <option value="Transferencia">Transferencia Bancaria</option>
+            <option value="QR">Pago QR</option>
           </select>
 
           <label for="porcentaje">Adicional %</label>
@@ -172,7 +172,7 @@
           <p id="totalConDescuento"></p>
 
           <button onclick="calcularDescuento()">Aplicar</button>
-   
+
 
 
           <label for="montoPagado">Dinero Abonado:</label>
@@ -321,7 +321,22 @@
         <div class="contenido-modal-Historial-Pagos">
           <span class="cerrarHistorialPagos" onclick="cerrarModalHistorialPagos()">&times;</span>
           <button onclick="exportarExcelPagos()">Exportar a Excel PAGOS</button>
+
           <h2>Detalles de Pagos</h2>
+          <div id="tipos_pagos"> 
+            <p>            Total en Efectivo: <span id="totalEfectivo"></span>
+            </p>
+            <p>            Total por Transferencia: <span id="totalTransferencia"></span>
+            </p>
+            <p>            Total por QR: <span id="totalQR"></span>
+            </p>
+            <p>            Total con tarjeta de débito: <span id="totalDebito"></span>
+            </p>
+            <p>            Total con tarjeta de crédito: <span id="totalCredito"></span>
+            </p>
+          </div>
+          
+
           <table id="tablaPagos">
             <!-- Aquí se insertarán dinámicamente los detalles de pago -->
           </table>

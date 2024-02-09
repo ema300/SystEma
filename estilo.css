@@ -564,6 +564,32 @@ select#formaPago {
 
 
 
+#tipos_pagos{
+  display: flex;
+}
+
+#tipos_pagos p {
+  margin: 0em 1em 1em 0em;
+  padding: 0em 0em 0em 0em;
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -949,6 +975,24 @@ input#valorIncremento {
   align-items: center;
   background: #091725;
 }
+#tipos_pagos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

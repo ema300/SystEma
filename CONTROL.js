@@ -1762,15 +1762,51 @@ function abrirModalMiModalPagos() {
   // Obtener detalles de pago de localStorage
   var pagosExist = JSON.parse(localStorage.getItem('pagos')) || [];
 
+  // Inicializar variables para las sumas por medio de pago
+  var efectivoTotal = 0;
+  var transferenciaTotal = 0;
+  var qrTotal = 0;
+  var debitoTotal = 0;
+  var creditoTotal = 0;
+
   // Generar HTML para la tabla
   var tablaHTML = "<tr><th>ID</th><th>Pago</th><th>Medios de Pago</th><th>Fecha y Hora</th></tr>";
 
   pagosExist.forEach(function (pago) {
+    // Sumar al total correspondiente según el medio de pago
+    switch(pago.FormaPago) {
+      case "Efectivo":
+        efectivoTotal += parseFloat(pago.Pago);
+        break;
+      case "Transferencia":
+        transferenciaTotal += parseFloat(pago.Pago);
+        break;
+      case "QR":
+        qrTotal += parseFloat(pago.Pago);
+        break;
+      case "Débito":
+        debitoTotal += parseFloat(pago.Pago);
+        break;
+      case "Crédito":
+        creditoTotal += parseFloat(pago.Pago);
+        break;
+      default:
+        break;
+    }
+
+    // Generar la fila de la tabla con los detalles del pago
     tablaHTML += `<tr><td>${pago.Id}</td><td>${pago.Pago}</td><td>${pago.FormaPago}</td><td>${pago.Fecha_Hora}</td></tr>`;
   });
 
   // Insertar el HTML en la tabla
   document.getElementById("tablaPagos").innerHTML = tablaHTML;
+
+  // Mostrar los totales en el HTML
+  document.getElementById("totalEfectivo").innerText = efectivoTotal.toFixed(2);
+  document.getElementById("totalTransferencia").innerText = transferenciaTotal.toFixed(2);
+  document.getElementById("totalQR").innerText = qrTotal.toFixed(2);
+  document.getElementById("totalDebito").innerText = debitoTotal.toFixed(2);
+  document.getElementById("totalCredito").innerText = creditoTotal.toFixed(2);
 }
 
 function cerrarModalHistorialPagos() {
