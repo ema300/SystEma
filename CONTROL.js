@@ -1413,10 +1413,10 @@ function mostrarPorUnSegundo(texto) {
 
 
 
-
+var precioProductos;
 // Función para calcular el adicional
 function calcularAdicional() {
-  var precioProductos = parseFloat(localStorage.getItem('valor_compra_actual'));
+  precioProductos = Apagar;
   var porcentaje = parseFloat(document.getElementById('porcentaje').value);
   var adicional = (precioProductos * porcentaje) / 100;
   var totalConAdicional = precioProductos + adicional;
@@ -1435,7 +1435,7 @@ function calcularAdicional() {
 // Función para calcular el descuento
 function calcularDescuento() {
   calcularAdicional()
-  var precioProductos = parseFloat(localStorage.getItem('valor_compra_actual'));
+  precioProductos = Apagar
 
   //var precioConAdicional = parseFloat(document.getElementById('totalConAdicional').innerText.replace('Total con Adicional: $', ''));
   var precioConAdicional = parseFloat(document.getElementById('totalConAdicional').innerText.replace('Total con Adicional: $', ''));
@@ -1473,7 +1473,7 @@ function calcularVuelto() {
   var montoPagado = parseFloat(document.getElementById('montoPagado').value);
 
   // Calcular el vuelto o monto restante a pagar
-  var precioFinal = parseFloat(document.getElementById('totalConDescuento').innerText.replace('Total con Descuento: $', '')) || parseFloat(document.getElementById('totalConAdicional').innerText.replace('Total con Adicional: $', '')) || parseFloat(localStorage.getItem('valor_compra_actual'));
+  var precioFinal = parseFloat(document.getElementById('totalConDescuento').innerText.replace('Total con Descuento: $', '')) || parseFloat(document.getElementById('totalConAdicional').innerText.replace('Total con Adicional: $', '')) || Apagar;
 
   // Restar el monto pagado al precio final
   montoRestante = precioFinal - montoPagado;
@@ -1490,6 +1490,7 @@ function calcularVuelto() {
     botonPagar.onclick = function () {
       pagos()
       mostrarModalPagoFaltaPagar()
+
 
     };
     resultado.appendChild(botonPagar);
@@ -1768,13 +1769,14 @@ function abrirModalMiModalPagos() {
   var qrTotal = 0;
   var debitoTotal = 0;
   var creditoTotal = 0;
+  var totalgeneral = 0;
 
   // Generar HTML para la tabla
   var tablaHTML = "<tr><th>ID</th><th>Pago</th><th>Medios de Pago</th><th>Fecha y Hora</th></tr>";
 
   pagosExist.forEach(function (pago) {
     // Sumar al total correspondiente según el medio de pago
-    switch(pago.FormaPago) {
+    switch (pago.FormaPago) {
       case "Efectivo":
         efectivoTotal += parseFloat(pago.Pago);
         break;
@@ -1807,6 +1809,9 @@ function abrirModalMiModalPagos() {
   document.getElementById("totalQR").innerText = qrTotal.toFixed(2);
   document.getElementById("totalDebito").innerText = debitoTotal.toFixed(2);
   document.getElementById("totalCredito").innerText = creditoTotal.toFixed(2);
+
+  totalgeneral = efectivoTotal +transferenciaTotal +qrTotal +debitoTotal +creditoTotal;
+  document.getElementById("totalGeneral").innerText = totalgeneral.toFixed(2);
 }
 
 function cerrarModalHistorialPagos() {
